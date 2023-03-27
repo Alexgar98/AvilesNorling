@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PantallaAnuncioIndividual">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="375dp"
+        android:layout_height="290dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/tituloAnuncio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Lorem ipsum"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/categoriaUbicacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Lorem ipsum"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/tituloAnuncio" />
+
+    <TextView
+        android:id="@+id/referenciaInteriorAnuncio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Ref: 0"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/descripcion"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/categoriaUbicacion" />
+
+    <TextView
+        android:id="@+id/txtDescripcion"
+        android:layout_width="384dp"
+        android:layout_height="308dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc hendrerit mi vel orci eleifend placerat. Integer interdum mi elit, ac tempus arcu consequat sit amet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum dictum lectus aliquam, varius ipsum non, dignissim massa. Vestibulum quis pharetra dui, vitae rutrum lacus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut finibus lacus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In purus felis, imperdiet mattis congue sodales, malesuada in odio. Curabitur aliquet urna sem, et posuere metus bibendum a. Sed vitae volutpat est. In sit amet nulla scelerisque, ornare nisi eget, varius lacus. Suspendisse dolor risus, lobortis ullamcorper condimentum tincidunt, porttitor a odio.  Mauris eu ipsum neque. Integer lobortis viverra lorem, a pulvinar enim lacinia at. Proin facilisis aliquam eleifend. Quisque cursus purus justo, in ultrices dui bibendum quis. Nunc bibendum, erat ac rutrum consequat, nisl leo venenatis felis, sit amet semper orci nunc id orci. In hac habitasse platea dictumst. Nullam consectetur malesuada est, eu porttitor dui venenatis quis."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/description" />
+
+    <TextView
+        android:id="@+id/caracteristicas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/caracteristicas"
+        app:layout_constraintStart_toStartOf="@+id/txtDescripcion"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescripcion" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reservar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

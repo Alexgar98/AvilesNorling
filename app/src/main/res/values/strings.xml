@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name" translatable="false">Aviles &amp; Norling</string>
+    <string name="venta">Venta</string>
+    <string name="alquiler">Alquiler</string>
+    <string name="vacaciones">Vacaciones</string>
+    <string name="espanol" translatable="false">Español</string>
+    <string name="ingles" translatable="false">English</string>
+    <string name="aleman" translatable="false">Deutsch</string>
+    <string name="frances" translatable="false">Français</string>
+    <string name="sueco" translatable="false">Svenska</string>
+    <string name="referencia">Referencia</string>
+    <string name="oferta">Oferta</string>
+    <string name="tipoInmueble">Tipo inmueble</string>
+    <string name="dormitorios">Dormitorios</string>
+    <string name="superficie">Sup. Desde</string>
+    <string name="personas">Nº Personas</string>
+    <string name="fecha">Fecha</string>
+    <string name="buscar">Buscar</string>
+    <string name="precioDesde">Precio Desde</string>
+    <string name="precioHasta">Precio Hasta</string>
+    <string name="descripcion">Descripción:</string>
+    <string name="caracteristicas">Características:</string>
+    <string name="reservar">Reservar</string>
+</resources>

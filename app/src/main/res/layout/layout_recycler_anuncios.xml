@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imagenAnuncio"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/precioAnuncio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(Precio del anuncio)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imagenAnuncio"
+        app:layout_constraintTop_toTopOf="@+id/imagenAnuncio" />
+
+    <TextView
+        android:id="@+id/referenciaAnuncio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Ref: (Referencia)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imagenAnuncio"
+        app:layout_constraintTop_toBottomOf="@+id/precioAnuncio" />
+
+    <ImageView
+        android:id="@+id/imgPersonas"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/imagenAnuncio"
+        app:layout_constraintTop_toBottomOf="@+id/referenciaAnuncio"
+        app:srcCompat="@drawable/personas" />
+
+    <ImageView
+        android:id="@+id/imgSuperficie"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/imagenAnuncio"
+        app:layout_constraintTop_toBottomOf="@+id/imgPersonas"
+        app:srcCompat="@drawable/casa" />
+
+    <ImageView
+        android:id="@+id/imgDormitorios"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgPersonas"
+        app:layout_constraintTop_toBottomOf="@+id/referenciaAnuncio"
+        app:srcCompat="@drawable/habitaciones" />
+
+    <ImageView
+        android:id="@+id/imgBanos"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgSuperficie"
+        app:layout_constraintTop_toBottomOf="@+id/imgDormitorios"
+        app:srcCompat="@drawable/bano" />
+
+    <TextView
+        android:id="@+id/numeroPersonas"
+        android:layout_width="58dp"
+        android:layout_height="23dp"
+        android:text="(0)"
+        app:layout_constraintBottom_toBottomOf="@+id/imgPersonas"
+        app:layout_constraintEnd_toStartOf="@+id/imgDormitorios"
+        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintStart_toEndOf="@+id/imgPersonas" />
+
+    <TextView
+        android:id="@+id/numeroSuperficie"
+        android:layout_width="48dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:text="(0) m2"
+        app:layout_constraintBottom_toBottomOf="@+id/imgSuperficie"
+        app:layout_constraintEnd_toStartOf="@+id/imgBanos"
+        app:layout_constraintStart_toEndOf="@+id/imgSuperficie"
+        app:layout_constraintTop_toTopOf="@+id/imgSuperficie" />
+
+    <TextView
+        android:id="@+id/numeroHabitaciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="(0)"
+        app:layout_constraintStart_toEndOf="@+id/imgDormitorios"
+        app:layout_constraintTop_toBottomOf="@+id/referenciaAnuncio" />
+
+    <TextView
+        android:id="@+id/numeroBanos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="(0)"
+        app:layout_constraintStart_toEndOf="@+id/imgBanos"
+        app:layout_constraintTop_toBottomOf="@+id/numeroHabitaciones" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RadioButton
+        android:id="@+id/btnTorre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Torre del Mar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioButton
+        android:id="@+id/btnVelez"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vélez-Málaga"
+        app:layout_constraintStart_toStartOf="@+id/btnTorre"
+        app:layout_constraintTop_toBottomOf="@+id/btnTorre" />
+
+    <RadioButton
+        android:id="@+id/btnAlgarrobo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Algarrobo"
+        app:layout_constraintStart_toStartOf="@+id/btnVelez"
+        app:layout_constraintTop_toBottomOf="@+id/btnVelez" />
+
+    <RadioButton
+        android:id="@+id/btnAlmachar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Almáchar"
+        app:layout_constraintStart_toStartOf="@+id/btnAlgarrobo"
+        app:layout_constraintTop_toBottomOf="@+id/btnAlgarrobo" />
+
+    <RadioButton
+        android:id="@+id/btnAlmayate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Almayate"
+        app:layout_constraintStart_toStartOf="@+id/btnAlmachar"
+        app:layout_constraintTop_toBottomOf="@+id/btnAlmachar" />
+
+    <RadioButton
+        android:id="@+id/btnBenajarafe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Benajarafe"
+        app:layout_constraintStart_toStartOf="@+id/btnAlmayate"
+        app:layout_constraintTop_toBottomOf="@+id/btnAlmayate" />
+
+    <RadioButton
+        android:id="@+id/btnBenamargosa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Benamargosa"
+        app:layout_constraintStart_toStartOf="@+id/btnBenajarafe"
+        app:layout_constraintTop_toBottomOf="@+id/btnBenajarafe" />
+
+    <RadioButton
+        android:id="@+id/btnCaleta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Caleta de Vélez"
+        app:layout_constraintStart_toStartOf="@+id/btnBenamargosa"
+        app:layout_constraintTop_toBottomOf="@+id/btnBenamargosa" />
+
+    <RadioButton
+        android:id="@+id/btnCanillas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Canillas de Aceituno"
+        app:layout_constraintStart_toStartOf="@+id/btnCaleta"
+        app:layout_constraintTop_toBottomOf="@+id/btnCaleta" />
+
+    <RadioButton
+        android:id="@+id/btnTorrox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Torrox"
+        app:layout_constraintStart_toStartOf="@+id/btnCanillas"
+        app:layout_constraintTop_toBottomOf="@+id/btnCanillas" />
+</androidx.constraintlayout.widget.ConstraintLayout>
