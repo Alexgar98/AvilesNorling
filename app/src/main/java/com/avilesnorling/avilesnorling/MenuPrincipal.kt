@@ -1,12 +1,12 @@
 package com.avilesnorling.avilesnorling
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Spinner
+import android.view.*
+import android.widget.*
 import com.avilesnorling.avilesnorling.clases.Idiomas
 import com.avilesnorling.avilesnorling.clases.IdiomasArrayAdapter
 
@@ -26,15 +26,39 @@ class MenuPrincipal : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_menu_principal)
 
-        spinnerIdiomas.adapter = IdiomasArrayAdapter(
-            this, listOf(
-                Idiomas(R.drawable.espana, R.string.espanol.toString()),
-                Idiomas(R.drawable.uk, R.string.ingles.toString()),
-                Idiomas(R.drawable.alemania, R.string.aleman.toString()),
-                Idiomas(R.drawable.francia, R.string.frances.toString()),
-                Idiomas(R.drawable.suecia, R.string.sueco.toString())
-            )
+        val idiomas = arrayOf(
+            Pair(getString(R.string.espanol), R.drawable.espana),
+            Pair(getString(R.string.ingles), R.drawable.uk),
+            Pair(getString(R.string.aleman), R.drawable.alemania),
+            Pair(getString(R.string.frances), R.drawable.francia),
+            Pair(getString(R.string.sueco), R.drawable.suecia)
         )
+
+        val adapter = object : ArrayAdapter<Pair<String, Int>>(this, R.layout.spinner_idiomas, R.id.txtPais, idiomas) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val idioma = idiomas[position]
+                val textoIdioma = view.findViewById<TextView>(R.id.txtPais)
+                textoIdioma.text = idioma.first
+                val imageView = view.findViewById<ImageView>(R.id.imgPais)
+                imageView.setImageResource(idioma.second)
+                return view
+            }
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                val idioma = idiomas[position]
+                val textoIdioma = view.findViewById<TextView>(R.id.txtPais)
+                textoIdioma.text = idioma.first
+                val imageView = view.findViewById<ImageView>(R.id.imgPais)
+                imageView.setImageResource(idioma.second)
+                return view
+            }
+        }
+
+
+        spinnerIdiomas.adapter = adapter
+
+        //TODO: Cambiar idioma de la aplicación al seleccionar
 
         imgWhatsapp.setOnClickListener {
             abrirWeb("https://api.whatsapp.com/send?phone=34643672547")
@@ -59,13 +83,13 @@ class MenuPrincipal : AppCompatActivity() {
             //TODO volver al menú principal. Esta parte debería estar en un fragment
         }
         btnVenta.setOnClickListener {
-            cambiarPantalla("Venta")
+            cambiarPantalla("Venta", btnVenta)
         }
         btnAlquiler.setOnClickListener {
-            cambiarPantalla("Alquiler")
+            cambiarPantalla("Alquiler", btnAlquiler)
         }
         btnVacaciones.setOnClickListener {
-            cambiarPantalla("Vacaciones")
+            cambiarPantalla("Vacaciones", btnVacaciones)
         }
 
 
@@ -79,11 +103,35 @@ class MenuPrincipal : AppCompatActivity() {
         startActivity(abrirPagina)
     }
 
-    fun cambiarPantalla (tipoAnuncio : String) {
+    fun cambiarPantalla (tipoAnuncio : String, boton : Button) {
         val intent : Intent = Intent(this, PantallaAnuncios::class.java)
+        var zona : String = ""
         intent.putExtra("tipoAnuncio", tipoAnuncio)
-        //TODO lanzar el popup de la ubicación
-        startActivity(intent)
+        val inflater : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView : View = inflater.inflate(R.layout.layout_radiogroup, null)
+        val popupVentana = PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        val radioGroup = popupView.findViewById<RadioGroup>(R.id.groupZonas)
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            //Ñapa monumental, cambiar esto más adelante
+            when (checkedId) {
+                R.id.btnTorre -> zona = "Torre del Mar"
+                R.id.btnVelez -> zona = "Vélez-Málaga"
+                R.id.btnAlgarrobo -> zona = "Algarrobo"
+                R.id.btnAlmachar -> zona = "Almáchar"
+                R.id.btnAlmayate -> zona = "Almayate"
+                R.id.btnBenajarafe -> zona = "Benajarafe"
+                R.id.btnBenamargosa -> zona = "Benamargosa"
+                R.id.btnCaleta -> zona = "Caleta de Vélez"
+                R.id.btnCanillas -> zona = "Canillas de Aceituno"
+                R.id.btnTorrox -> zona = "Torrox"
+
+            }
+            intent.putExtra("zona", zona)
+            Toast.makeText(this, "Tipo de anuncio: " + tipoAnuncio + ", Zona: " + zona, Toast.LENGTH_LONG).show()
+            startActivity(intent)
+        }
+        popupVentana.showAtLocation(boton, Gravity.CENTER, 0, 0)
+
 
     }
 }

@@ -21,4 +21,8 @@
     <string name="descripcion">Descripción:</string>
     <string name="caracteristicas">Características:</string>
     <string name="reservar">Reservar</string>
+    <string name="pisos">Pisos</string>
+    <string name="casas">Casas</string>
+    <string name="locales">Locales</string>
+    <string name="tiendas">Tiendas</string>
 </resources>
