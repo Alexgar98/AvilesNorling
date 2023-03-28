@@ -25,4 +25,6 @@
     <string name="casas">Casas</string>
     <string name="locales">Locales</string>
     <string name="tiendas">Tiendas</string>
+    <string name="tipo">Tipo</string>
+    <string name="zona">Zona</string>
 </resources>

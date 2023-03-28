@@ -3,19 +3,22 @@ package com.avilesnorling.avilesnorling
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.avilesnorling.avilesnorling.clases.Anuncio
+import com.avilesnorling.avilesnorling.clases.AnuncioRecyclerAdapter
 
 class PantallaAnuncios : AppCompatActivity() {
     val txtreferencia : EditText by lazy {findViewById<EditText>(R.id.referencia)}
     val txtsuperficie : EditText by lazy {findViewById<EditText>(R.id.superficie)}
     val txtprecioDesde : EditText by lazy {findViewById<EditText>(R.id.precioDesde)}
     val txtprecioHasta : EditText by lazy {findViewById<EditText>(R.id.precioHasta)}
-    val tipoAnuncio : Spinner = findViewById<Spinner>(R.id.tipoAnuncio)
+    val tipoAnuncio : Spinner by lazy {findViewById<Spinner>(R.id.tipoAnuncio)}
     val tipoInmueble : Spinner by lazy {findViewById<Spinner>(R.id.tipoInmueble)}
-    val ubicacion : Spinner = findViewById<Spinner>(R.id.ubicacion)
+    val ubicacion : Spinner by lazy {findViewById<Spinner>(R.id.ubicacion)}
     val dormitorios : Spinner by lazy {findViewById<Spinner>(R.id.dormitorios)}
     val btnBuscar : Button by lazy {findViewById<Button>(R.id.btnBuscar)}
-    var recyclerAnuncios : RecyclerView = findViewById<RecyclerView>(R.id.recyclerAnuncios)
+    val recyclerAnuncios : RecyclerView by lazy {findViewById<RecyclerView>(R.id.recyclerAnuncios)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,17 +47,29 @@ class PantallaAnuncios : AppCompatActivity() {
         dormitorios.setSelection(0)
 
 
-        var referencia : String? = txtreferencia.text.toString()
-        var superficie : String? = txtsuperficie.text.toString()
-        var precioDesde : String? = txtprecioDesde.text.toString()
-        var precioHasta : String? = txtprecioHasta.text.toString()
-        var anuncio : String? = tipoAnuncio.selectedItem.toString()
-        var inmueble : String? = tipoInmueble.selectedItem.toString()
-        var ubicacionSpinner : String? = ubicacion.selectedItem.toString()
-        var numeroDormitorios : String? = dormitorios.selectedItem.toString()
+        var anunciosBuscados = ArrayList<Anuncio>()
+
+        //TODO Buscar en base de datos y añadir lo que salga a anunciosBuscados
 
         btnBuscar.setOnClickListener {
-            //TODO Buscar en base de datos según las variables de arriba y cargar el recycler con lo que haya
+            var referencia : String? = txtreferencia.text.toString()
+            var superficie : String? = txtsuperficie.text.toString()
+            var precioDesde : String? = txtprecioDesde.text.toString()
+            var precioHasta : String? = txtprecioHasta.text.toString()
+            var anuncio : String? = tipoAnuncio.selectedItem.toString()
+            var inmueble : String? = tipoInmueble.selectedItem.toString()
+            var ubicacionSpinner : String? = ubicacion.selectedItem.toString()
+            var numeroDormitorios : String? = dormitorios.selectedItem.toString()
+            //TODO Buscar otra vez en BD
+
+            anunciosBuscados = ArrayList<Anuncio>()
+
+
         }
+
+        recyclerAnuncios.layoutManager = LinearLayoutManager(this)
+        val recyclerAdapter = AnuncioRecyclerAdapter(anunciosBuscados)
+        recyclerAnuncios.adapter = recyclerAdapter
+
     }
 }
