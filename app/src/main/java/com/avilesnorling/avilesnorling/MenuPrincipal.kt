@@ -1,7 +1,10 @@
 package com.avilesnorling.avilesnorling
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +12,7 @@ import android.view.*
 import android.widget.*
 import com.avilesnorling.avilesnorling.clases.Idiomas
 import com.avilesnorling.avilesnorling.clases.IdiomasArrayAdapter
+import java.util.*
 
 class MenuPrincipal : AppCompatActivity() {
     val spinnerIdiomas : Spinner by lazy{findViewById<Spinner>(R.id.spinnerIdiomas)}
@@ -22,9 +26,13 @@ class MenuPrincipal : AppCompatActivity() {
     val btnVenta : Button by lazy{findViewById<Button>(R.id.btnVenta)}
     val btnAlquiler : Button by lazy{findViewById<Button>(R.id.btnAlquiler)}
     val btnVacaciones : Button by lazy{findViewById<Button>(R.id.btnVacaciones)}
+    lateinit var locale : Locale
+    private var idiomaActual = "es"
+    private var idioma : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_menu_principal)
+        idiomaActual = intent.getStringExtra(idioma).toString()
 
         val idiomas = arrayOf(
             Pair(getString(R.string.espanol), R.drawable.espana),
@@ -58,7 +66,31 @@ class MenuPrincipal : AppCompatActivity() {
 
         spinnerIdiomas.adapter = adapter
 
-        //TODO: Cambiar idioma de la aplicación al seleccionar
+        when (idiomaActual) {
+            "es" -> spinnerIdiomas.setSelection(0)
+            "en" -> spinnerIdiomas.setSelection(1)
+            "de" -> spinnerIdiomas.setSelection(2)
+            "fr" -> spinnerIdiomas.setSelection(3)
+            "sv" -> spinnerIdiomas.setSelection(4)
+        }
+
+        //TODO probar a ver si esto funciona
+
+        spinnerIdiomas.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (position) {
+                    0 -> setLocale("es")
+                    1 -> setLocale("en")
+                    2 -> setLocale("de")
+                    3 -> setLocale("fr")
+                    4 -> setLocale("sv")
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
 
         imgWhatsapp.setOnClickListener {
             abrirWeb("https://api.whatsapp.com/send?phone=34643672547")
@@ -91,9 +123,6 @@ class MenuPrincipal : AppCompatActivity() {
         btnVacaciones.setOnClickListener {
             cambiarPantalla("Vacaciones", btnVacaciones)
         }
-
-
-
 
     }
 
@@ -132,6 +161,22 @@ class MenuPrincipal : AppCompatActivity() {
         }
         popupVentana.showAtLocation(boton, Gravity.CENTER, 0, 0)
 
+
+    }
+
+    fun setLocale(localeName: String) {
+        if (localeName != idiomaActual) {
+            locale = Locale(localeName)
+            val res = resources
+            val dm = res.displayMetrics
+            val conf = res.configuration
+            //Esto está deprecated, preguntar si eso porque me tiene hasta las narices (?)
+            conf.locale = locale
+            res.updateConfiguration(conf, dm)
+            val refresh = Intent(this, MenuPrincipal::class.java)
+            refresh.putExtra(idioma, localeName)
+            startActivity(refresh)
+        }
 
     }
 }

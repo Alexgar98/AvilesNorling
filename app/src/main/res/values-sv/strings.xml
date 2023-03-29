@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="venta">Försäljning</string>
+    <string name="alquiler">Uthyrning</string>
+    <string name="vacaciones">Högtider</string>
+    <string name="referencia">Referensnr</string>
+    <string name="oferta">Erbjudande</string>
+    <string name="tipoInmueble">Fastighetstyp</string>
+    <string name="dormitorios">Sovrum</string>
+    <string name="superficie">Området från</string>
+    <string name="personas">Gäster</string>
+    <string name="fecha">Datum</string>
+    <string name="buscar">Sök</string>
+    <string name="precioDesde">Pris från</string>
+    <string name="precioHasta">Pris till</string>
+    <string name="descripcion">Beskrivning:</string>
+    <string name="caracteristicas">Beskrivning:</string>
+    <string name="reservar">Book</string>
+    <string name="pisos">Lägenheter</string>
+    <string name="casas">Hus</string>
+    <string name="locales">Affärslokaler</string>
+    <string name="tiendas">Affär</string>
+    <string name="tipo">Typ</string>
+    <string name="zona">Områden</string>
+    <string name="contacto">Kontakta</string>
+</resources>
