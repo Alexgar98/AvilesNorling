@@ -34,6 +34,7 @@ class MenuPrincipal : AppCompatActivity() {
         setContentView(R.layout.layout_menu_principal)
         idiomaActual = intent.getStringExtra(idioma).toString()
 
+        //Array de idiomas que se muestra en el spinner
         val idiomas = arrayOf(
             Pair(getString(R.string.espanol), R.drawable.espana),
             Pair(getString(R.string.ingles), R.drawable.uk),
@@ -42,6 +43,7 @@ class MenuPrincipal : AppCompatActivity() {
             Pair(getString(R.string.sueco), R.drawable.suecia)
         )
 
+        //Adapter del spinner
         val adapter = object : ArrayAdapter<Pair<String, Int>>(this, R.layout.spinner_idiomas, R.id.txtPais, idiomas) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
@@ -63,9 +65,10 @@ class MenuPrincipal : AppCompatActivity() {
             }
         }
 
-
+        //Aquí se aplica el adapter
         spinnerIdiomas.adapter = adapter
 
+        //Setea el spinner según el idioma seleccionado, para que no se vuelva siempre al español
         when (idiomaActual) {
             "es" -> spinnerIdiomas.setSelection(0)
             "en" -> spinnerIdiomas.setSelection(1)
@@ -74,8 +77,7 @@ class MenuPrincipal : AppCompatActivity() {
             "sv" -> spinnerIdiomas.setSelection(4)
         }
 
-        //TODO probar a ver si esto funciona
-
+        //Selección de idioma
         spinnerIdiomas.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when (position) {
@@ -92,6 +94,7 @@ class MenuPrincipal : AppCompatActivity() {
             }
         }
 
+        //Enlaces a redes sociales
         imgWhatsapp.setOnClickListener {
             abrirWeb("https://api.whatsapp.com/send?phone=34643672547")
         }
@@ -114,6 +117,7 @@ class MenuPrincipal : AppCompatActivity() {
         imgCasa.setOnClickListener {
             //TODO volver al menú principal. Esta parte debería estar en un fragment
         }
+        //Botones
         btnVenta.setOnClickListener {
             cambiarPantalla("Venta", btnVenta)
         }
@@ -126,12 +130,14 @@ class MenuPrincipal : AppCompatActivity() {
 
     }
 
+    //Función para abrir la web que toque
     private fun abrirWeb (url : String) {
         val abrirPagina : Intent = Intent(android.content.Intent.ACTION_VIEW)
         abrirPagina.data = Uri.parse(url)
         startActivity(abrirPagina)
     }
 
+    //Función para cambiar a la pantalla de turno
     fun cambiarPantalla (tipoAnuncio : String, boton : Button) {
         val intent : Intent = Intent(this, PantallaAnuncios::class.java)
         var zona : String = ""
@@ -156,7 +162,6 @@ class MenuPrincipal : AppCompatActivity() {
 
             }
             intent.putExtra("zona", zona)
-            Toast.makeText(this, "Tipo de anuncio: " + tipoAnuncio + ", Zona: " + zona, Toast.LENGTH_LONG).show()
             startActivity(intent)
         }
         popupVentana.showAtLocation(boton, Gravity.CENTER, 0, 0)
@@ -164,6 +169,7 @@ class MenuPrincipal : AppCompatActivity() {
 
     }
 
+    //Función para cambiar el idioma
     fun setLocale(localeName: String) {
         if (localeName != idiomaActual) {
             locale = Locale(localeName)

@@ -23,4 +23,5 @@
     <string name="tipo">Type</string>
     <string name="zona">Zone</string>
     <string name="contacto">Contacter</string>
+    <string name="fechaNoValida">La date sélectionnée n\'est pas valide</string>
 </resources>

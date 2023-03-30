@@ -63,10 +63,10 @@
 
         <Spinner
             android:id="@+id/spinnerIdiomas"
-            android:layout_width="150dp"
+            android:layout_width="175dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
 
         <ImageView
             android:id="@+id/imgCasa"

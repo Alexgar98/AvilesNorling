@@ -28,4 +28,5 @@
     <string name="tipo">Tipo</string>
     <string name="zona">Zona</string>
     <string name="contacto">Contacto</string>
+    <string name="fechaNoValida">La fecha indicada no es válida</string>
 </resources>

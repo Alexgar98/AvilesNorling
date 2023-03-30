@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fondo"
     tools:context=".PantallaAnuncios">
 
     <LinearLayout
@@ -26,13 +27,15 @@
             android:layout_marginTop="0dp"
             android:ems="10"
             android:hint="@string/referencia"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/white" />
 
         <Spinner
             android:id="@+id/tipoAnuncio"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/tipo" />
+            android:contentDescription="@string/tipo"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
     <LinearLayout
@@ -51,14 +54,16 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:contentDescription="@string/tipoInmueble" />
+            android:contentDescription="@string/tipoInmueble"
+            android:textColor="@color/white"/>
 
         <Spinner
             android:id="@+id/ubicacion"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:contentDescription="@string/zona" />
+            android:contentDescription="@string/zona"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
     <LinearLayout
@@ -78,7 +83,8 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:contentDescription="@string/dormitorios"
-            android:text="@string/dormitorios" />
+            android:text="@string/dormitorios"
+            android:textColor="@color/white"/>
 
         <EditText
             android:id="@+id/superficie"
@@ -87,7 +93,8 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/superficie"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <LinearLayout
@@ -101,23 +108,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
-        <EditText
-            android:id="@+id/precioDesde"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/precioDesde"
-            android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/precioHasta"
+        <ViewFlipper
+            android:id="@+id/precioPersonas"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/precioHasta"
-            android:inputType="textPersonName" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/precioDesde"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/precioDesde"
+                android:inputType="textPersonName"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/personas"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:ems="10"
+                android:hint="@string/personas"
+                android:inputType="number"
+                android:textColor="@color/white" />
+        </ViewFlipper>
+
+        <ViewFlipper
+            android:id="@+id/precioFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/precioHasta"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/precioHasta"
+                android:inputType="textPersonName"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/fecha"
+                android:inputType="date"
+                android:textColor="@color/white" />
+        </ViewFlipper>
     </LinearLayout>
 
     <Button

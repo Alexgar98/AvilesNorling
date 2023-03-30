@@ -23,4 +23,5 @@
     <string name="tipo">Typ</string>
     <string name="zona">Områden</string>
     <string name="contacto">Kontakta</string>
+    <string name="fechaNoValida">Det valda datumet är ogiltigt</string>
 </resources>
