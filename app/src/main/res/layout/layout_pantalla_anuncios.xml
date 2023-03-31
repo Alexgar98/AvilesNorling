@@ -8,7 +8,7 @@
     tools:context=".PantallaAnuncios">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/redesIdioma"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -17,7 +17,75 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:id="@+id/imgWhatsapp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/whatsapp" />
+
+        <ImageView
+            android:id="@+id/imgFacebook"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/facebook" />
+
+        <ImageView
+            android:id="@+id/imgTwitter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/twitter" />
+
+        <ImageView
+            android:id="@+id/imgLinkedin"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/linkedin" />
+
+        <ImageView
+            android:id="@+id/imgYoutube"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/youtube" />
+
+        <ImageView
+            android:id="@+id/imgInstagram"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/instagram" />
+
+        <Spinner
+            android:id="@+id/spinnerIdiomas"
+            android:layout_width="175dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/imgCasa"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/casa" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/redesIdioma">
 
         <EditText
             android:id="@+id/referencia"
@@ -35,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/tipo"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <LinearLayout
