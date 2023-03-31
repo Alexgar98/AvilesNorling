@@ -17,9 +17,7 @@ import kotlin.collections.ArrayList
 class PantallaAnuncios : AppCompatActivity() {
     val txtreferencia : EditText by lazy {findViewById<EditText>(R.id.referencia)}
     val txtsuperficie : EditText by lazy {findViewById<EditText>(R.id.superficie)}
-    //Cambiar
     val txtprecioDesde : EditText by lazy {findViewById<EditText>(R.id.precioDesde)}
-    //Cambiar también
     val txtprecioHasta : EditText by lazy {findViewById<EditText>(R.id.precioHasta)}
     val tipoAnuncio : Spinner by lazy {findViewById<Spinner>(R.id.tipoAnuncio)}
     val tipoInmueble : Spinner by lazy {findViewById<Spinner>(R.id.tipoInmueble)}
@@ -38,7 +36,7 @@ class PantallaAnuncios : AppCompatActivity() {
         //Arrays con los valores de los spinners
         var anuncios = arrayOf<String>(getString(R.string.oferta), getString(R.string.venta), getString(R.string.alquiler), getString(R.string.vacaciones))
         var inmuebles = arrayOf<String>(getString(R.string.tipoInmueble), getString(R.string.pisos), getString(R.string.casas), getString(R.string.locales), getString(R.string.tiendas))
-        var ubicaciones = arrayOf<String>("Torre del Mar", "Vélez-Málaga", "Algarrobo", "Almáchar", "Almayate", "Benajarafe", "Benamargosa", "Caleta de Vélez", "Canillas de Aceituno", "Torrox")
+        var ubicaciones = arrayOf<String>("Torre del Mar", "Vélez-Málaga", "Algarrobo", "Almáchar", "Almayate", "Benajarafe", "Benamargosa", "Caleta de Vélez", "Canillas de Aceituno", "Torrox", "Málaga", "Málaga oriental")
         var numerosDormitorios = arrayOf<String>(getString(R.string.dormitorios), "1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+", "10+")
 
 

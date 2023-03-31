@@ -147,6 +147,29 @@ class MenuPrincipal : AppCompatActivity() {
         val popupVentana = PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
         val radioGroup = popupView.findViewById<RadioGroup>(R.id.groupZonas)
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            //Cambio la visibilidad de los botones cuando no hacen falta
+            if (tipoAnuncio == "Venta") {
+                val btnAlgarrobo : RadioButton = findViewById<RadioButton>(R.id.btnAlgarrobo)
+                btnAlgarrobo.visibility = View.VISIBLE
+                val btnAlmachar : RadioButton = findViewById<RadioButton>(R.id.btnAlmachar)
+                btnAlmachar.visibility = View.VISIBLE
+                val btnAlmayate : RadioButton = findViewById<RadioButton>(R.id.btnAlmayate)
+                btnAlmayate.visibility = View.VISIBLE
+                val btnBenajarafe : RadioButton = findViewById<RadioButton>(R.id.btnBenajarafe)
+                btnBenajarafe.visibility = View.VISIBLE
+                val btnBenamargosa : RadioButton = findViewById<RadioButton>(R.id.btnBenamargosa)
+                btnBenamargosa.visibility = View.VISIBLE
+                val btnTorrox : RadioButton = findViewById<RadioButton>(R.id.btnTorrox)
+                btnTorrox.visibility = View.VISIBLE
+            }
+            if (tipoAnuncio == "Vacaciones") {
+                val btnCanillas : RadioButton = findViewById<RadioButton>(R.id.btnCanillas)
+                btnCanillas.visibility = View.GONE
+                val btnMalaga : RadioButton = findViewById<RadioButton>(R.id.btnMalaga)
+                btnMalaga.visibility = View.VISIBLE
+                val btnMalagaOriental : RadioButton = findViewById<RadioButton>(R.id.btnMalagaOriental)
+                btnMalagaOriental.visibility = View.VISIBLE
+            }
             //Ñapa monumental, cambiar esto más adelante
             when (checkedId) {
                 R.id.btnTorre -> zona = "Torre del Mar"
@@ -159,6 +182,8 @@ class MenuPrincipal : AppCompatActivity() {
                 R.id.btnCaleta -> zona = "Caleta de Vélez"
                 R.id.btnCanillas -> zona = "Canillas de Aceituno"
                 R.id.btnTorrox -> zona = "Torrox"
+                R.id.btnMalaga -> zona = "Málaga"
+                R.id.btnMalagaOriental -> zona = "Málaga oriental"
 
             }
             intent.putExtra("zona", zona)

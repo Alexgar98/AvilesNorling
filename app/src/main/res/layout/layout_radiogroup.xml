@@ -31,31 +31,36 @@
             android:id="@+id/btnAlgarrobo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Algarrobo" />
+            android:text="Algarrobo"
+            android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/btnAlmachar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Almáchar" />
+            android:text="Almáchar"
+            android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/btnAlmayate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Almayate" />
+            android:text="Almayate"
+            android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/btnBenajarafe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Benajarafe" />
+            android:text="Benajarafe"
+            android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/btnBenamargosa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Benamargosa" />
+            android:text="Benamargosa"
+            android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/btnCaleta"
@@ -73,7 +78,22 @@
             android:id="@+id/btnTorrox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Torrox" />
+            android:text="Torrox"
+            android:visibility="gone" />
+
+        <RadioButton
+            android:id="@+id/btnMalaga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Málaga"
+            android:visibility="gone" />
+
+        <RadioButton
+            android:id="@+id/btnMalagaOriental"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Málaga oriental"
+            android:visibility="gone" />
 
     </RadioGroup>
 
