@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
 
     <ImageView
         android:id="@+id/imagenAnuncio"
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="(Precio del anuncio)"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imagenAnuncio"
         app:layout_constraintTop_toTopOf="@+id/imagenAnuncio" />
@@ -30,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Ref: (Referencia)"
+        android:textColor="@color/gris"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imagenAnuncio"
         app:layout_constraintTop_toBottomOf="@+id/precioAnuncio" />
@@ -79,20 +82,22 @@
         android:layout_width="58dp"
         android:layout_height="23dp"
         android:text="(0)"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/imgPersonas"
         app:layout_constraintEnd_toStartOf="@+id/imgDormitorios"
         app:layout_constraintHorizontal_bias="0.523"
-        app:layout_constraintStart_toEndOf="@+id/imgPersonas" />
+        app:layout_constraintStart_toEndOf="@+id/imgPersonas"
+        app:layout_constraintTop_toTopOf="@+id/imgPersonas" />
 
     <TextView
         android:id="@+id/numeroSuperficie"
-        android:layout_width="48dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="58dp"
+        android:layout_height="23dp"
         android:text="(0) m2"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/imgSuperficie"
-        app:layout_constraintEnd_toStartOf="@+id/imgBanos"
-        app:layout_constraintStart_toEndOf="@+id/imgSuperficie"
+        app:layout_constraintEnd_toEndOf="@+id/numeroPersonas"
+        app:layout_constraintStart_toStartOf="@+id/numeroPersonas"
         app:layout_constraintTop_toTopOf="@+id/imgSuperficie" />
 
     <TextView
@@ -100,18 +105,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:text="(0)"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/imgDormitorios"
         app:layout_constraintStart_toEndOf="@+id/imgDormitorios"
-        app:layout_constraintTop_toBottomOf="@+id/referenciaAnuncio" />
+        app:layout_constraintTop_toTopOf="@+id/imgDormitorios" />
 
     <TextView
         android:id="@+id/numeroBanos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
         android:text="(0)"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/imgBanos"
         app:layout_constraintStart_toEndOf="@+id/imgBanos"
-        app:layout_constraintTop_toBottomOf="@+id/numeroHabitaciones" />
+        app:layout_constraintTop_toTopOf="@+id/imgBanos" />
 </androidx.constraintlayout.widget.ConstraintLayout>

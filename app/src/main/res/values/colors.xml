@@ -10,4 +10,5 @@
     <color name="fondo">#433F3F</color>
     <color name="btn">#009999</color>
     <color name="hintColor">#9CC5B8</color>
+    <color name="gris">#AAAAAA</color>
 </resources>

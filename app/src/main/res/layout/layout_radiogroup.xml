@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/fondo">
 
     <RadioGroup
         android:id="@+id/groupZonas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:background="@color/white"
+        android:background="@color/fondo"
         android:paddingHorizontal="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,19 +20,22 @@
             android:id="@+id/btnTorre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Torre del Mar" />
+            android:text="Torre del Mar"
+            android:textColor="@color/white" />
 
         <RadioButton
             android:id="@+id/btnVelez"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vélez-Málaga" />
+            android:text="Vélez-Málaga"
+            android:textColor="@color/white" />
 
         <RadioButton
             android:id="@+id/btnAlgarrobo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Algarrobo"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RadioButton
@@ -39,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Almáchar"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RadioButton
@@ -46,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Almayate"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RadioButton
@@ -53,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Benajarafe"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RadioButton
@@ -60,25 +67,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Benamargosa"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/btnCaleta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Caleta de Vélez" />
+            android:text="Caleta de Vélez"
+            android:textColor="@color/white" />
 
         <RadioButton
             android:id="@+id/btnCanillas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Canillas de Aceituno" />
+            android:text="Canillas de Aceituno"
+            android:textColor="@color/white" />
 
         <RadioButton
             android:id="@+id/btnTorrox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Torrox"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RadioButton
@@ -86,6 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Málaga"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RadioButton
