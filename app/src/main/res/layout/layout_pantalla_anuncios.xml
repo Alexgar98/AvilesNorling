@@ -93,10 +93,12 @@
             android:layout_height="48dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
+            android:backgroundTint="@color/white"
             android:ems="10"
             android:hint="@string/referencia"
             android:inputType="textPersonName"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textColorHint="@color/hintColor" />
 
         <Spinner
             android:id="@+id/tipoAnuncio"
@@ -159,10 +161,12 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_weight="1"
+            android:backgroundTint="@color/white"
             android:ems="10"
             android:hint="@string/superficie"
             android:inputType="textPersonName"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textColorHint="@color/hintColor" />
     </LinearLayout>
 
     <LinearLayout
@@ -188,10 +192,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_weight="1"
+                android:backgroundTint="@color/white"
                 android:ems="10"
                 android:hint="@string/precioDesde"
                 android:inputType="textPersonName"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/hintColor" />
 
             <EditText
                 android:id="@+id/personas"
@@ -200,7 +206,8 @@
                 android:ems="10"
                 android:hint="@string/personas"
                 android:inputType="number"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/hintColor" />
         </ViewFlipper>
 
         <ViewFlipper
@@ -214,10 +221,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_weight="1"
+                android:backgroundTint="@color/white"
                 android:ems="10"
                 android:hint="@string/precioHasta"
                 android:inputType="textPersonName"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/hintColor" />
 
             <EditText
                 android:id="@+id/fecha"
@@ -226,7 +235,8 @@
                 android:ems="10"
                 android:hint="@string/fecha"
                 android:inputType="date"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/hintColor" />
         </ViewFlipper>
     </LinearLayout>
 
@@ -235,6 +245,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:backgroundTint="@color/btn"
         android:text="@string/buscar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

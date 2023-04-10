@@ -1,5 +1,6 @@
 package com.avilesnorling.avilesnorling
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +12,7 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.Anuncio
+import com.avilesnorling.avilesnorling.clases.AnuncioBusqueda
 import com.avilesnorling.avilesnorling.clases.AnuncioRecyclerAdapter
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -57,22 +59,24 @@ class PantallaAnuncios : AppCompatActivity() {
 
 
         //Adapters de los spinners
-        val anunciosAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, anuncios)
+        val anunciosAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, anuncios)
         tipoAnuncio.adapter = anunciosAdapter
         var anuncioElegido = intent.getStringExtra("tipoAnuncio")
         tipoAnuncio.setSelection(anunciosAdapter.getPosition(anuncioElegido))
 
-        val inmueblesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, inmuebles)
+        val inmueblesAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, inmuebles)
         tipoInmueble.adapter = inmueblesAdapter
+        tipoInmueble.prompt = getText(R.string.tipoInmueble)
         tipoInmueble.setSelection(0)
 
-        val ubicacionAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, ubicaciones)
+        val ubicacionAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, ubicaciones)
         ubicacion.adapter = ubicacionAdapter
         var ubicacionElegida = intent.getStringExtra("zona")
         ubicacion.setSelection(ubicacionAdapter.getPosition(ubicacionElegida))
 
-        val dormitoriosAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, numerosDormitorios)
+        val dormitoriosAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, numerosDormitorios)
         dormitorios.adapter = dormitoriosAdapter
+        dormitorios.prompt = getText(R.string.dormitorios)
         dormitorios.setSelection(0)
 
         //Cambio los TextView según si se ha seleccionado Vacaciones o no como tipo de anuncio
@@ -273,5 +277,11 @@ class PantallaAnuncios : AppCompatActivity() {
             startActivity(refresh)
         }
 
+    }
+
+    fun resultados(url : String) : ArrayList<AnuncioBusqueda>? {
+        var anuncios : ArrayList<AnuncioBusqueda>? = null
+        //Web scraping
+        return anuncios
     }
 }
