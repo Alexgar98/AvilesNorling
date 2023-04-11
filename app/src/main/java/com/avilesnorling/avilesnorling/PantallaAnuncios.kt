@@ -12,7 +12,6 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.Anuncio
-import com.avilesnorling.avilesnorling.clases.AnuncioBusqueda
 import com.avilesnorling.avilesnorling.clases.AnuncioRecyclerAdapter
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -277,11 +276,5 @@ class PantallaAnuncios : AppCompatActivity() {
             startActivity(refresh)
         }
 
-    }
-
-    fun resultados(url : String) : ArrayList<AnuncioBusqueda>? {
-        var anuncios : ArrayList<AnuncioBusqueda>? = null
-        //Web scraping
-        return anuncios
     }
 }
