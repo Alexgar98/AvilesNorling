@@ -2,16 +2,18 @@ package com.avilesnorling.avilesnorling
 
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.*
 import com.avilesnorling.avilesnorling.clases.Anuncio
+import com.avilesnorling.avilesnorling.clases.Helper
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jdom2.input.SAXBuilder
-import org.w3c.dom.Element
+import org.jdom2.Element
 import org.xml.sax.InputSource
 import java.io.*
 import java.net.URL
@@ -41,8 +43,14 @@ class MenuPrincipal : AppCompatActivity() {
         setContentView(R.layout.layout_menu_principal)
         idiomaActual = intent.getStringExtra(idioma).toString()
         //Se actualiza la base de datos por si el XML ha cambiado
-        GlobalScope.launch {
-            updateDatabase()
+        try {
+            GlobalScope.launch {
+                updateDatabase()
+            }
+            Toast.makeText(this, "Si ves esto es que algo ha funcionado (?)", Toast.LENGTH_LONG).show()
+        }
+        catch (e : IOException) {
+            Toast.makeText(this, "No se ha podido sincronizar la base de datos", Toast.LENGTH_LONG).show()
         }
         //Array de idiomas que se muestra en el spinner
         val idiomas = arrayOf(
@@ -225,7 +233,7 @@ class MenuPrincipal : AppCompatActivity() {
     //Función para coger el XML y actualizar base de datos en SQLite a partir de él
     private fun updateDatabase() {
         //Manejo del XML
-        try {
+
             val xml = URL("https://avilesnorling.inmoenter.com/export/all/xcp.xml")
             //val dbFactory = DocumentBuilderFactory.newInstance()
             //val dBuilder = dbFactory.newDocumentBuilder()
@@ -239,66 +247,91 @@ class MenuPrincipal : AppCompatActivity() {
             val root = document.rootElement
 
             //Base de datos
-            val baseDatos = File("/data/propiedades.db")
-            val conexion = DriverManager.getConnection("jdbc:sqlite:${baseDatos.absolutePath}")
-            val statement = conexion.createStatement()
-            //Borro la tabla si hay para hacerla de nuevo con los datos actualizados del XML
-            statement.executeUpdate("DROP TABLE IF EXISTS propiedades")
-            statement.executeUpdate(
-                "CREATE TABLE propiedades (referencia TEXT PRIMARY KEY, fecha DATE, url TEXT, tipoInmueble INTEGER, tipoOferta INTEGER," +
-                        "descripcionEs TEXT, descripcionEn TEXT, descripcionFr TEXT, descripcionDe TEXT, descripcionSv TEXT, codigoPostal INTEGER, " +
-                        "provincia TEXT, localidad TEXT, direccion TEXT, geoLocalizacion TEXT, registroTurismo TEXT)"
-            ) //Tocar si es necesario
+            val querier : SQLiteDatabase = Helper(this).writableDatabase
 
             //Leo el XML y meto los datos en una lista de anuncios
             val datos = mutableListOf<Anuncio>()
             val elementos = root.getChild("listaPropiedades").getChildren("propiedad")
 
             for (i in 0 until elementos.size) {
-                val elemento = elementos[i] as Element
+                val elemento = elementos[i]
                 val referencia: String =
-                    elemento.getElementsByTagName("referencia").item(0).textContent
+                    elemento.getChildText("referencia")
                 val fecha: LocalDateTime =
-                    LocalDateTime.parse(elemento.getElementsByTagName("fecha").item(0).textContent)
-                val url: String = elemento.getElementsByTagName("url").item(0).textContent
-                val tipoInmueble: Int =
-                    elemento.getElementsByTagName("tipoInmueble").item(0).textContent.toInt()
-                val tipoOferta: Int =
-                    elemento.getElementsByTagName("tipoOferta").item(0).textContent.toInt()
-                val codigoPostal: Int =
-                    elemento.getElementsByTagName("codigoPostal").item(0).textContent.toInt()
+                    LocalDateTime.parse(elemento.getChildText("fecha"))
+                val url: String = elemento.getChildText("url")
+                var tipoInmueble: Int?
+                try {
+                    tipoInmueble = elemento.getChildText("tipoInmueble").toInt()
+                }
+                catch (e : java.lang.NumberFormatException) {
+                    tipoInmueble = null
+                }
+                var tipoOferta: Int?
+                try {
+                    tipoOferta = elemento.getChildText("tipoOferta").toInt()
+                }
+                catch (e : java.lang.NumberFormatException) {
+                    tipoOferta = null
+                }
+                var codigoPostal: Int?
+                try {
+                    codigoPostal = elemento.getChildText("codigoPostal").toInt()
+                }
+                catch (e : java.lang.NumberFormatException) {
+                    codigoPostal = null
+                }
                 val provincia: String =
-                    elemento.getElementsByTagName("provincia").item(0).textContent
+                    elemento.getChildText("provincia")
                 val localidad: String =
-                    elemento.getElementsByTagName("localidad").item(0).textContent
+                    elemento.getChildText("localidad")
                 val direccion: String =
-                    elemento.getElementsByTagName("direccion").item(0).textContent
+                    elemento.getChildText("direccion")
                 val geoLocalizacion: String =
-                    elemento.getElementsByTagName("geoLocalizacion").item(0).textContent
-                val registroTurismo: String =
-                    elemento.getElementsByTagName("registroTurismo").item(0).textContent
+                    elemento.getChildText("geoLocalizacion")
+                val registroTurismo: String? =
+                    elemento.getChildText("registroTurismo")
 
-                val descripcion = elemento.getElementsByTagName("descripcionPrincipal") as Element
+                val descripcion = elemento.getChild("descripcionPrincipal").getChildren("descripcion")
                 //Español
-                val descripcionEs =
-                    descripcion.getElementsByTagName("descripcion").item(0) as Element
-                val espaniol = descripcionEs.getElementsByTagName("texto").item(0).textContent
+                val espaniol = descripcion[0].getChildText("texto")
+                //espaniol.replace("'", "''")
                 //Inglés
-                val descripcionEn =
-                    descripcion.getElementsByTagName("descripcion").item(1) as Element
-                val ingles = descripcionEn.getElementsByTagName("texto").item(0).textContent
-                //Francés
-                val descripcionFr =
-                    descripcion.getElementsByTagName("descripcion").item(2) as Element
-                val frances = descripcionFr.getElementsByTagName("texto").item(0).textContent
+                val ingles : String?
+                if (descripcion.size >= 2) {
+                    ingles = descripcion[1].getChildText("texto")
+                    //ingles.replace("'", "''")
+                }
+                else {
+                    ingles = null
+                }
+                val frances : String?
+                if (descripcion.size >= 3) {
+                    //Francés
+                    frances = descripcion[2].getChildText("texto")
+                    //frances.replace("'", "''")
+                }
+                else {
+                    frances = null
+                }
                 //Alemán
-                val descripcionDe =
-                    descripcion.getElementsByTagName("descripcion").item(4) as Element
-                val aleman = descripcionDe.getElementsByTagName("texto").item(0).textContent
+                val aleman : String?
+                if (descripcion.size >= 5) {
+                    aleman = descripcion[4].getChildText("texto")
+                    //aleman.replace("'", "''")
+                }
+                else {
+                    aleman = null
+                }
                 //Sueco
-                val descripcionSv =
-                    descripcion.getElementsByTagName("descripcion").item(7) as Element
-                val sueco = descripcionSv.getElementsByTagName("texto").item(0).textContent
+                val sueco : String?
+                if (descripcion.size >= 8) {
+                    sueco = descripcion[7].getChildText("texto")
+                    //sueco.replace("'", "''")
+                }
+                else {
+                    sueco = null
+                }
 
                 datos.add(
                     Anuncio(
@@ -323,22 +356,39 @@ class MenuPrincipal : AppCompatActivity() {
             }
             //Uso la lista para meter los datos en BD
             for (dato in datos) {
-                statement.executeUpdate(
+                val sql : String = "INSERT INTO propiedades (referencia, fecha, url, tipoInmueble, tipoOferta, descripcionEs, " +
+                        "descripcionEn, descripcionFr, descripcionDe, descripcionSv, codigoPostal, provincia, " +
+                        "localidad, direccion, geoLocalizacion, registroTurismo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                val statement = querier.compileStatement(sql)
+                statement.bindString(1, dato.referencia)
+                statement.bindString(2, dato.fecha.toString())
+                statement.bindString(3, dato.url)
+                statement.bindLong(4, dato.tipoInmueble!!.toLong())
+                statement.bindLong(5, dato.tipoOferta!!.toLong())
+                statement.bindString(6, dato.descripcionEs)
+                statement.bindString(7, dato.descripcionEn)
+                statement.bindString(8, dato.descripcionFr)
+                statement.bindString(9, dato.descripcionDe)
+                statement.bindString(10, dato.descripcionSv)
+                statement.bindLong(11, dato.codigoPostal!!.toLong())
+                statement.bindString(12, dato.provincia)
+                statement.bindString(13, dato.localidad)
+                statement.bindString(14, dato.direccion)
+                statement.bindString(15, dato.geoLocalizacion)
+                statement.bindString(16, dato.registroTurismo)
+                statement.executeInsert()
+
+                /*querier.execSQL(
                     "INSERT INTO propiedades (referencia, fecha, url, tipoInmueble, tipoOferta, descripcionEs, " +
-                            "descripcionEn, descripcionFr, descripcion De, descripcionSv, codigoPostal, provincia, " +
+                            "descripcionEn, descripcionFr, descripcionDe, descripcionSv, codigoPostal, provincia, " +
                             "localidad, direccion, geoLocalizacion, registroTurismo) VALUES (" +
                             "'${dato.referencia}', '${dato.fecha}', '${dato.url}', '${dato.tipoInmueble}', '${dato.tipoOferta}'" +
                             ", '${dato.descripcionEs}', '${dato.descripcionEn}', '${dato.descripcionFr}', '${dato.descripcionDe}'" +
                             ", '${dato.descripcionSv}', '${dato.codigoPostal}', '${dato.provincia}', '${dato.localidad}'" +
                             ", '${dato.direccion}', '${dato.geoLocalizacion}', '${dato.registroTurismo}')"
-                )
+                )*/
             }
+            Toast.makeText(this, "Si ves esto es que algo ha funcionado (?)", Toast.LENGTH_LONG).show()
 
-            statement.close()
-            conexion.close()
-        }
-        catch (e : IOException) {
-            Toast.makeText(this, "No se pudo sincronizar la base de datos", Toast.LENGTH_LONG).show()
-        }
     }
 }
