@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import com.avilesnorling.avilesnorling.clases.Anuncio
@@ -42,16 +43,6 @@ class MenuPrincipal : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_menu_principal)
         idiomaActual = intent.getStringExtra(idioma).toString()
-        //Se actualiza la base de datos por si el XML ha cambiado
-        try {
-            GlobalScope.launch {
-                updateDatabase()
-            }
-            Toast.makeText(this, "Si ves esto es que algo ha funcionado (?)", Toast.LENGTH_LONG).show()
-        }
-        catch (e : IOException) {
-            Toast.makeText(this, "No se ha podido sincronizar la base de datos", Toast.LENGTH_LONG).show()
-        }
         //Array de idiomas que se muestra en el spinner
         val idiomas = arrayOf(
             Pair(getString(R.string.espanol), R.drawable.espana),
@@ -111,6 +102,18 @@ class MenuPrincipal : AppCompatActivity() {
 
             }
         }
+        //Se actualiza la base de datos por si el XML ha cambiado
+        try {
+            //GlobalScope.launch {
+                updateDatabase()
+            //}
+            Toast.makeText(this, "Si ves esto es que algo ha funcionado (?)", Toast.LENGTH_LONG).show()
+        }
+        catch (e : IOException) {
+            Toast.makeText(this, "No se ha podido sincronizar la base de datos", Toast.LENGTH_LONG).show()
+            Log.e("Exception", e.message, e)
+        }
+
 
         //Enlaces a redes sociales
         imgWhatsapp.setOnClickListener {
@@ -265,32 +268,47 @@ class MenuPrincipal : AppCompatActivity() {
                     tipoInmueble = elemento.getChildText("tipoInmueble").toInt()
                 }
                 catch (e : java.lang.NumberFormatException) {
-                    tipoInmueble = null
+                    tipoInmueble = 0
                 }
                 var tipoOferta: Int?
                 try {
                     tipoOferta = elemento.getChildText("tipoOferta").toInt()
                 }
                 catch (e : java.lang.NumberFormatException) {
-                    tipoOferta = null
+                    tipoOferta = 0
                 }
                 var codigoPostal: Int?
                 try {
                     codigoPostal = elemento.getChildText("codigoPostal").toInt()
                 }
                 catch (e : java.lang.NumberFormatException) {
-                    codigoPostal = null
+                    codigoPostal = 0
                 }
-                val provincia: String =
+                var provincia: String =
                     elemento.getChildText("provincia")
-                val localidad: String =
+                if (provincia == null) {
+                    provincia = ""
+                }
+                var localidad: String =
                     elemento.getChildText("localidad")
-                val direccion: String =
+                if (localidad == null) {
+                    localidad = ""
+                }
+                var direccion: String =
                     elemento.getChildText("direccion")
-                val geoLocalizacion: String =
+                if (direccion == null) {
+                    direccion = ""
+                }
+                var geoLocalizacion: String =
                     elemento.getChildText("geoLocalizacion")
-                val registroTurismo: String? =
+                if (geoLocalizacion == null) {
+                    geoLocalizacion = ""
+                }
+                var registroTurismo: String? =
                     elemento.getChildText("registroTurismo")
+                if (registroTurismo == null) {
+                    registroTurismo = ""
+                }
 
                 val descripcion = elemento.getChild("descripcionPrincipal").getChildren("descripcion")
                 //Español
@@ -303,7 +321,7 @@ class MenuPrincipal : AppCompatActivity() {
                     //ingles.replace("'", "''")
                 }
                 else {
-                    ingles = null
+                    ingles = ""
                 }
                 val frances : String?
                 if (descripcion.size >= 3) {
@@ -312,7 +330,7 @@ class MenuPrincipal : AppCompatActivity() {
                     //frances.replace("'", "''")
                 }
                 else {
-                    frances = null
+                    frances = ""
                 }
                 //Alemán
                 val aleman : String?
@@ -321,7 +339,7 @@ class MenuPrincipal : AppCompatActivity() {
                     //aleman.replace("'", "''")
                 }
                 else {
-                    aleman = null
+                    aleman = ""
                 }
                 //Sueco
                 val sueco : String?
@@ -330,7 +348,7 @@ class MenuPrincipal : AppCompatActivity() {
                     //sueco.replace("'", "''")
                 }
                 else {
-                    sueco = null
+                    sueco = ""
                 }
 
                 datos.add(
@@ -388,7 +406,7 @@ class MenuPrincipal : AppCompatActivity() {
                             ", '${dato.direccion}', '${dato.geoLocalizacion}', '${dato.registroTurismo}')"
                 )*/
             }
-            Toast.makeText(this, "Si ves esto es que algo ha funcionado (?)", Toast.LENGTH_LONG).show()
+
 
     }
 }

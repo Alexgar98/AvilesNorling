@@ -30,7 +30,7 @@ class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>) : RecyclerVi
 
     override fun onBindViewHolder(holder: AnuncioRecyclerAdapter.ViewHolder, position: Int) {
         val anuncio = anuncios[position]
-        holder.referenciaAnuncio.text = anuncio.referencia
+        holder.referenciaAnuncio.text = "Ref: " + anuncio.referencia
         //TODO el resto de datos se sacan de BD
     }
 

@@ -3,6 +3,9 @@ package com.avilesnorling.avilesnorling
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,8 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.Anuncio
 import com.avilesnorling.avilesnorling.clases.AnuncioRecyclerAdapter
+import com.avilesnorling.avilesnorling.clases.Helper
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,6 +52,7 @@ class PantallaAnuncios : AppCompatActivity() {
     private var idiomaActual = "es"
     private var idioma : String? = null
 
+    @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_pantalla_anuncios)
@@ -66,7 +72,7 @@ class PantallaAnuncios : AppCompatActivity() {
         val inmueblesAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, inmuebles)
         tipoInmueble.adapter = inmueblesAdapter
         tipoInmueble.prompt = getText(R.string.tipoInmueble)
-        tipoInmueble.setSelection(0)
+        //tipoInmueble.setSelection(0)
 
         val ubicacionAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, ubicaciones)
         ubicacion.adapter = ubicacionAdapter
@@ -76,7 +82,7 @@ class PantallaAnuncios : AppCompatActivity() {
         val dormitoriosAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, numerosDormitorios)
         dormitorios.adapter = dormitoriosAdapter
         dormitorios.prompt = getText(R.string.dormitorios)
-        dormitorios.setSelection(0)
+        //dormitorios.setSelection(0)
 
         //Cambio los TextView según si se ha seleccionado Vacaciones o no como tipo de anuncio
         tipoAnuncio.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -138,9 +144,56 @@ class PantallaAnuncios : AppCompatActivity() {
             datePickerDialog.show()
         }
 
-        var anunciosBuscados = ArrayList<Anuncio>()
+        //Codifico el tipo de inmueble según el anuncio elegido
+        var inmueble : Int
+        inmueble = if (anuncioElegido == "Venta") {
+            1
+        } else if (anuncioElegido == "Alquiler" || anuncioElegido == "Vacaciones") {
+            2
+        } else {
+            0
+        }
 
-        //TODO Buscar en base de datos y añadir lo que salga a anunciosBuscados
+        //Búsqueda
+        var anunciosBuscados = ArrayList<Anuncio>()
+        val helper : Helper = Helper(this)
+        var querier : SQLiteDatabase = helper.writableDatabase
+        val cursor : Cursor = //if (inmueble == 0) {
+            //querier.query("propiedades", null, "localidad = ?", arrayOf(ubicacionElegida), null, null, null)
+            querier.query("propiedades", null, null, null, null, null, null)
+        /*} else {
+            querier.query(
+                "propiedades",
+                null,
+                "localidad = ? and tipoInmueble = ?",
+                arrayOf(ubicacionElegida, inmueble.toString()),
+                null,
+                null,
+                null
+            )
+        }*/
+        cursor.moveToFirst()
+        while (cursor.moveToNext()) {
+            val anuncioNuevo : Anuncio = Anuncio(cursor.getString(cursor.getColumnIndexOrThrow("referencia")),
+                LocalDateTime.parse(cursor.getString(cursor.getColumnIndexOrThrow("fecha"))),
+                cursor.getString(cursor.getColumnIndexOrThrow("url")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")),
+                cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs")),
+                cursor.getString(cursor.getColumnIndexOrThrow("descripcionEn")),
+                cursor.getString(cursor.getColumnIndexOrThrow("descripcionFr")),
+                cursor.getString(cursor.getColumnIndexOrThrow("descripcionDe")),
+                cursor.getString(cursor.getColumnIndexOrThrow("descripcionSv")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("codigoPostal")),
+                cursor.getString(cursor.getColumnIndexOrThrow("provincia")),
+                cursor.getString(cursor.getColumnIndexOrThrow("localidad")),
+                cursor.getString(cursor.getColumnIndexOrThrow("direccion")),
+                cursor.getString(cursor.getColumnIndexOrThrow("geoLocalizacion")),
+                cursor.getString(cursor.getColumnIndexOrThrow("registroTurismo"))
+            )
+            anunciosBuscados.add(anuncioNuevo)
+        }
+        Toast.makeText(this, "Se han encontrado estos resultados: " + anunciosBuscados.size, Toast.LENGTH_LONG).show()
 
         btnBuscar.setOnClickListener {
             var referencia : String? = txtreferencia.text.toString()
@@ -203,7 +256,7 @@ class PantallaAnuncios : AppCompatActivity() {
         spinnerIdiomas.adapter = adapter
 
         //Setea el spinner según el idioma seleccionado, para que no se vuelva siempre al español
-        when (idiomaActual) {
+        /*when (idiomaActual) {
             "es" -> spinnerIdiomas.setSelection(0)
             "en" -> spinnerIdiomas.setSelection(1)
             "de" -> spinnerIdiomas.setSelection(2)
@@ -226,7 +279,7 @@ class PantallaAnuncios : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
-        }
+        }*/
 
         //Enlaces a redes sociales
         imgWhatsapp.setOnClickListener {
