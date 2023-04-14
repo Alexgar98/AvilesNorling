@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class Helper (contexto : Context) : SQLiteOpenHelper(contexto, "propiedades", null, 9) {
+class Helper (contexto : Context) : SQLiteOpenHelper(contexto, "propiedades", null, 12) {
     override fun onCreate(p0: SQLiteDatabase?) {
         p0!!.execSQL("drop table if exists propiedades")
         p0!!.execSQL("CREATE TABLE propiedades (referencia TEXT PRIMARY KEY, fecha DATE, url TEXT, tipoInmueble INTEGER, tipoOferta INTEGER," +

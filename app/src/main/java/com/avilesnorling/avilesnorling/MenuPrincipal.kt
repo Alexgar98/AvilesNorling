@@ -2,7 +2,9 @@ package com.avilesnorling.avilesnorling
 
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabaseLockedException
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -37,7 +39,7 @@ class MenuPrincipal : AppCompatActivity() {
     val btnAlquiler : Button by lazy{findViewById<Button>(R.id.btnAlquiler)}
     val btnVacaciones : Button by lazy{findViewById<Button>(R.id.btnVacaciones)}
     lateinit var locale : Locale
-    private var idiomaActual = "es"
+    private var idiomaActual = Locale.getDefault().language.toString()
     private var idioma : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +86,7 @@ class MenuPrincipal : AppCompatActivity() {
             "de" -> spinnerIdiomas.setSelection(2)
             "fr" -> spinnerIdiomas.setSelection(3)
             "sv" -> spinnerIdiomas.setSelection(4)
+            else -> spinnerIdiomas.setSelection(0)
         }
 
         //Selección de idioma
@@ -104,9 +107,15 @@ class MenuPrincipal : AppCompatActivity() {
         }
         //Se actualiza la base de datos por si el XML ha cambiado
         try {
-            //GlobalScope.launch {
-                updateDatabase()
-            //}
+            GlobalScope.launch {
+                try {
+                    updateDatabase()
+                }
+                catch (e : SQLiteDatabaseLockedException) {
+                    Thread.sleep(1000)
+                    updateDatabase()
+                }
+            }
             Toast.makeText(this, "Si ves esto es que algo ha funcionado (?)", Toast.LENGTH_LONG).show()
         }
         catch (e : IOException) {
@@ -374,27 +383,35 @@ class MenuPrincipal : AppCompatActivity() {
             }
             //Uso la lista para meter los datos en BD
             for (dato in datos) {
-                val sql : String = "INSERT INTO propiedades (referencia, fecha, url, tipoInmueble, tipoOferta, descripcionEs, " +
-                        "descripcionEn, descripcionFr, descripcionDe, descripcionSv, codigoPostal, provincia, " +
-                        "localidad, direccion, geoLocalizacion, registroTurismo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                val statement = querier.compileStatement(sql)
-                statement.bindString(1, dato.referencia)
-                statement.bindString(2, dato.fecha.toString())
-                statement.bindString(3, dato.url)
-                statement.bindLong(4, dato.tipoInmueble!!.toLong())
-                statement.bindLong(5, dato.tipoOferta!!.toLong())
-                statement.bindString(6, dato.descripcionEs)
-                statement.bindString(7, dato.descripcionEn)
-                statement.bindString(8, dato.descripcionFr)
-                statement.bindString(9, dato.descripcionDe)
-                statement.bindString(10, dato.descripcionSv)
-                statement.bindLong(11, dato.codigoPostal!!.toLong())
-                statement.bindString(12, dato.provincia)
-                statement.bindString(13, dato.localidad)
-                statement.bindString(14, dato.direccion)
-                statement.bindString(15, dato.geoLocalizacion)
-                statement.bindString(16, dato.registroTurismo)
-                statement.executeInsert()
+                try {
+                    val sql: String =
+                        "INSERT INTO propiedades (referencia, fecha, url, tipoInmueble, tipoOferta, descripcionEs, " +
+                                "descripcionEn, descripcionFr, descripcionDe, descripcionSv, codigoPostal, provincia, " +
+                                "localidad, direccion, geoLocalizacion, registroTurismo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                    val statement = querier.compileStatement(sql)
+                    statement.bindString(1, dato.referencia)
+                    statement.bindString(2, dato.fecha.toString())
+                    statement.bindString(3, dato.url)
+                    statement.bindLong(4, dato.tipoInmueble!!.toLong())
+                    statement.bindLong(5, dato.tipoOferta!!.toLong())
+                    statement.bindString(6, dato.descripcionEs)
+                    statement.bindString(7, dato.descripcionEn)
+                    statement.bindString(8, dato.descripcionFr)
+                    statement.bindString(9, dato.descripcionDe)
+                    statement.bindString(10, dato.descripcionSv)
+                    statement.bindLong(11, dato.codigoPostal!!.toLong())
+                    statement.bindString(12, dato.provincia)
+                    statement.bindString(13, dato.localidad)
+                    statement.bindString(14, dato.direccion)
+                    statement.bindString(15, dato.geoLocalizacion)
+                    statement.bindString(16, dato.registroTurismo)
+                    statement.executeInsert()
+                }
+                catch (e : SQLiteConstraintException) {
+                    e.message?.let { Log.e("Error", it) }
+                    continue
+
+                }
 
                 /*querier.execSQL(
                     "INSERT INTO propiedades (referencia, fecha, url, tipoInmueble, tipoOferta, descripcionEs, " +

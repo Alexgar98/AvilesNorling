@@ -158,10 +158,10 @@ class PantallaAnuncios : AppCompatActivity() {
         var anunciosBuscados = ArrayList<Anuncio>()
         val helper : Helper = Helper(this)
         var querier : SQLiteDatabase = helper.writableDatabase
-        val cursor : Cursor = //if (inmueble == 0) {
-            //querier.query("propiedades", null, "localidad = ?", arrayOf(ubicacionElegida), null, null, null)
-            querier.query("propiedades", null, null, null, null, null, null)
-        /*} else {
+        val cursor : Cursor = if (inmueble == 0) {
+            querier.query("propiedades", null, "localidad = ?", arrayOf(ubicacionElegida), null, null, null)
+            //querier.query("propiedades", null, null, null, null, null, null)
+        } else {
             querier.query(
                 "propiedades",
                 null,
@@ -171,7 +171,7 @@ class PantallaAnuncios : AppCompatActivity() {
                 null,
                 null
             )
-        }*/
+        }
         cursor.moveToFirst()
         while (cursor.moveToNext()) {
             val anuncioNuevo : Anuncio = Anuncio(cursor.getString(cursor.getColumnIndexOrThrow("referencia")),
@@ -216,6 +216,10 @@ class PantallaAnuncios : AppCompatActivity() {
         recyclerAnuncios.layoutManager = LinearLayoutManager(this)
         val recyclerAdapter = AnuncioRecyclerAdapter(anunciosBuscados)
         recyclerAnuncios.adapter = recyclerAdapter
+
+        recyclerAnuncios.setOnClickListener {
+
+        }
 
         //Barra de arriba
 

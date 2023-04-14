@@ -1,16 +1,19 @@
 package com.avilesnorling.avilesnorling
 
 import android.content.Intent
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.avilesnorling.avilesnorling.clases.Helper
 import java.util.*
 
 class PantallaAnuncioIndividual : AppCompatActivity() {
-    var imagenPrincipal : ImageView = findViewById<ImageView>(R.id.imagenAnuncio)
+    var imagenPrincipal : ImageView = findViewById<ImageView>(R.id.imagenPrincipal)
     var categoriaUbicacion : TextView = findViewById<TextView>(R.id.categoriaUbicacion)
     var referencia : TextView = findViewById<TextView>(R.id.referenciaInteriorAnuncio)
     var descripcion : TextView = findViewById<TextView>(R.id.txtDescripcion)
@@ -31,7 +34,19 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_anuncio_individual)
 
-        //TODO obtener las cosas de base de datos
+        val urlAnuncio : String? = intent.getStringExtra("urlAnuncio")
+        val helper : Helper = Helper(this)
+        var querier : SQLiteDatabase = helper.writableDatabase
+        val cursor : Cursor = querier.query("propiedades", null, "url = ?", arrayOf(urlAnuncio), null, null, null)
+        cursor.moveToFirst()
+        //TODO descodificar tipoInmueble
+        referencia.text = "Ref: " + cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
+        descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs"))
+        val esVenta : Boolean = cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")) == 1
+        if (esVenta) {
+            btnReserva.visibility = View.GONE
+        }
+        //TODO web scraping y obtener las cosas de base de datos
 
         btnReserva.setOnClickListener {
             //TODO Averiguar cómo hace la conversión Avaibook para entrar a la reserva por ahí. Es inviable hacerlo con cada anuncio
