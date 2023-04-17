@@ -89,7 +89,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="384dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +138,7 @@
             <TextView
                 android:id="@+id/txtDescripcion"
                 android:layout_width="384dp"
-                android:layout_height="308dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"

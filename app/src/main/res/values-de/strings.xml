@@ -24,4 +24,5 @@
     <string name="zona">Bereich</string>
     <string name="contacto">Kontakt</string>
     <string name="fechaNoValida">Das ausgewählte Datum ist ungültig</string>
+    <string name="noSePudoConectar">Es konnte keine Verbindung zur Datenbank hergestellt werden. Bitte versuchen Sie es später erneut</string>
 </resources>

@@ -13,10 +13,10 @@ import com.avilesnorling.avilesnorling.clases.Helper
 import java.util.*
 
 class PantallaAnuncioIndividual : AppCompatActivity() {
-    var imagenPrincipal : ImageView = findViewById<ImageView>(R.id.imagenPrincipal)
-    var categoriaUbicacion : TextView = findViewById<TextView>(R.id.categoriaUbicacion)
-    var referencia : TextView = findViewById<TextView>(R.id.referenciaInteriorAnuncio)
-    var descripcion : TextView = findViewById<TextView>(R.id.txtDescripcion)
+    val imagenPrincipal : ImageView by lazy {findViewById<ImageView>(R.id.imagenPrincipal)}
+    val categoriaUbicacion : TextView by lazy {findViewById<TextView>(R.id.categoriaUbicacion)}
+    val referencia : TextView by lazy {findViewById<TextView>(R.id.referenciaInteriorAnuncio)}
+    val descripcion : TextView by lazy {findViewById<TextView>(R.id.txtDescripcion)}
     val btnReserva : Button by lazy {findViewById<Button>(R.id.btnReserva)}
     //Barra de arriba
     val spinnerIdiomas : Spinner by lazy{findViewById<Spinner>(R.id.spinnerIdiomas)}
@@ -39,7 +39,32 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         var querier : SQLiteDatabase = helper.writableDatabase
         val cursor : Cursor = querier.query("propiedades", null, "url = ?", arrayOf(urlAnuncio), null, null, null)
         cursor.moveToFirst()
-        //TODO descodificar tipoInmueble
+        val tipoInmueble : Int = cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble"))
+        var inmueble : String
+        when (tipoInmueble) {
+            1 -> inmueble = "Estudio"
+            2 -> inmueble = "Apartamento"
+            3 -> inmueble = "Piso"
+            4 -> inmueble = "Dúplex"
+            5 -> inmueble = "Casa"
+            6 -> inmueble = "Bungalow"
+            7 -> inmueble = "Chalet"
+            8 -> inmueble = "Villa"
+            9 -> inmueble = "Oficina"
+            10 -> inmueble = "Local"
+            11 -> inmueble = "Nave"
+            12 -> inmueble = "Edificio"
+            13 -> inmueble = "Finca"
+            14 -> inmueble = "Solar"
+            15 -> inmueble = "Parcela"
+            16 -> inmueble = "Garaje"
+            17 -> inmueble = "Hotel"
+            18 -> inmueble = "Trastero"
+            19 -> inmueble = "Loft"
+            else -> inmueble = "Propiedad"
+        }
+        val ubicacion : String = cursor.getString(cursor.getColumnIndexOrThrow("localidad"))
+        categoriaUbicacion.text = inmueble + " en " + ubicacion
         referencia.text = "Ref: " + cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
         descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs"))
         val esVenta : Boolean = cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")) == 1
@@ -91,7 +116,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         spinnerIdiomas.adapter = adapter
 
         //Setea el spinner según el idioma seleccionado, para que no se vuelva siempre al español
-        when (idiomaActual) {
+        /*when (idiomaActual) {
             "es" -> spinnerIdiomas.setSelection(0)
             "en" -> spinnerIdiomas.setSelection(1)
             "de" -> spinnerIdiomas.setSelection(2)
@@ -114,7 +139,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
-        }
+        }*/
 
         //Enlaces a redes sociales
         imgWhatsapp.setOnClickListener {

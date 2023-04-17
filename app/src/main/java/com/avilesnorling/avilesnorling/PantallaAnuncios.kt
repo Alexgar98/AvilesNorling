@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.LocaleList
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -145,8 +146,7 @@ class PantallaAnuncios : AppCompatActivity() {
         }
 
         //Codifico el tipo de inmueble según el anuncio elegido
-        var inmueble : Int
-        inmueble = if (anuncioElegido == "Venta") {
+        var inmueble : Int = if (anuncioElegido == "Venta") {
             1
         } else if (anuncioElegido == "Alquiler" || anuncioElegido == "Vacaciones") {
             2
@@ -160,7 +160,6 @@ class PantallaAnuncios : AppCompatActivity() {
         var querier : SQLiteDatabase = helper.writableDatabase
         val cursor : Cursor = if (inmueble == 0) {
             querier.query("propiedades", null, "localidad = ?", arrayOf(ubicacionElegida), null, null, null)
-            //querier.query("propiedades", null, null, null, null, null, null)
         } else {
             querier.query(
                 "propiedades",
@@ -323,11 +322,9 @@ class PantallaAnuncios : AppCompatActivity() {
         if (localeName != idiomaActual) {
             locale = Locale(localeName)
             val res = resources
-            val dm = res.displayMetrics
             val conf = res.configuration
-            //Esto está deprecated, preguntar si eso porque me tiene hasta las narices (?)
-            conf.locale = locale
-            res.updateConfiguration(conf, dm)
+            conf.setLocales(LocaleList(locale))
+            this.createConfigurationContext(conf)
             val refresh = Intent(this, PantallaAnuncios::class.java)
             refresh.putExtra(idioma, localeName)
             startActivity(refresh)
