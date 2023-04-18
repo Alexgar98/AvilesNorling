@@ -158,13 +158,13 @@ class PantallaAnuncios : AppCompatActivity() {
         var anunciosBuscados = ArrayList<Anuncio>()
         val helper : Helper = Helper(this)
         var querier : SQLiteDatabase = helper.writableDatabase
-        val cursor : Cursor = if (inmueble == 0) {
+        var cursor : Cursor = if (inmueble == 0) {
             querier.query("propiedades", null, "localidad = ?", arrayOf(ubicacionElegida), null, null, null)
         } else {
             querier.query(
                 "propiedades",
                 null,
-                "localidad = ? and tipoInmueble = ?",
+                "localidad = ? and tipoOferta = ?",
                 arrayOf(ubicacionElegida, inmueble.toString()),
                 null,
                 null,
@@ -173,26 +173,20 @@ class PantallaAnuncios : AppCompatActivity() {
         }
         cursor.moveToFirst()
         while (cursor.moveToNext()) {
-            val anuncioNuevo : Anuncio = Anuncio(cursor.getString(cursor.getColumnIndexOrThrow("referencia")),
-                LocalDateTime.parse(cursor.getString(cursor.getColumnIndexOrThrow("fecha"))),
-                cursor.getString(cursor.getColumnIndexOrThrow("url")),
-                cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble")),
-                cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")),
-                cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs")),
-                cursor.getString(cursor.getColumnIndexOrThrow("descripcionEn")),
-                cursor.getString(cursor.getColumnIndexOrThrow("descripcionFr")),
-                cursor.getString(cursor.getColumnIndexOrThrow("descripcionDe")),
-                cursor.getString(cursor.getColumnIndexOrThrow("descripcionSv")),
-                cursor.getInt(cursor.getColumnIndexOrThrow("codigoPostal")),
-                cursor.getString(cursor.getColumnIndexOrThrow("provincia")),
-                cursor.getString(cursor.getColumnIndexOrThrow("localidad")),
-                cursor.getString(cursor.getColumnIndexOrThrow("direccion")),
-                cursor.getString(cursor.getColumnIndexOrThrow("geoLocalizacion")),
-                cursor.getString(cursor.getColumnIndexOrThrow("registroTurismo"))
-            )
+            val anuncioNuevo : Anuncio = devolverAnuncio(cursor)
             anunciosBuscados.add(anuncioNuevo)
         }
         Toast.makeText(this, "Se han encontrado estos resultados: " + anunciosBuscados.size, Toast.LENGTH_LONG).show()
+
+
+
+        recyclerAnuncios.layoutManager = LinearLayoutManager(this)
+        val recyclerAdapter = AnuncioRecyclerAdapter(anunciosBuscados)
+        recyclerAnuncios.adapter = recyclerAdapter
+
+        recyclerAnuncios.setOnClickListener {
+
+        }
 
         btnBuscar.setOnClickListener {
             var referencia : String? = txtreferencia.text.toString()
@@ -203,21 +197,43 @@ class PantallaAnuncios : AppCompatActivity() {
             var inmueble : String? = tipoInmueble.selectedItem.toString()
             var ubicacionSpinner : String? = ubicacion.selectedItem.toString()
             var numeroDormitorios : String? = dormitorios.selectedItem.toString()
-            var personasElegidas : Int? = personas.text.toString().toInt()
+            var personasElegidas : String? = personas.text.toString()
             var fechaElegida : Date?
-            //TODO Buscar otra vez en BD
 
-            anunciosBuscados = ArrayList<Anuncio>()
+            anunciosBuscados.clear()
+            recyclerAdapter.notifyDataSetChanged()
+            recyclerAnuncios.scrollToPosition(0)
 
+            var consulta : String? = ""
+            var valores : Array<String> = arrayOf()
+            if (referencia != null) {
+                consulta += "referencia = ?"
+                valores+=referencia
+            }
+            if (ubicacionSpinner != null) {
+                if (consulta == "") {
+                    consulta += "localidad = ?"
+                }
+                else {
+                    consulta += " and localidad = ?"
+                }
+                valores+=ubicacionSpinner
+            }
+            //TODO codificar tipoAnuncio y tipoInmueble
 
-        }
+            if (consulta == "") {
+                consulta = null
+            }
 
-        recyclerAnuncios.layoutManager = LinearLayoutManager(this)
-        val recyclerAdapter = AnuncioRecyclerAdapter(anunciosBuscados)
-        recyclerAnuncios.adapter = recyclerAdapter
+            cursor = querier.query("propiedades", null, consulta, valores, null, null, null)
+            cursor.moveToFirst()
+            while (cursor.moveToNext()) {
+                val anuncioNuevo : Anuncio = devolverAnuncio(cursor)
+                anunciosBuscados.add(anuncioNuevo)
+            }
 
-        recyclerAnuncios.setOnClickListener {
-
+            recyclerAdapter.notifyDataSetChanged()
+            Toast.makeText(this, "Se han encontrado estos resultados: " + anunciosBuscados.size, Toast.LENGTH_LONG).show()
         }
 
         //Barra de arriba
@@ -330,5 +346,25 @@ class PantallaAnuncios : AppCompatActivity() {
             startActivity(refresh)
         }
 
+    }
+
+    //Función para devolver un anuncio obtenido de base de datos
+    private fun devolverAnuncio(cursor : Cursor) : Anuncio {
+        return Anuncio(cursor.getString(cursor.getColumnIndexOrThrow("referencia")),
+            LocalDateTime.parse(cursor.getString(cursor.getColumnIndexOrThrow("fecha"))),
+            cursor.getString(cursor.getColumnIndexOrThrow("url")),
+            cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble")),
+            cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")),
+            cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs")),
+            cursor.getString(cursor.getColumnIndexOrThrow("descripcionEn")),
+            cursor.getString(cursor.getColumnIndexOrThrow("descripcionFr")),
+            cursor.getString(cursor.getColumnIndexOrThrow("descripcionDe")),
+            cursor.getString(cursor.getColumnIndexOrThrow("descripcionSv")),
+            cursor.getInt(cursor.getColumnIndexOrThrow("codigoPostal")),
+            cursor.getString(cursor.getColumnIndexOrThrow("provincia")),
+            cursor.getString(cursor.getColumnIndexOrThrow("localidad")),
+            cursor.getString(cursor.getColumnIndexOrThrow("direccion")),
+            cursor.getString(cursor.getColumnIndexOrThrow("geoLocalizacion")),
+            cursor.getString(cursor.getColumnIndexOrThrow("registroTurismo")))
     }
 }
