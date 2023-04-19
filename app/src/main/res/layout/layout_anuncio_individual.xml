@@ -138,11 +138,9 @@
 
             <TextView
                 android:id="@+id/txtDescripcion"
-                android:layout_width="384dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
+                android:paddingTop="10dp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc hendrerit mi vel orci eleifend placerat. Integer interdum mi elit, ac tempus arcu consequat sit amet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum dictum lectus aliquam, varius ipsum non, dignissim massa. Vestibulum quis pharetra dui, vitae rutrum lacus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut finibus lacus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In purus felis, imperdiet mattis congue sodales, malesuada in odio. Curabitur aliquet urna sem, et posuere metus bibendum a. Sed vitae volutpat est. In sit amet nulla scelerisque, ornare nisi eget, varius lacus. Suspendisse dolor risus, lobortis ullamcorper condimentum tincidunt, porttitor a odio.  Mauris eu ipsum neque. Integer lobortis viverra lorem, a pulvinar enim lacinia at. Proin facilisis aliquam eleifend. Quisque cursus purus justo, in ultrices dui bibendum quis. Nunc bibendum, erat ac rutrum consequat, nisl leo venenatis felis, sit amet semper orci nunc id orci. In hac habitasse platea dictumst. Nullam consectetur malesuada est, eu porttitor dui venenatis quis."
                 android:textColor="@color/white" />
 

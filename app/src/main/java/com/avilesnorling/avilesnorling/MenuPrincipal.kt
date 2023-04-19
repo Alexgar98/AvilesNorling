@@ -8,9 +8,12 @@ import android.database.sqlite.SQLiteDatabaseLockedException
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.LocaleList
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.core.os.ConfigurationCompat
 import com.avilesnorling.avilesnorling.clases.Anuncio
 import com.avilesnorling.avilesnorling.clases.Helper
 import kotlinx.coroutines.GlobalScope
@@ -93,11 +96,11 @@ class MenuPrincipal : AppCompatActivity() {
         spinnerIdiomas.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when (position) {
-                    0 -> setLocale("es")
-                    1 -> setLocale("en")
-                    2 -> setLocale("de")
-                    3 -> setLocale("fr")
-                    4 -> setLocale("sv")
+                    0 -> changeLocale("es")
+                    1 -> changeLocale("en")
+                    2 -> changeLocale("de")
+                    3 -> changeLocale("fr")
+                    4 -> changeLocale("sv")
                 }
             }
 
@@ -155,9 +158,11 @@ class MenuPrincipal : AppCompatActivity() {
         val intent : Intent = Intent(this, PantallaAnuncios::class.java)
         var zona : String = ""
         intent.putExtra("tipoAnuncio", tipoAnuncio)
+
         val inflater : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView : View = inflater.inflate(R.layout.layout_radiogroup, null)
         val popupVentana = PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+
         val radioGroup = popupView.findViewById<RadioGroup>(R.id.groupZonas)
         if (tipoAnuncio == "Venta") {
             val btnAlgarrobo : RadioButton = popupView.findViewById<RadioButton>(R.id.btnAlgarrobo)
@@ -200,12 +205,13 @@ class MenuPrincipal : AppCompatActivity() {
             }
             intent.putExtra("zona", zona)
             startActivity(intent)
+            popupVentana.dismiss()
         }
         popupVentana.showAtLocation(boton, Gravity.CENTER, 0, 0)
     }
 
     //Función para cambiar el idioma
-    fun setLocale(localeName: String) {
+    fun changeLocale(localeName: String) {
         if (localeName != idiomaActual) {
             locale = Locale(localeName)
             val res = resources
@@ -219,4 +225,10 @@ class MenuPrincipal : AppCompatActivity() {
             startActivity(refresh)
         }
     }
+
+    override fun onBackPressed() {
+        //Aquí no tiene que haber nada absolutamente
+    }
+
+
 }

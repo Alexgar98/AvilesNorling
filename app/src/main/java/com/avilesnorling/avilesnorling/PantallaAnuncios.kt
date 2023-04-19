@@ -59,7 +59,7 @@ class PantallaAnuncios : AppCompatActivity() {
         setContentView(R.layout.layout_pantalla_anuncios)
         //Arrays con los valores de los spinners
         var anuncios = arrayOf<String>(getString(R.string.oferta), getString(R.string.venta), getString(R.string.alquiler), getString(R.string.vacaciones))
-        var inmuebles = arrayOf<String>(getString(R.string.tipoInmueble), getString(R.string.pisos), getString(R.string.casas), getString(R.string.locales), getString(R.string.tiendas))
+        var inmuebles = arrayOf<String>(getString(R.string.tipoInmueble), getString(R.string.pisos), getString(R.string.casas), getString(R.string.locales))
         var ubicaciones = arrayOf<String>("Torre del Mar", "Vélez-Málaga", "Algarrobo", "Almáchar", "Almayate", "Benajarafe", "Benamargosa", "Caleta de Vélez", "Canillas de Aceituno", "Torrox", "Málaga", "Málaga oriental")
         var numerosDormitorios = arrayOf<String>(getString(R.string.dormitorios), "1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+", "10+")
 
@@ -145,8 +145,8 @@ class PantallaAnuncios : AppCompatActivity() {
             datePickerDialog.show()
         }
 
-        //Codifico el tipo de inmueble según el anuncio elegido
-        var inmueble : Int = if (anuncioElegido == "Venta") {
+        //Codifico el tipo de anuncio según el anuncio elegido
+        var anuncio : Int = if (anuncioElegido == "Venta") {
             1
         } else if (anuncioElegido == "Alquiler" || anuncioElegido == "Vacaciones") {
             2
@@ -158,20 +158,19 @@ class PantallaAnuncios : AppCompatActivity() {
         var anunciosBuscados = ArrayList<Anuncio>()
         val helper : Helper = Helper(this)
         var querier : SQLiteDatabase = helper.writableDatabase
-        var cursor : Cursor = if (inmueble == 0) {
+        var cursor : Cursor = if (anuncio == 0) {
             querier.query("propiedades", null, "localidad = ?", arrayOf(ubicacionElegida), null, null, null)
         } else {
             querier.query(
                 "propiedades",
                 null,
                 "localidad = ? and tipoOferta = ?",
-                arrayOf(ubicacionElegida, inmueble.toString()),
+                arrayOf(ubicacionElegida, anuncio.toString()),
                 null,
                 null,
                 null
             )
         }
-        cursor.moveToFirst()
         while (cursor.moveToNext()) {
             val anuncioNuevo : Anuncio = devolverAnuncio(cursor)
             anunciosBuscados.add(anuncioNuevo)
@@ -194,7 +193,7 @@ class PantallaAnuncios : AppCompatActivity() {
             var precioDesde : String? = txtprecioDesde.text.toString()
             var precioHasta : String? = txtprecioHasta.text.toString()
             var anuncio : String? = tipoAnuncio.selectedItem.toString()
-            var inmueble : String? = tipoInmueble.selectedItem.toString()
+            var inmuebleElegido : String? = tipoInmueble.selectedItem.toString()
             var ubicacionSpinner : String? = ubicacion.selectedItem.toString()
             var numeroDormitorios : String? = dormitorios.selectedItem.toString()
             var personasElegidas : String? = personas.text.toString()
@@ -219,14 +218,50 @@ class PantallaAnuncios : AppCompatActivity() {
                 }
                 valores+=ubicacionSpinner
             }
-            //TODO codificar tipoAnuncio y tipoInmueble
+            if (anuncio != getString(R.string.oferta)) {
+                if (consulta == "") {
+                    consulta += "tipoOferta = ?"
+                }
+                else {
+                    consulta += " and tipoOferta = ?"
+                }
+                when (anuncio) {
+                    getString(R.string.venta) -> valores += ("" + 1)
+                    getString(R.string.alquiler) -> valores += ("" + 2)
+                    getString(R.string.vacaciones) -> valores += ("" + 2) //TODO distinguir esto
+                }
+            }
+
+            //Codifico el tipo de inmueble
+            var inmueble : Int = if (inmuebleElegido == getString(R.string.pisos)) {
+                4
+            }
+            else if (inmuebleElegido == getString(R.string.casas)) {
+                16
+            }
+            else if (inmuebleElegido == getString(R.string.locales)) {
+                512
+            }
+            else {
+                0
+            }
+
+            if (inmueble != 0) {
+                if (consulta == "") {
+                    consulta = "tipoInmueble = ?"
+                }
+                else {
+                    consulta += " and tipoInmueble = ?"
+                }
+                valores += ("" + inmueble)
+            }
 
             if (consulta == "") {
                 consulta = null
+                valores = emptyArray()
             }
 
             cursor = querier.query("propiedades", null, consulta, valores, null, null, null)
-            cursor.moveToFirst()
             while (cursor.moveToNext()) {
                 val anuncioNuevo : Anuncio = devolverAnuncio(cursor)
                 anunciosBuscados.add(anuncioNuevo)

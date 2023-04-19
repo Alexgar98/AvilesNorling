@@ -28,58 +28,14 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val imgInstagram : ImageView by lazy{findViewById<ImageView>(R.id.imgInstagram)}
     val imgCasa : ImageView by lazy{findViewById<ImageView>(R.id.imgCasa)}
     lateinit var locale : Locale
-    private var idiomaActual = "es"
+    private var idiomaActual = Locale.getDefault().language.toString()
     private var idioma : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_anuncio_individual)
 
         val urlAnuncio : String? = intent.getStringExtra("urlAnuncio")
-        val helper : Helper = Helper(this)
-        var querier : SQLiteDatabase = helper.writableDatabase
-        val cursor : Cursor = querier.query("propiedades", null, "url = ?", arrayOf(urlAnuncio), null, null, null)
-        cursor.moveToFirst()
-        val tipoInmueble : Int = cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble"))
-        var inmueble : String
-        when (tipoInmueble) {
-            1 -> inmueble = "Estudio"
-            2 -> inmueble = "Apartamento"
-            3 -> inmueble = "Piso"
-            4 -> inmueble = "Dúplex"
-            5 -> inmueble = "Casa"
-            6 -> inmueble = "Bungalow"
-            7 -> inmueble = "Chalet"
-            8 -> inmueble = "Villa"
-            9 -> inmueble = "Oficina"
-            10 -> inmueble = "Local"
-            11 -> inmueble = "Nave"
-            12 -> inmueble = "Edificio"
-            13 -> inmueble = "Finca"
-            14 -> inmueble = "Solar"
-            15 -> inmueble = "Parcela"
-            16 -> inmueble = "Garaje"
-            17 -> inmueble = "Hotel"
-            18 -> inmueble = "Trastero"
-            19 -> inmueble = "Loft"
-            else -> inmueble = "Propiedad"
-        }
-        val ubicacion : String = cursor.getString(cursor.getColumnIndexOrThrow("localidad"))
-        categoriaUbicacion.text = inmueble + " en " + ubicacion
-        referencia.text = "Ref: " + cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
-        descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs"))
-        val esVenta : Boolean = cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")) == 1
-        if (esVenta) {
-            btnReserva.visibility = View.GONE
-        }
-        //TODO web scraping y obtener las cosas de base de datos
-
-        btnReserva.setOnClickListener {
-            //TODO Averiguar cómo hace la conversión Avaibook para entrar a la reserva por ahí. Es inviable hacerlo con cada anuncio
-        }
-
-        //Barra de arriba
-
-        idiomaActual = intent.getStringExtra(idioma).toString()
+        idiomaActual = intent.getStringExtra("idioma").toString()
 
         //Array de idiomas que se muestra en el spinner
         val idiomas = arrayOf(
@@ -89,7 +45,6 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             Pair(getString(R.string.frances), R.drawable.francia),
             Pair(getString(R.string.sueco), R.drawable.suecia)
         )
-
         //Adapter del spinner
         val adapter = object : ArrayAdapter<Pair<String, Int>>(this, R.layout.spinner_idiomas, R.id.txtPais, idiomas) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -116,30 +71,81 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         spinnerIdiomas.adapter = adapter
 
         //Setea el spinner según el idioma seleccionado, para que no se vuelva siempre al español
-        /*when (idiomaActual) {
+        when (idiomaActual) {
             "es" -> spinnerIdiomas.setSelection(0)
             "en" -> spinnerIdiomas.setSelection(1)
             "de" -> spinnerIdiomas.setSelection(2)
             "fr" -> spinnerIdiomas.setSelection(3)
             "sv" -> spinnerIdiomas.setSelection(4)
+            else -> spinnerIdiomas.setSelection(0)
         }
 
         //Selección de idioma
         spinnerIdiomas.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when (position) {
-                    0 -> setLocale("es")
-                    1 -> setLocale("en")
-                    2 -> setLocale("de")
-                    3 -> setLocale("fr")
-                    4 -> setLocale("sv")
+                    0 -> setLocale("es", urlAnuncio)
+                    1 -> setLocale("en", urlAnuncio)
+                    2 -> setLocale("de", urlAnuncio)
+                    3 -> setLocale("fr", urlAnuncio)
+                    4 -> setLocale("sv", urlAnuncio)
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
-        }*/
+        }
+
+        val helper : Helper = Helper(this)
+        var querier : SQLiteDatabase = helper.writableDatabase
+        val cursor : Cursor = querier.query("propiedades", null, "url = ?", arrayOf(urlAnuncio), null, null, null)
+        cursor.moveToFirst()
+        val tipoInmueble : Int = cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble"))
+        var inmueble : String
+        when (tipoInmueble) {
+            1 -> inmueble = "Estudio"
+            2 -> inmueble = "Apartamento"
+            4 -> inmueble = "Piso"
+            8 -> inmueble = "Dúplex"
+            16 -> inmueble = "Casa"
+            64 -> inmueble = "Chalet"
+            128 -> inmueble = "Villa"
+            512 -> inmueble = "Local"
+            else -> inmueble = "Propiedad"
+        }
+        val ubicacion : String = cursor.getString(cursor.getColumnIndexOrThrow("localidad"))
+        categoriaUbicacion.text = inmueble + " en " + ubicacion
+        referencia.text = "Ref: " + cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
+        if (idiomaActual == "es") {
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs"))
+        }
+        else if (idiomaActual == "en") {
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEn"))
+        }
+        else if (idiomaActual == "fr") {
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionFr"))
+        }
+        else if (idiomaActual == "de") {
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionDe"))
+        }
+        else if (idiomaActual == "sv") {
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionSv"))
+        }
+        else {
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs"))
+        }
+        val esVenta : Boolean = cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")) == 1
+        if (esVenta) {
+            btnReserva.visibility = View.GONE
+        }
+        //TODO web scraping y obtener las cosas de base de datos
+
+        btnReserva.setOnClickListener {
+            //TODO Averiguar cómo hace la conversión Avaibook para entrar a la reserva por ahí. Es inviable hacerlo con cada anuncio
+        }
+
+        //Barra de arriba
 
         //Enlaces a redes sociales
         imgWhatsapp.setOnClickListener {
@@ -174,7 +180,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         startActivity(abrirPagina)
     }
 
-    fun setLocale(localeName: String) {
+    fun setLocale(localeName: String, url : String?) {
         if (localeName != idiomaActual) {
             locale = Locale(localeName)
             val res = resources
@@ -183,8 +189,10 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             //Esto está deprecated, preguntar si eso porque me tiene hasta las narices (?)
             conf.locale = locale
             res.updateConfiguration(conf, dm)
+            idiomaActual = localeName
             val refresh = Intent(this, PantallaAnuncioIndividual::class.java)
-            refresh.putExtra(idioma, localeName)
+            refresh.putExtra("idioma", localeName)
+            refresh.putExtra("urlAnuncio", url)
             startActivity(refresh)
         }
 
