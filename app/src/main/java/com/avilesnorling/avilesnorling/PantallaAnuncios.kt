@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.database.Cursor
+import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.LocaleList
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -195,20 +197,62 @@ class PantallaAnuncios : AppCompatActivity() {
             var anuncio : String? = tipoAnuncio.selectedItem.toString()
             var inmuebleElegido : String? = tipoInmueble.selectedItem.toString()
             var ubicacionSpinner : String? = ubicacion.selectedItem.toString()
-            var numeroDormitorios : String? = dormitorios.selectedItem.toString()
+            var numeroDormitorios : String = dormitorios.selectedItem.toString()
             var personasElegidas : String? = personas.text.toString()
             var fechaElegida : Date?
 
+            try {
             anunciosBuscados.clear()
             recyclerAdapter.notifyDataSetChanged()
             recyclerAnuncios.scrollToPosition(0)
 
             var consulta : String? = ""
             var valores : Array<String> = arrayOf()
-            if (referencia != null) {
+            if (referencia != null && referencia != "") {
                 consulta += "referencia = ?"
                 valores+=referencia
             }
+            if (superficie != null && superficie != "") {
+
+                    if (consulta == "") {
+                        consulta += "superficie > ?"
+                    }
+                    else {
+                        consulta += " and superficie = ?"
+                    }
+                    valores+= superficie
+
+            }
+
+                if (precioDesde != null && precioDesde != "" && precioDesde.toInt() > 0) {
+                    if (consulta == "") {
+                        consulta += "precio > ?"
+                    }
+                    else {
+                        consulta += " and precio > ?"
+                    }
+                    valores += precioDesde
+                }
+
+                if (precioHasta != null && precioHasta != "" && precioHasta.toInt() > 0) {
+                    if (consulta == "") {
+                        consulta += "precio < ?"
+                    }
+                    else {
+                        consulta += " and precio < ?"
+                    }
+                    valores += precioHasta
+                }
+                if (numeroDormitorios != getString(R.string.dormitorios)) {
+                    val dormitoriosElegidos : String = numeroDormitorios.replace("+", "")
+                    if (consulta == "") {
+                        consulta += "dormitorios >= ?"
+                    }
+                    else {
+                        consulta += " and dormitorios >= ?"
+                    }
+                    valores += dormitoriosElegidos
+                }
             if (ubicacionSpinner != null) {
                 if (consulta == "") {
                     consulta += "localidad = ?"
@@ -268,7 +312,17 @@ class PantallaAnuncios : AppCompatActivity() {
             }
 
             recyclerAdapter.notifyDataSetChanged()
-            Toast.makeText(this, "Se han encontrado estos resultados: " + anunciosBuscados.size, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Se han encontrado estos resultados: " + anunciosBuscados.size, Toast.LENGTH_LONG).show()
+            }
+            catch (e : java.lang.NumberFormatException) {
+                e.message?.let { Log.e("Error", it) }
+                Toast.makeText(this, R.string.valoresInvalidos, Toast.LENGTH_LONG).show()
+            }
+            catch (e : SQLException) {
+                e.message?.let { Log.e("Error", it) }
+                Toast.makeText(this, R.string.noSePudoConectar, Toast.LENGTH_LONG).show()
+            }
+
         }
 
         //Barra de arriba
@@ -400,6 +454,12 @@ class PantallaAnuncios : AppCompatActivity() {
             cursor.getString(cursor.getColumnIndexOrThrow("localidad")),
             cursor.getString(cursor.getColumnIndexOrThrow("direccion")),
             cursor.getString(cursor.getColumnIndexOrThrow("geoLocalizacion")),
-            cursor.getString(cursor.getColumnIndexOrThrow("registroTurismo")))
+            cursor.getString(cursor.getColumnIndexOrThrow("registroTurismo")),
+            cursor.getString(cursor.getColumnIndexOrThrow("imgPrincipal")),
+            cursor.getInt(cursor.getColumnIndexOrThrow("precio")),
+            cursor.getInt(cursor.getColumnIndexOrThrow("dormitorios")),
+            cursor.getInt(cursor.getColumnIndexOrThrow("superficie")),
+            cursor.getInt(cursor.getColumnIndexOrThrow("banos"))
+        )
     }
 }

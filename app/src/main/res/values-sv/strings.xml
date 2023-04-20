@@ -25,4 +25,5 @@
     <string name="contacto">Kontakta</string>
     <string name="fechaNoValida">Det valda datumet är ogiltigt</string>
     <string name="noSePudoConectar">Kunde inte ansluta till databasen. Vänligen försök igen senare</string>
+    <string name="valoresInvalidos">De valda värdena är inte giltiga. Var god försök igen</string>
 </resources>

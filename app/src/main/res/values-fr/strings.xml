@@ -25,4 +25,5 @@
     <string name="contacto">Contacter</string>
     <string name="fechaNoValida">La date sélectionnée n\'est pas valide</string>
     <string name="noSePudoConectar">Impossible de se connecter à la base de données. Veuillez réessayer plus tard</string>
+    <string name="valoresInvalidos">Les valeurs sélectionnées ne sont pas valides. Veuillez réessayer</string>
 </resources>
