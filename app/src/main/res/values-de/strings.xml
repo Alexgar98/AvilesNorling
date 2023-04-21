@@ -26,4 +26,14 @@
     <string name="fechaNoValida">Das ausgewählte Datum ist ungültig</string>
     <string name="noSePudoConectar">Es konnte keine Verbindung zur Datenbank hergestellt werden. Bitte versuchen Sie es später erneut</string>
     <string name="valoresInvalidos">Die ausgewählten Werte sind ungültig. Bitte versuche es erneut</string>
+    <string name="estudio">Studie</string>
+    <string name="apartamento">Apartment</string>
+    <string name="piso">Wohnung</string>
+    <string name="casa">Haus</string>
+    <string name="chalet">Chalet</string>
+    <string name="duplex">Duplex</string>
+    <string name="villa">Villa</string>
+    <string name="local">Lokal</string>
+    <string name="propiedad">Eigentum</string>
+    <string name="en">in</string>
 </resources>

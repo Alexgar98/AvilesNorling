@@ -31,4 +31,14 @@
     <string name="fechaNoValida">La fecha indicada no es válida</string>
     <string name="noSePudoConectar">No se pudo conectar con la base de datos. Vuelve a intentarlo más tarde</string>
     <string name="valoresInvalidos">Los valores introducidos no son válidos. Vuelve a intentarlo</string>
+    <string name="estudio">Estudio</string>
+    <string name="apartamento">Apartamento</string>
+    <string name="piso">Piso</string>
+    <string name="casa">Casa</string>
+    <string name="chalet">Chalet</string>
+    <string name="duplex">Dúplex</string>
+    <string name="villa">Villa</string>
+    <string name="local">Local</string>
+    <string name="propiedad">Propiedad</string>
+    <string name="en">en</string>
 </resources>

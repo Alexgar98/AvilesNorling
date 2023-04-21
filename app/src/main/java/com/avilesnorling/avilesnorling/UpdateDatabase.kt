@@ -169,6 +169,13 @@ class UpdateDatabase : Service() {
                 } catch (e: java.lang.NumberFormatException) {
                     banos = 0
                 }
+                var vacacional : Boolean
+                try {
+                    vacacional = elemento.getChildText("tipoOfertaExt").equals(16)
+                }
+                catch (e : Exception) {
+                    vacacional = false
+                }
 
                 datos.add(
                     Anuncio(
@@ -192,7 +199,8 @@ class UpdateDatabase : Service() {
                         precio,
                         dormitorios,
                         superficie,
-                        banos
+                        banos,
+                        vacacional
                     )
                 )
             }
@@ -204,7 +212,7 @@ class UpdateDatabase : Service() {
                         "INSERT INTO propiedades (referencia, fecha, url, tipoInmueble, tipoOferta, descripcionEs, " +
                                 "descripcionEn, descripcionFr, descripcionDe, descripcionSv, codigoPostal, provincia, " +
                                 "localidad, direccion, geoLocalizacion, registroTurismo, imgPrincipal, precio, dormitorios," +
-                                " superficie, banos) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                                " superficie, banos, vacacional) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                     val statement = querier.compileStatement(sql)
                     statement.bindString(1, dato.referencia)
                     statement.bindString(2, dato.fecha.toString())
@@ -227,6 +235,7 @@ class UpdateDatabase : Service() {
                     statement.bindLong(19, dato.dormitorios!!.toLong())
                     statement.bindLong(20, dato.superficie!!.toLong())
                     statement.bindLong(21, dato.banos!!.toLong())
+                    statement.bindString(22, dato.vacacional.toString())
                     statement.executeInsert()
                 } catch (e: SQLiteConstraintException) {
                     e.message?.let { Log.e("Error", it) }

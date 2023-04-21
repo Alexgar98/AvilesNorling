@@ -26,4 +26,14 @@
     <string name="fechaNoValida">Det valda datumet är ogiltigt</string>
     <string name="noSePudoConectar">Kunde inte ansluta till databasen. Vänligen försök igen senare</string>
     <string name="valoresInvalidos">De valda värdena är inte giltiga. Var god försök igen</string>
+    <string name="estudio">Etta</string>
+    <string name="apartamento">Lägenhet</string>
+    <string name="piso">Våning</string>
+    <string name="casa">Hus</string>
+    <string name="chalet">Hus</string>
+    <string name="duplex">Duplex</string>
+    <string name="villa">Villa</string>
+    <string name="local">Affärslokaler</string>
+    <string name="propiedad">Egendom</string>
+    <string name="en">i</string>
 </resources>

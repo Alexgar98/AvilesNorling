@@ -162,6 +162,8 @@ class MenuPrincipal : AppCompatActivity() {
         val inflater : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView : View = inflater.inflate(R.layout.layout_radiogroup, null)
         val popupVentana = PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        popupVentana.isOutsideTouchable = true
+        popupVentana.isFocusable = true
 
         val radioGroup = popupView.findViewById<RadioGroup>(R.id.groupZonas)
         if (tipoAnuncio == "Venta") {

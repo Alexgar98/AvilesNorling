@@ -10,6 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.avilesnorling.avilesnorling.clases.Helper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.jdom2.Element
+import org.jdom2.input.SAXBuilder
+import java.net.URL
 import java.util.*
 
 class PantallaAnuncioIndividual : AppCompatActivity() {
@@ -18,6 +23,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val referencia : TextView by lazy {findViewById<TextView>(R.id.referenciaInteriorAnuncio)}
     val descripcion : TextView by lazy {findViewById<TextView>(R.id.txtDescripcion)}
     val btnReserva : Button by lazy {findViewById<Button>(R.id.btnReserva)}
+    val titulo : TextView by lazy {findViewById<TextView>(R.id.tituloAnuncio)}
     //Barra de arriba
     val spinnerIdiomas : Spinner by lazy{findViewById<Spinner>(R.id.spinnerIdiomas)}
     val imgWhatsapp : ImageView by lazy{findViewById<ImageView>(R.id.imgWhatsapp)}
@@ -104,18 +110,18 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         val tipoInmueble : Int = cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble"))
         var inmueble : String
         when (tipoInmueble) {
-            1 -> inmueble = "Estudio"
-            2 -> inmueble = "Apartamento"
-            4 -> inmueble = "Piso"
-            8 -> inmueble = "Dúplex"
-            16 -> inmueble = "Casa"
-            64 -> inmueble = "Chalet"
-            128 -> inmueble = "Villa"
-            512 -> inmueble = "Local"
-            else -> inmueble = "Propiedad"
+            1 -> inmueble = getString(R.string.estudio)
+            2 -> inmueble = getString(R.string.apartamento)
+            4 -> inmueble = getString(R.string.piso)
+            8 -> inmueble = getString(R.string.duplex)
+            16 -> inmueble = getString(R.string.casa)
+            64 -> inmueble = getString(R.string.chalet)
+            128 -> inmueble = getString(R.string.villa)
+            512 -> inmueble = getString(R.string.local)
+            else -> inmueble = getString(R.string.propiedad)
         }
         val ubicacion : String = cursor.getString(cursor.getColumnIndexOrThrow("localidad"))
-        categoriaUbicacion.text = inmueble + " en " + ubicacion
+        categoriaUbicacion.text = inmueble + " " + getString(R.string.en) + " " + ubicacion
         referencia.text = "Ref: " + cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
         if (idiomaActual == "es") {
             descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs"))
@@ -139,7 +145,21 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         if (esVenta) {
             btnReserva.visibility = View.GONE
         }
-        //TODO web scraping y obtener las cosas de base de datos
+
+        var elemento : Element? = null
+        //Saco los datos del XML porque no quiero engordar aún más la clase Anuncio
+        GlobalScope.launch {
+            elemento = sacarElemento(urlAnuncio)
+
+        }
+        if (elemento != null) {
+            titulo.text = elemento!!.getChild("extensionInmoenter").getChild("listaTitulos").getChild("titulo").getChildText("texto")
+        }
+        else {
+            Toast.makeText(this, "No se pudieron obtener los datos. Volviendo atrás", Toast.LENGTH_LONG).show()
+            val intent : Intent = Intent(this, PantallaAnuncios::class.java)
+            startActivity(intent)
+        }
 
         btnReserva.setOnClickListener {
             //TODO Averiguar cómo hace la conversión Avaibook para entrar a la reserva por ahí. Es inviable hacerlo con cada anuncio
@@ -196,5 +216,23 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             startActivity(refresh)
         }
 
+    }
+
+    fun sacarElemento (url : String?) : Element? {
+        val xml = URL("https://avilesnorling.inmoenter.com/export/all/xcp.xml")
+        val builder = SAXBuilder()
+        val document = builder.build(xml)
+        val root = document.rootElement
+        val elementosPosibles = root.getChild("Propiedades").getChildren("propiedad")
+        var elemento : Element? = null
+
+        for (i in 0 until elementosPosibles.size) {
+            if (elementosPosibles[i].getChildText("url") == url) {
+                elemento = elementosPosibles[i]
+                break
+            }
+        }
+
+        return elemento
     }
 }

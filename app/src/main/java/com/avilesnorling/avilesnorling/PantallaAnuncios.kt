@@ -160,18 +160,95 @@ class PantallaAnuncios : AppCompatActivity() {
         var anunciosBuscados = ArrayList<Anuncio>()
         val helper : Helper = Helper(this)
         var querier : SQLiteDatabase = helper.writableDatabase
-        var cursor : Cursor = if (anuncio == 0) {
-            querier.query("propiedades", null, "localidad = ?", arrayOf(ubicacionElegida), null, null, null)
-        } else {
-            querier.query(
-                "propiedades",
-                null,
-                "localidad = ? and tipoOferta = ?",
-                arrayOf(ubicacionElegida, anuncio.toString()),
-                null,
-                null,
-                null
-            )
+        var cursor : Cursor
+        if (anuncio == 0) {
+            if (ubicacionElegida != "Málaga oriental") {
+                cursor = querier.query(
+                    "propiedades",
+                    null,
+                    "localidad = ?",
+                    arrayOf(ubicacionElegida),
+                    null,
+                    null,
+                    null
+                )
+            }
+            else {
+                cursor = querier.query("propiedades", null, null, null, null, null, null)
+            }
+        } else if (anuncio == 2) {
+            if (anuncioElegido != "Vacaciones") {
+                if (ubicacionElegida != "Málaga oriental") {
+                    cursor = querier.query(
+                        "propiedades",
+                        null,
+                        "localidad = ? and tipoOferta = ? and vacacional = ?",
+                        arrayOf(ubicacionElegida, anuncio.toString(), "false"),
+                        null,
+                        null,
+                        null
+                    )
+                }
+                else {
+                    cursor = querier.query(
+                        "propiedades",
+                        null,
+                        "tipoOferta = ? and vacacional = ?",
+                        arrayOf(anuncio.toString(), "false"),
+                        null,
+                        null,
+                        null
+                    )
+                }
+            }
+            else {
+                if (ubicacionElegida != "Málaga oriental") {
+                    cursor = querier.query(
+                        "propiedades",
+                        null,
+                        "localidad = ? and tipoOferta = ? and vacacional = ?",
+                        arrayOf(ubicacionElegida, anuncio.toString(), "true"),
+                        null,
+                        null,
+                        null
+                    )
+                }
+                else {
+                    cursor = querier.query(
+                        "propiedades",
+                        null,
+                        "tipoOferta = ? and vacacional = ?",
+                        arrayOf(anuncio.toString(), "true"),
+                        null,
+                        null,
+                        null
+                    )
+                }
+            }
+        }
+        else {
+            if (ubicacionElegida != "Málaga oriental") {
+                cursor = querier.query(
+                    "propiedades",
+                    null,
+                    "localidad = ? and tipoOferta = ?",
+                    arrayOf(ubicacionElegida, anuncio.toString()),
+                    null,
+                    null,
+                    null
+                )
+            }
+            else {
+                cursor = querier.query(
+                    "propiedades",
+                    null,
+                    "tipoOferta = ?",
+                    arrayOf(anuncio.toString()),
+                    null,
+                    null,
+                    null
+                )
+            }
         }
         while (cursor.moveToNext()) {
             val anuncioNuevo : Anuncio = devolverAnuncio(cursor)
@@ -253,7 +330,7 @@ class PantallaAnuncios : AppCompatActivity() {
                     }
                     valores += dormitoriosElegidos
                 }
-            if (ubicacionSpinner != null) {
+            if (ubicacionSpinner != null && ubicacionSpinner != "Málaga oriental") {
                 if (consulta == "") {
                     consulta += "localidad = ?"
                 }
@@ -269,10 +346,19 @@ class PantallaAnuncios : AppCompatActivity() {
                 else {
                     consulta += " and tipoOferta = ?"
                 }
-                when (anuncio) {
-                    getString(R.string.venta) -> valores += ("" + 1)
-                    getString(R.string.alquiler) -> valores += ("" + 2)
-                    getString(R.string.vacaciones) -> valores += ("" + 2) //TODO distinguir esto
+                if (anuncio == getString(R.string.venta)) {
+                    valores += ("" + 1)
+                }
+                else {
+                    valores += ("" + 2)
+                    if (anuncio == getString(R.string.alquiler)) {
+                            consulta += " and vacacional = ?"
+                        valores += "false"
+                    }
+                        else {
+                            consulta += " and vacacional = ?"
+                        valores += "true"
+                }
                 }
             }
 
@@ -459,7 +545,8 @@ class PantallaAnuncios : AppCompatActivity() {
             cursor.getInt(cursor.getColumnIndexOrThrow("precio")),
             cursor.getInt(cursor.getColumnIndexOrThrow("dormitorios")),
             cursor.getInt(cursor.getColumnIndexOrThrow("superficie")),
-            cursor.getInt(cursor.getColumnIndexOrThrow("banos"))
+            cursor.getInt(cursor.getColumnIndexOrThrow("banos")),
+            cursor.getString(cursor.getColumnIndexOrThrow("vacacional")).toBoolean()
         )
     }
 }

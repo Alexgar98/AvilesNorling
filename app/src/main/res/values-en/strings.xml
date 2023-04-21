@@ -26,4 +26,14 @@
     <string name="fechaNoValida">The selected date is not valid</string>
     <string name="noSePudoConectar">Could not connect with database. Please try again later</string>
     <string name="valoresInvalidos">The selected values are not valid. Please try again</string>
+    <string name="estudio">Studio flat</string>
+    <string name="apartamento">Apartment</string>
+    <string name="piso">Flat</string>
+    <string name="casa">House</string>
+    <string name="chalet">Chalet</string>
+    <string name="duplex">Duplex</string>
+    <string name="villa">Villa</string>
+    <string name="local">Business local</string>
+    <string name="propiedad">Property</string>
+    <string name="en">in</string>
 </resources>
