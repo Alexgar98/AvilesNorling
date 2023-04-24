@@ -36,4 +36,8 @@
     <string name="local">Business local</string>
     <string name="propiedad">Property</string>
     <string name="en">in</string>
+    <string name="generales">General</string>
+    <string name="superficies">Surfaces</string>
+    <string name="equipamientos">Equipment</string>
+    <string name="calidades">Qualities</string>
 </resources>

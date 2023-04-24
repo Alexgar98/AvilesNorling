@@ -12,10 +12,12 @@ import android.widget.*
 import com.avilesnorling.avilesnorling.clases.Helper
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jdom2.DefaultJDOMFactory
 import org.jdom2.Element
 import org.jdom2.input.SAXBuilder
 import java.net.URL
 import java.util.*
+import javax.xml.parsers.SAXParserFactory
 
 class PantallaAnuncioIndividual : AppCompatActivity() {
     val imagenPrincipal : ImageView by lazy {findViewById<ImageView>(R.id.imagenPrincipal)}
@@ -146,19 +148,22 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             btnReserva.visibility = View.GONE
         }
 
-        var elemento : Element? = null
         //Saco los datos del XML porque no quiero engordar aún más la clase Anuncio
-        GlobalScope.launch {
-            elemento = sacarElemento(urlAnuncio)
-
-        }
-        if (elemento != null) {
-            titulo.text = elemento!!.getChild("extensionInmoenter").getChild("listaTitulos").getChild("titulo").getChildText("texto")
-        }
-        else {
-            Toast.makeText(this, "No se pudieron obtener los datos. Volviendo atrás", Toast.LENGTH_LONG).show()
-            val intent : Intent = Intent(this, PantallaAnuncios::class.java)
-            startActivity(intent)
+        sacarElemento(urlAnuncio) {elemento ->
+            runOnUiThread {
+                if (elemento != null) {
+                    titulo.text = elemento!!.getChild("extensionInmoenter").getChild("listaTitulos")
+                        .getChild("titulo").getChildText("texto")
+                } else {
+                    Toast.makeText(
+                        this,
+                        "No se pudieron obtener los datos. Volviendo atrás",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    val intent: Intent = Intent(this, PantallaAnuncios::class.java)
+                    startActivity(intent)
+                }
+            }
         }
 
         btnReserva.setOnClickListener {
@@ -218,21 +223,34 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
     }
 
-    fun sacarElemento (url : String?) : Element? {
-        val xml = URL("https://avilesnorling.inmoenter.com/export/all/xcp.xml")
-        val builder = SAXBuilder()
-        val document = builder.build(xml)
-        val root = document.rootElement
-        val elementosPosibles = root.getChild("Propiedades").getChildren("propiedad")
-        var elemento : Element? = null
+    fun sacarElemento (url : String?, callback : (Element?) -> Unit ) {
+        Thread {
+            try {
+                val xml = URL("https://avilesnorling.inmoenter.com/export/all/xcp.xml")
+                val builder = SAXBuilder()
+                val factory = DefaultJDOMFactory()
+                builder.jdomFactory = factory
+                val document = builder.build(xml)
+                val root = document.rootElement
+                val elementosPosibles = root.getChild("listaPropiedades").getChildren("propiedad")
+                var elemento: Element? = null
 
-        for (i in 0 until elementosPosibles.size) {
-            if (elementosPosibles[i].getChildText("url") == url) {
-                elemento = elementosPosibles[i]
-                break
+                for (i in 0 until elementosPosibles.size) {
+                    if (elementosPosibles[i].getChildText("url") == url) {
+                        elemento = elementosPosibles[i]
+                        break
+                    }
+                }
+                runOnUiThread {
+                    callback(elemento)
+                }
             }
-        }
-
-        return elemento
+            catch (e : Exception) {
+                e.message?.let { android.util.Log.e("Error", it) }
+                runOnUiThread {
+                    callback(null)
+                }
+            }
+        }.start()
     }
 }

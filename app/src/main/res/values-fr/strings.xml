@@ -36,4 +36,8 @@
     <string name="local">Local</string>
     <string name="propiedad">Propriété</string>
     <string name="en">à</string>
+    <string name="generales">Général</string>
+    <string name="superficies">Surfaces</string>
+    <string name="equipamientos">Equipment</string>
+    <string name="calidades">Qualités</string>
 </resources>

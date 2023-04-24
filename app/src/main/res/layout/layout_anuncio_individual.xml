@@ -134,7 +134,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/descripcion"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtDescripcion"
@@ -150,6 +151,75 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/caracteristicas"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tituloGenerales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/generales"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/generales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/white" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/tituloSuperficies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/superficies"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/superficies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/white" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/tituloEquipamiento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/equipamientos"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/equipamientos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/white" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/tituloCalidades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calidades"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/calidades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
                 android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>

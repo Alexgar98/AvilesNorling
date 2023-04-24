@@ -41,4 +41,8 @@
     <string name="local">Local</string>
     <string name="propiedad">Propiedad</string>
     <string name="en">en</string>
+    <string name="generales">Generales</string>
+    <string name="superficies">Superficies</string>
+    <string name="equipamientos">Equipamientos</string>
+    <string name="calidades">Calidades</string>
 </resources>

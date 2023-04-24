@@ -36,4 +36,8 @@
     <string name="local">Lokal</string>
     <string name="propiedad">Eigentum</string>
     <string name="en">in</string>
+    <string name="generales">General</string>
+    <string name="superficies">Oberflächen</string>
+    <string name="equipamientos">Ausrüstung</string>
+    <string name="calidades">Qualitäten</string>
 </resources>

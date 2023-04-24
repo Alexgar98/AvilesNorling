@@ -36,4 +36,8 @@
     <string name="local">Affärslokaler</string>
     <string name="propiedad">Egendom</string>
     <string name="en">i</string>
+    <string name="generales">Allmänt</string>
+    <string name="superficies">Ytor</string>
+    <string name="equipamientos">Utrustning</string>
+    <string name="calidades">Material</string>
 </resources>
