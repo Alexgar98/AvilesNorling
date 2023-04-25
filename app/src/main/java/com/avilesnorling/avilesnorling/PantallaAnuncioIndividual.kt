@@ -9,6 +9,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.avilesnorling.avilesnorling.clases.FotoRecyclerAdapter
 import com.avilesnorling.avilesnorling.clases.Helper
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.GlobalScope
@@ -21,7 +24,7 @@ import java.util.*
 import javax.xml.parsers.SAXParserFactory
 
 class PantallaAnuncioIndividual : AppCompatActivity() {
-    val imagenPrincipal : ImageView by lazy {findViewById<ImageView>(R.id.imagenPrincipal)}
+    //val imagenPrincipal : ImageView by lazy {findViewById<ImageView>(R.id.imagenPrincipal)}
     val categoriaUbicacion : TextView by lazy {findViewById<TextView>(R.id.categoriaUbicacion)}
     val referencia : TextView by lazy {findViewById<TextView>(R.id.referenciaInteriorAnuncio)}
     val descripcion : TextView by lazy {findViewById<TextView>(R.id.txtDescripcion)}
@@ -35,6 +38,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val cercaDe : TextView by lazy {findViewById<TextView>(R.id.cercaDe)}
     val comunicaciones : TextView by lazy {findViewById<TextView>(R.id.comunicaciones)}
     val precioTexto : TextView by lazy {findViewById<TextView>(R.id.precioAnuncioIndividual)}
+    val recyclerFotos : RecyclerView by lazy {findViewById<RecyclerView>(R.id.recyclerFotos)}
     //Barra de arriba
     val spinnerIdiomas : Spinner by lazy{findViewById<Spinner>(R.id.spinnerIdiomas)}
     val imgWhatsapp : ImageView by lazy{findViewById<ImageView>(R.id.imgWhatsapp)}
@@ -176,7 +180,10 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     for (i in 0 until listaImagenes.size) {
                         imagenes.add(listaImagenes[i].getChildText("url"))
                     } //TODO Recycler para meter el resto de imágenes
-                    Picasso.get().load(imagenes[0]).into(imagenPrincipal)
+                    //Picasso.get().load(imagenes[0]).into(imagenPrincipal)
+                    recyclerFotos.layoutManager = LinearLayoutManager(this)
+                    val recyclerAdapter = FotoRecyclerAdapter(imagenes)
+                    recyclerFotos.adapter = recyclerAdapter
                     var textoGeneral : String = ""
                     val registroTurismo : String? = elemento!!.getChildText("registroTurismo")
                     val ascensor : String? = elemento!!.getChildText("ascensor")

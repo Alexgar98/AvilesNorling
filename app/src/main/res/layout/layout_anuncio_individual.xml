@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo"
+    android:scrollbars="horizontal"
     tools:context=".PantallaAnuncioIndividual">
 
     <LinearLayout
@@ -17,7 +18,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imgWhatsapp"
@@ -76,16 +77,16 @@
             android:src="@drawable/casa" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imagenPrincipal"
-        android:layout_width="375dp"
-        android:layout_height="290dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerFotos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
+        android:scrollbars="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/redesIdioma"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        app:layout_constraintTop_toBottomOf="@+id/redesIdioma" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -95,7 +96,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagenPrincipal">
+        app:layout_constraintTop_toBottomOf="@+id/recyclerFotos">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -246,7 +247,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
 
             <Space
                 android:layout_width="match_parent"
@@ -264,7 +265,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
 
             <Space
                 android:layout_width="match_parent"
@@ -282,7 +283,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>
 
