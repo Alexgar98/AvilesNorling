@@ -120,6 +120,14 @@
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/precioAnuncioIndividual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="TextView"
+                android:textColor="@color/btn" />
+
+            <TextView
                 android:id="@+id/referenciaInteriorAnuncio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -221,6 +229,60 @@
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textColor="@color/white" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/tituloSituacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Situación"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/situacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/white"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/tituloCercaDe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cerca de"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/cercaDe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/white"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/tituloComunicaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comunicaciones"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/comunicaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/white"/>
         </LinearLayout>
     </ScrollView>
 

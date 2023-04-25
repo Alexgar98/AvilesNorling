@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.avilesnorling.avilesnorling.clases.Helper
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jdom2.DefaultJDOMFactory
@@ -26,6 +27,14 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val descripcion : TextView by lazy {findViewById<TextView>(R.id.txtDescripcion)}
     val btnReserva : Button by lazy {findViewById<Button>(R.id.btnReserva)}
     val titulo : TextView by lazy {findViewById<TextView>(R.id.tituloAnuncio)}
+    val generales : TextView by lazy {findViewById<TextView>(R.id.generales)}
+    val superficies : TextView by lazy {findViewById<TextView>(R.id.superficies)}
+    val equipamientos : TextView by lazy {findViewById<TextView>(R.id.equipamientos)}
+    val calidades : TextView by lazy {findViewById<TextView>(R.id.calidades)}
+    val situacion : TextView by lazy {findViewById<TextView>(R.id.situacion)}
+    val cercaDe : TextView by lazy {findViewById<TextView>(R.id.cercaDe)}
+    val comunicaciones : TextView by lazy {findViewById<TextView>(R.id.comunicaciones)}
+    val precioTexto : TextView by lazy {findViewById<TextView>(R.id.precioAnuncioIndividual)}
     //Barra de arriba
     val spinnerIdiomas : Spinner by lazy{findViewById<Spinner>(R.id.spinnerIdiomas)}
     val imgWhatsapp : ImageView by lazy{findViewById<ImageView>(R.id.imgWhatsapp)}
@@ -126,23 +135,24 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         categoriaUbicacion.text = inmueble + " " + getString(R.string.en) + " " + ubicacion
         referencia.text = "Ref: " + cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
         if (idiomaActual == "es") {
-            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs"))
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs")).trim()
         }
         else if (idiomaActual == "en") {
-            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEn"))
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEn")).trim()
         }
         else if (idiomaActual == "fr") {
-            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionFr"))
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionFr")).trim()
         }
         else if (idiomaActual == "de") {
-            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionDe"))
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionDe")).trim()
         }
         else if (idiomaActual == "sv") {
-            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionSv"))
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionSv")).trim()
         }
         else {
-            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs"))
+            descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs")).trim()
         }
+
         val esVenta : Boolean = cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")) == 1
         if (esVenta) {
             btnReserva.visibility = View.GONE
@@ -154,6 +164,247 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                 if (elemento != null) {
                     titulo.text = elemento!!.getChild("extensionInmoenter").getChild("listaTitulos")
                         .getChild("titulo").getChildText("texto")
+                    val precio : String? = elemento!!.getChildText("precio")
+                    if (precio != null && precio != "0") {
+                        precioTexto.text = precio + " €"
+                    }
+                    else {
+                        precioTexto.visibility = View.GONE
+                    }
+                    val listaImagenes = elemento!!.getChild("listaImagenes").getChildren("imagen")
+                    val imagenes : ArrayList<String?> = arrayListOf()
+                    for (i in 0 until listaImagenes.size) {
+                        imagenes.add(listaImagenes[i].getChildText("url"))
+                    } //TODO Recycler para meter el resto de imágenes
+                    Picasso.get().load(imagenes[0]).into(imagenPrincipal)
+                    var textoGeneral : String = ""
+                    val registroTurismo : String? = elemento!!.getChildText("registroTurismo")
+                    val ascensor : String? = elemento!!.getChildText("ascensor")
+                    val salones : String? = elemento!!.getChild("extensionInmoenter").getChildText("salones")
+                    val dormitorios : String? = elemento!!.getChildText("dormitorios")
+                    val banos : String? = elemento!!.getChildText("baños")
+                    val empotrados : String? = elemento!!.getChildText("armariosEmpotrados")
+                    val terrazas : String? = elemento!!.getChildText("terrazas")
+                    val superficieTerrazas : String? = elemento!!.getChildText("superficieTerrazas")
+                    val planta : String? = elemento!!.getChild("extensionInmoenter").getChildText("nplantas")
+                    val lavadero : String? = elemento!!.getChild("extensionInmoenter").getChildText("lavadero")
+                    if (registroTurismo != null) {
+                        textoGeneral += "\n- Código Turístico: " + registroTurismo
+                    }
+                    if (planta != null) {
+                        textoGeneral += "\n- " + planta + "ª planta"
+                    }
+                    if (ascensor != null) {
+                        textoGeneral += "\n- Ascensor"
+                    }
+                    if (salones != null) {
+                        textoGeneral += "\n- " + salones + " salones"
+                    }
+                    if (dormitorios != null) {
+                        textoGeneral += "\n- " + dormitorios + " dormitorios"
+                    }
+                    if (banos != null) {
+                        textoGeneral += "\n- " + banos + " baños"
+                    }
+                    if (empotrados != null) {
+                        textoGeneral += "\n- " + empotrados + " armarios empotrados"
+                    }
+                    if (terrazas != null) {
+                        textoGeneral += "\n- " + terrazas
+                        if (superficieTerrazas != null) {
+                            textoGeneral += " (" + superficieTerrazas + " m2)"
+                        }
+                    }
+                    if (lavadero != null) {
+                        textoGeneral += "\n- Lavadero"
+                    }
+                    generales.text = textoGeneral + "\n"
+
+                    val construido : String? = elemento!!.getChildText("superficieConstruida")
+                    val util : String? = elemento!!.getChildText("superficieUtil")
+                    var textoSuperficies : String = ""
+                    if (construido != null) {
+                        textoSuperficies +="\n- Constr.: " + construido + " m2"
+                    }
+                    if (util != null) {
+                        textoSuperficies +="\n- Útil: " + util + " m2"
+                    }
+                    superficies.text = textoSuperficies + "\n"
+
+                    val piscina : String? = elemento!!.getChildText("piscina")
+                    val jardines : String? = elemento!!.getChildText("jardines")
+                    val cocinaAmueblada : String? = elemento!!.getChildText("cocinaAmueblada")
+                    val electrodomesticos : String? = elemento!!.getChildText("electrodomesticos")
+                    val portero : String? = elemento!!.getChildText("tipoPortero")
+                    val tipoCocina : String? = elemento!!.getChild("extensionInmoenter").getChildText("tipoCocina")
+                    val aireAcondicionado : String? = elemento!!.getChildText("tipoAireAcondicionado")
+                    var textoEquipamientos : String = ""
+                    if (piscina != null) {
+                        textoEquipamientos +="\n- Piscina"
+                    }
+                    if (jardines != null) {
+                        textoEquipamientos +="\n- Jardines"
+                    }
+                    if (tipoCocina != null) {
+                        if (tipoCocina == "1") {
+                            textoEquipamientos += "\n- Cocina independiente"
+                        }
+                        else if (tipoCocina == "2") {
+                            textoEquipamientos += "\n- Cocina americana"
+                        }
+                        else {
+                            textoEquipamientos += "\n- Cocina amueblada"
+                        }
+                    }
+                    if (cocinaAmueblada != null) {
+                        textoEquipamientos +="\n- Cocina amueblada"
+                    }
+                    if (electrodomesticos != null) {
+                        textoEquipamientos +="\n- Electrodomésticos"
+                    }
+                    if (aireAcondicionado != null) {
+                        if (aireAcondicionado == "2") {
+                            textoEquipamientos += "\n- Aire Acondicionado / Instalación"
+                        }
+                        else if (aireAcondicionado == "3") {
+                            textoEquipamientos += "\n- A/C Climatizador"
+                        }
+                        else {
+                            textoEquipamientos += "\n- Aire acondicionado central"
+                        } //TODO Preinstalación
+                    }
+                    if (portero != null) {
+                        if (portero == "1") {
+                            textoEquipamientos +="\n- Portero automático"
+                        }
+                        else {
+                            textoEquipamientos +="\n- Video-portero"
+                        }
+                    }
+                    equipamientos.text = textoEquipamientos + "\n"
+
+                    var textoCalidades : String = ""
+                    val soleria : String? = elemento!!.getChildText("tipoSoleria")
+                    if (soleria != null) {
+                        if (soleria == "5") {
+                            textoCalidades += "\n- Solería de cerámica"
+                        }
+                        else if (soleria == "1") {
+                            textoCalidades += "\n- Solería de parquet"
+                        }
+                        else if (soleria == "6") {
+                            textoCalidades += "\n- Tarima"
+                        }
+                        else {
+                            textoCalidades += "\n- Solería de mármol"
+                        }
+                    }
+                    calidades.text = textoCalidades + "\n"
+
+                    var textoSituacion : String = ""
+                    val zona : String? = elemento!!.getChildText("tipoZona")
+                    val playa : String? = elemento!!.getChildText("tipoPlaya")
+                    val orientacion : String? = elemento!!.getChildText("tipoOrientacion")
+                    if (zona != null) {
+                        if (zona == "1") {
+                            textoSituacion += "\n- Zona urbana"
+                        }
+                        else {
+                            textoSituacion += "\n- Urbanización"
+                        }
+                    }
+                    if (playa != null) {
+                        if (playa == "2") {
+                            textoSituacion += "\n- A 500 metros de la playa"
+                        }
+                        else if (playa == "4") {
+                            textoSituacion += "\n- 2ª Línea de playa"
+                        }
+                        else if (playa == "3") {
+                            textoSituacion += "\n- En zona costera"
+                        }
+                        else {
+                            textoSituacion += "\n- 1ª Línea de playa"
+                        }
+                    }
+                    if (orientacion != null) {
+                        if (orientacion == "3") {
+                            textoSituacion += "\n- Orientación este"
+                        }
+                        else if (orientacion == "4") {
+                            textoSituacion += "\n- Orientación oeste"
+                        }
+                        else if (orientacion == "2") {
+                            textoSituacion += "\n- Orientación sur"
+                        }
+                        else if (orientacion == "8") {
+                            textoSituacion += "\n- Orientación suroeste"
+                        }
+                        else if (orientacion == "7") {
+                            textoSituacion += "\n- Orientación sureste"
+                        }
+                        else {
+                            textoSituacion += "\n- Orientación noroeste"
+                        }
+                    }
+
+                    situacion.text = textoSituacion + "\n"
+
+                    var textoCercaDe : String = ""
+                    val escuelas : String? = elemento!!.getChildText("centrosEscolares")
+                    val deporte : String? = elemento!!.getChildText("instalacionesDeportivas")
+                    val verde : String? = elemento!!.getChildText("espaciosVerdes")
+                    if (escuelas != null) {
+                        textoCercaDe += "\n- Escuelas"
+                    }
+                    if (deporte != null) {
+                        textoCercaDe += "\n- Zonas deportivas"
+                    }
+                    if (verde != null) {
+                        textoCercaDe += "\n- Zonas verdes"
+                    }
+
+                    cercaDe.text = textoCercaDe + "\n"
+
+                    var textoComunicaciones : String = ""
+                    val bus : String? = elemento!!.getChildText("autobuses")
+                    if (bus != null) {
+                        textoComunicaciones += "\n- Bus"
+                    }
+
+                    comunicaciones.text = textoComunicaciones + "\n"
+
+                    if (textoSituacion == "") {
+                        situacion.visibility = View.GONE
+                        findViewById<TextView>(R.id.tituloSituacion).visibility = View.GONE
+                    }
+
+                    if (textoCercaDe == "") {
+                        cercaDe.visibility = View.GONE
+                        findViewById<TextView>(R.id.tituloCercaDe).visibility = View.GONE
+                    }
+
+                    if (textoComunicaciones == "") {
+                        comunicaciones.visibility = View.GONE
+                        findViewById<TextView>(R.id.tituloComunicaciones).visibility = View.GONE
+                    }
+
+                    if (textoGeneral == "") {
+                        generales.visibility = View.GONE
+                        findViewById<TextView>(R.id.tituloGenerales).visibility = View.GONE
+                    }
+                    if (textoSuperficies == "") {
+                        superficies.visibility = View.GONE
+                        findViewById<TextView>(R.id.tituloSuperficies).visibility = View.GONE
+                    }
+                    if (textoEquipamientos == "") {
+                        equipamientos.visibility = View.GONE
+                        findViewById<TextView>(R.id.tituloEquipamiento).visibility = View.GONE
+                    }
+                    if (textoCalidades == "") {
+                        calidades.visibility = View.GONE
+                        findViewById<TextView>(R.id.tituloCalidades).visibility = View.GONE
+                    }
                 } else {
                     Toast.makeText(
                         this,
