@@ -270,8 +270,13 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                             textoEquipamientos += "\n- A/C Climatizador"
                         }
                         else {
-                            textoEquipamientos += "\n- Aire acondicionado central"
-                        } //TODO Preinstalación
+                            if (elemento!!.getChildText("tipoConservacion") == "6") {
+                                textoEquipamientos += "\n- Aire Acondicionado / Preinstalación"
+                            }
+                            else {
+                                textoEquipamientos += "\n- Aire acondicionado central"
+                            }
+                        }
                     }
                     if (portero != null) {
                         if (portero == "1") {
