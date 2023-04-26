@@ -1,6 +1,5 @@
 package com.avilesnorling.avilesnorling
 
-import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -85,26 +84,14 @@ class UpdateDatabase : Service() {
                 } catch (e: java.lang.NumberFormatException) {
                     codigoPostal = 0
                 }
-                var provincia: String =
+                val provincia: String =
                     elemento.getChildText("provincia")
-                if (provincia == null) {
-                    provincia = ""
-                }
-                var localidad: String =
+                val localidad: String =
                     elemento.getChildText("localidad")
-                if (localidad == null) {
-                    localidad = ""
-                }
-                var direccion: String =
+                val direccion: String =
                     elemento.getChildText("direccion")
-                if (direccion == null) {
-                    direccion = ""
-                }
-                var geoLocalizacion: String =
+                val geoLocalizacion: String =
                     elemento.getChildText("geoLocalizacion")
-                if (geoLocalizacion == null) {
-                    geoLocalizacion = ""
-                }
                 var registroTurismo: String? =
                     elemento.getChildText("registroTurismo")
                 if (registroTurismo == null) {
@@ -171,7 +158,7 @@ class UpdateDatabase : Service() {
                 }
                 var vacacional : Boolean
                 try {
-                    vacacional = elemento.getChildText("tipoOfertaExt").equals(16)
+                    vacacional = elemento.getChildText("tipoOfertaExt").equals("16")
                 }
                 catch (e : Exception) {
                     vacacional = false

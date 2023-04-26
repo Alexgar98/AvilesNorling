@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
 import com.avilesnorling.avilesnorling.R
 
 class IdiomasArrayAdapter (contexto : Context, idiomas : List<Idiomas>) : ArrayAdapter<Idiomas>(contexto, 0, idiomas) {

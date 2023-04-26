@@ -6,28 +6,29 @@ import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteDatabaseLockedException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import com.avilesnorling.avilesnorling.clases.AlarmReceiver
 import com.avilesnorling.avilesnorling.clases.Anuncio
 import com.avilesnorling.avilesnorling.clases.Helper
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.jdom2.input.SAXBuilder
-import java.io.IOException
 import java.net.URL
 import java.time.LocalDateTime
 import java.util.*
 
 class PantallaCarga : AppCompatActivity() {
+    val imgCarga : ImageView by lazy {findViewById<ImageView>(R.id.imgCarga)}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_pantalla_carga)
+        Glide.with(this).load(R.drawable.loading_gif).into(imgCarga)
         try {
             //Se actualiza la base de datos por si el XML ha cambiado
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -109,26 +110,14 @@ class PantallaCarga : AppCompatActivity() {
             } catch (e: java.lang.NumberFormatException) {
                 codigoPostal = 0
             }
-            var provincia: String =
+            val provincia: String =
                 elemento.getChildText("provincia")
-            if (provincia == null) {
-                provincia = ""
-            }
-            var localidad: String =
+            val localidad: String =
                 elemento.getChildText("localidad")
-            if (localidad == null) {
-                localidad = ""
-            }
-            var direccion: String =
+            val direccion: String =
                 elemento.getChildText("direccion")
-            if (direccion == null) {
-                direccion = ""
-            }
-            var geoLocalizacion: String =
+            val geoLocalizacion: String =
                 elemento.getChildText("geoLocalizacion")
-            if (geoLocalizacion == null) {
-                geoLocalizacion = ""
-            }
             var registroTurismo: String? =
                 elemento.getChildText("registroTurismo")
             if (registroTurismo == null) {

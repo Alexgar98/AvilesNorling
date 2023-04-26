@@ -13,7 +13,7 @@
         android:icon="@mipmap/icono"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AvilesNorling"
+        android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:targetApi="31">
         <activity
             android:name=".PantallaCarga"

@@ -13,18 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.FotoRecyclerAdapter
 import com.avilesnorling.avilesnorling.clases.Helper
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.jdom2.DefaultJDOMFactory
 import org.jdom2.Element
 import org.jdom2.input.SAXBuilder
 import java.net.URL
 import java.util.*
-import javax.xml.parsers.SAXParserFactory
 
 class PantallaAnuncioIndividual : AppCompatActivity() {
-    //val imagenPrincipal : ImageView by lazy {findViewById<ImageView>(R.id.imagenPrincipal)}
     val categoriaUbicacion : TextView by lazy {findViewById<TextView>(R.id.categoriaUbicacion)}
     val referencia : TextView by lazy {findViewById<TextView>(R.id.referenciaInteriorAnuncio)}
     val descripcion : TextView by lazy {findViewById<TextView>(R.id.txtDescripcion)}
@@ -50,7 +45,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val imgCasa : ImageView by lazy{findViewById<ImageView>(R.id.imgCasa)}
     lateinit var locale : Locale
     private var idiomaActual = Locale.getDefault().language.toString()
-    private var idioma : String? = null
+    //private var idioma : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_anuncio_individual)
@@ -119,21 +114,19 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         }
 
         val helper : Helper = Helper(this)
-        var querier : SQLiteDatabase = helper.writableDatabase
+        val querier : SQLiteDatabase = helper.writableDatabase
         val cursor : Cursor = querier.query("propiedades", null, "url = ?", arrayOf(urlAnuncio), null, null, null)
         cursor.moveToFirst()
-        val tipoInmueble : Int = cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble"))
-        var inmueble : String
-        when (tipoInmueble) {
-            1 -> inmueble = getString(R.string.estudio)
-            2 -> inmueble = getString(R.string.apartamento)
-            4 -> inmueble = getString(R.string.piso)
-            8 -> inmueble = getString(R.string.duplex)
-            16 -> inmueble = getString(R.string.casa)
-            64 -> inmueble = getString(R.string.chalet)
-            128 -> inmueble = getString(R.string.villa)
-            512 -> inmueble = getString(R.string.local)
-            else -> inmueble = getString(R.string.propiedad)
+        val inmueble : String = when (cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble"))) {
+            1 -> getString(R.string.estudio)
+            2 -> getString(R.string.apartamento)
+            4 -> getString(R.string.piso)
+            8 -> getString(R.string.duplex)
+            16 -> getString(R.string.casa)
+            64 -> getString(R.string.chalet)
+            128 -> getString(R.string.villa)
+            512 -> getString(R.string.local)
+            else -> getString(R.string.propiedad)
         }
         val ubicacion : String = cursor.getString(cursor.getColumnIndexOrThrow("localidad"))
         categoriaUbicacion.text = inmueble + " " + getString(R.string.en) + " " + ubicacion
@@ -162,39 +155,40 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             btnReserva.visibility = View.GONE
         }
 
+        cursor.close()
+
         //Saco los datos del XML porque no quiero engordar aún más la clase Anuncio
         sacarElemento(urlAnuncio) {elemento ->
             runOnUiThread {
                 if (elemento != null) {
-                    titulo.text = elemento!!.getChild("extensionInmoenter").getChild("listaTitulos")
+                    titulo.text = elemento.getChild("extensionInmoenter").getChild("listaTitulos")
                         .getChild("titulo").getChildText("texto")
-                    val precio : String? = elemento!!.getChildText("precio")
+                    val precio : String? = elemento.getChildText("precio")
                     if (precio != null && precio != "0") {
                         precioTexto.text = precio + " €"
                     }
                     else {
                         precioTexto.visibility = View.GONE
                     }
-                    val listaImagenes = elemento!!.getChild("listaImagenes").getChildren("imagen")
+                    val listaImagenes = elemento.getChild("listaImagenes").getChildren("imagen")
                     val imagenes : ArrayList<String?> = arrayListOf()
                     for (i in 0 until listaImagenes.size) {
                         imagenes.add(listaImagenes[i].getChildText("url"))
-                    } //TODO Recycler para meter el resto de imágenes
-                    //Picasso.get().load(imagenes[0]).into(imagenPrincipal)
-                    recyclerFotos.layoutManager = LinearLayoutManager(this)
+                    }
+                    recyclerFotos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                     val recyclerAdapter = FotoRecyclerAdapter(imagenes)
                     recyclerFotos.adapter = recyclerAdapter
                     var textoGeneral : String = ""
-                    val registroTurismo : String? = elemento!!.getChildText("registroTurismo")
-                    val ascensor : String? = elemento!!.getChildText("ascensor")
-                    val salones : String? = elemento!!.getChild("extensionInmoenter").getChildText("salones")
-                    val dormitorios : String? = elemento!!.getChildText("dormitorios")
-                    val banos : String? = elemento!!.getChildText("baños")
-                    val empotrados : String? = elemento!!.getChildText("armariosEmpotrados")
-                    val terrazas : String? = elemento!!.getChildText("terrazas")
-                    val superficieTerrazas : String? = elemento!!.getChildText("superficieTerrazas")
-                    val planta : String? = elemento!!.getChild("extensionInmoenter").getChildText("nplantas")
-                    val lavadero : String? = elemento!!.getChild("extensionInmoenter").getChildText("lavadero")
+                    val registroTurismo : String? = elemento.getChildText("registroTurismo")
+                    val ascensor : String? = elemento.getChildText("ascensor")
+                    val salones : String? = elemento.getChild("extensionInmoenter").getChildText("salones")
+                    val dormitorios : String? = elemento.getChildText("dormitorios")
+                    val banos : String? = elemento.getChildText("baños")
+                    val empotrados : String? = elemento.getChildText("armariosEmpotrados")
+                    val terrazas : String? = elemento.getChildText("terrazas")
+                    val superficieTerrazas : String? = elemento.getChildText("superficieTerrazas")
+                    val planta : String? = elemento.getChild("extensionInmoenter").getChildText("nplantas")
+                    val lavadero : String? = elemento.getChild("extensionInmoenter").getChildText("lavadero")
                     if (registroTurismo != null) {
                         textoGeneral += "\n- Código Turístico: " + registroTurismo
                     }
@@ -227,8 +221,8 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     }
                     generales.text = textoGeneral + "\n"
 
-                    val construido : String? = elemento!!.getChildText("superficieConstruida")
-                    val util : String? = elemento!!.getChildText("superficieUtil")
+                    val construido : String? = elemento.getChildText("superficieConstruida")
+                    val util : String? = elemento.getChildText("superficieUtil")
                     var textoSuperficies : String = ""
                     if (construido != null) {
                         textoSuperficies +="\n- Constr.: " + construido + " m2"
@@ -238,13 +232,13 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     }
                     superficies.text = textoSuperficies + "\n"
 
-                    val piscina : String? = elemento!!.getChildText("piscina")
-                    val jardines : String? = elemento!!.getChildText("jardines")
-                    val cocinaAmueblada : String? = elemento!!.getChildText("cocinaAmueblada")
-                    val electrodomesticos : String? = elemento!!.getChildText("electrodomesticos")
-                    val portero : String? = elemento!!.getChildText("tipoPortero")
-                    val tipoCocina : String? = elemento!!.getChild("extensionInmoenter").getChildText("tipoCocina")
-                    val aireAcondicionado : String? = elemento!!.getChildText("tipoAireAcondicionado")
+                    val piscina : String? = elemento.getChildText("piscina")
+                    val jardines : String? = elemento.getChildText("jardines")
+                    val cocinaAmueblada : String? = elemento.getChildText("cocinaAmueblada")
+                    val electrodomesticos : String? = elemento.getChildText("electrodomesticos")
+                    val portero : String? = elemento.getChildText("tipoPortero")
+                    val tipoCocina : String? = elemento.getChild("extensionInmoenter").getChildText("tipoCocina")
+                    val aireAcondicionado : String? = elemento.getChildText("tipoAireAcondicionado")
                     var textoEquipamientos : String = ""
                     if (piscina != null) {
                         textoEquipamientos +="\n- Piscina"
@@ -270,53 +264,46 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                         textoEquipamientos +="\n- Electrodomésticos"
                     }
                     if (aireAcondicionado != null) {
-                        if (aireAcondicionado == "2") {
-                            textoEquipamientos += "\n- Aire Acondicionado / Instalación"
-                        }
-                        else if (aireAcondicionado == "3") {
-                            textoEquipamientos += "\n- A/C Climatizador"
-                        }
-                        else {
-                            if (elemento!!.getChildText("tipoConservacion") == "6") {
-                                textoEquipamientos += "\n- Aire Acondicionado / Preinstalación"
-                            }
-                            else {
-                                textoEquipamientos += "\n- Aire acondicionado central"
+                        textoEquipamientos += if (aireAcondicionado == "2") {
+                            "\n- Aire Acondicionado / Instalación"
+                        } else if (aireAcondicionado == "3") {
+                            "\n- A/C Climatizador"
+                        } else {
+                            if (elemento.getChildText("tipoConservacion") == "6") {
+                                "\n- Aire Acondicionado / Preinstalación"
+                            } else {
+                                "\n- Aire acondicionado central"
                             }
                         }
                     }
                     if (portero != null) {
-                        if (portero == "1") {
-                            textoEquipamientos +="\n- Portero automático"
-                        }
-                        else {
-                            textoEquipamientos +="\n- Video-portero"
+                        textoEquipamientos += if (portero == "1") {
+                            "\n- Portero automático"
+                        } else {
+                            "\n- Video-portero"
                         }
                     }
                     equipamientos.text = textoEquipamientos + "\n"
 
                     var textoCalidades : String = ""
-                    val soleria : String? = elemento!!.getChildText("tipoSoleria")
+                    val soleria : String? = elemento.getChildText("tipoSoleria")
                     if (soleria != null) {
-                        if (soleria == "5") {
-                            textoCalidades += "\n- Solería de cerámica"
-                        }
-                        else if (soleria == "1") {
-                            textoCalidades += "\n- Solería de parquet"
-                        }
-                        else if (soleria == "6") {
-                            textoCalidades += "\n- Tarima"
-                        }
-                        else {
-                            textoCalidades += "\n- Solería de mármol"
+                        textoCalidades += if (soleria == "5") {
+                            "\n- Solería de cerámica"
+                        } else if (soleria == "1") {
+                            "\n- Solería de parquet"
+                        } else if (soleria == "6") {
+                            "\n- Tarima"
+                        } else {
+                            "\n- Solería de mármol"
                         }
                     }
                     calidades.text = textoCalidades + "\n"
 
                     var textoSituacion : String = ""
-                    val zona : String? = elemento!!.getChildText("tipoZona")
-                    val playa : String? = elemento!!.getChildText("tipoPlaya")
-                    val orientacion : String? = elemento!!.getChildText("tipoOrientacion")
+                    val zona : String? = elemento.getChildText("tipoZona")
+                    val playa : String? = elemento.getChildText("tipoPlaya")
+                    val orientacion : String? = elemento.getChildText("tipoOrientacion")
                     if (zona != null) {
                         if (zona == "1") {
                             textoSituacion += "\n- Zona urbana"
@@ -363,9 +350,9 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     situacion.text = textoSituacion + "\n"
 
                     var textoCercaDe : String = ""
-                    val escuelas : String? = elemento!!.getChildText("centrosEscolares")
-                    val deporte : String? = elemento!!.getChildText("instalacionesDeportivas")
-                    val verde : String? = elemento!!.getChildText("espaciosVerdes")
+                    val escuelas : String? = elemento.getChildText("centrosEscolares")
+                    val deporte : String? = elemento.getChildText("instalacionesDeportivas")
+                    val verde : String? = elemento.getChildText("espaciosVerdes")
                     if (escuelas != null) {
                         textoCercaDe += "\n- Escuelas"
                     }
@@ -379,7 +366,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     cercaDe.text = textoCercaDe + "\n"
 
                     var textoComunicaciones : String = ""
-                    val bus : String? = elemento!!.getChildText("autobuses")
+                    val bus : String? = elemento.getChildText("autobuses")
                     if (bus != null) {
                         textoComunicaciones += "\n- Bus"
                     }

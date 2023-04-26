@@ -2,32 +2,12 @@ package com.avilesnorling.avilesnorling
 
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteConstraintException
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteDatabaseLockedException
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.LocaleList
-import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.core.content.ContextCompat
-import androidx.core.os.ConfigurationCompat
-import com.avilesnorling.avilesnorling.clases.Anuncio
-import com.avilesnorling.avilesnorling.clases.Helper
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.jdom2.input.SAXBuilder
-import org.jdom2.Element
-import org.xml.sax.InputSource
-import java.io.*
-import java.net.URL
-import java.sql.DriverManager
-import java.time.LocalDateTime
 import java.util.*
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.SAXParserFactory
 
 class MenuPrincipal : AppCompatActivity() {
     val spinnerIdiomas : Spinner by lazy{findViewById<Spinner>(R.id.spinnerIdiomas)}
@@ -148,7 +128,7 @@ class MenuPrincipal : AppCompatActivity() {
 
     //Función para abrir la web que toque
     private fun abrirWeb (url : String) {
-        val abrirPagina : Intent = Intent(android.content.Intent.ACTION_VIEW)
+        val abrirPagina : Intent = Intent(Intent.ACTION_VIEW)
         abrirPagina.data = Uri.parse(url)
         startActivity(abrirPagina)
     }

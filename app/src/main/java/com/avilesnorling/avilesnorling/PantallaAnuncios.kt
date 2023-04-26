@@ -6,7 +6,6 @@ import android.content.Intent
 import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.Anuncio
 import com.avilesnorling.avilesnorling.clases.AnuncioRecyclerAdapter
 import com.avilesnorling.avilesnorling.clases.Helper
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -60,16 +58,16 @@ class PantallaAnuncios : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_pantalla_anuncios)
         //Arrays con los valores de los spinners
-        var anuncios = arrayOf<String>(getString(R.string.oferta), getString(R.string.venta), getString(R.string.alquiler), getString(R.string.vacaciones))
-        var inmuebles = arrayOf<String>(getString(R.string.tipoInmueble), getString(R.string.pisos), getString(R.string.casas), getString(R.string.locales))
-        var ubicaciones = arrayOf<String>("Torre del Mar", "Vélez-Málaga", "Algarrobo", "Almáchar", "Almayate", "Benajarafe", "Benamargosa", "Caleta de Vélez", "Canillas de Aceituno", "Torrox", "Málaga", "Málaga oriental")
-        var numerosDormitorios = arrayOf<String>(getString(R.string.dormitorios), "1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+", "10+")
+        val anuncios = arrayOf<String>(getString(R.string.oferta), getString(R.string.venta), getString(R.string.alquiler), getString(R.string.vacaciones))
+        val inmuebles = arrayOf<String>(getString(R.string.tipoInmueble), getString(R.string.pisos), getString(R.string.casas), getString(R.string.locales))
+        val ubicaciones = arrayOf<String>("Torre del Mar", "Vélez-Málaga", "Algarrobo", "Almáchar", "Almayate", "Benajarafe", "Benamargosa", "Caleta de Vélez", "Canillas de Aceituno", "Torrox", "Málaga", "Málaga oriental")
+        val numerosDormitorios = arrayOf<String>(getString(R.string.dormitorios), "1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+", "10+")
 
 
         //Adapters de los spinners
         val anunciosAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, anuncios)
         tipoAnuncio.adapter = anunciosAdapter
-        var anuncioElegido = intent.getStringExtra("tipoAnuncio")
+        val anuncioElegido = intent.getStringExtra("tipoAnuncio")
         tipoAnuncio.setSelection(anunciosAdapter.getPosition(anuncioElegido))
 
         val inmueblesAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, inmuebles)
@@ -79,7 +77,7 @@ class PantallaAnuncios : AppCompatActivity() {
 
         val ubicacionAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, ubicaciones)
         ubicacion.adapter = ubicacionAdapter
-        var ubicacionElegida = intent.getStringExtra("zona")
+        val ubicacionElegida = intent.getStringExtra("zona")
         ubicacion.setSelection(ubicacionAdapter.getPosition(ubicacionElegida))
 
         val dormitoriosAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, numerosDormitorios)
@@ -117,7 +115,7 @@ class PantallaAnuncios : AppCompatActivity() {
                 { _, year, month, day ->
                     //El +1 es porque el DatePicker empieza los meses en 0 y el LocalDate en 1
                     val fechaElegida : LocalDate = LocalDate.of(year, month + 1, day)
-                    if (fechaInicio == null || (fechaInicio != null && fechaFin != null)) {
+                    if (fechaInicio == null || fechaFin != null) {
                         if (fechaElegida.isBefore(LocalDate.now())) {
                             Toast.makeText(this, getString(R.string.fechaNoValida), Toast.LENGTH_LONG).show()
                         }
@@ -129,7 +127,7 @@ class PantallaAnuncios : AppCompatActivity() {
                         }
                     }
                     else {
-                        if (fechaFin == null && fechaElegida.isAfter(fechaInicio)) {
+                        if (fechaElegida.isAfter(fechaInicio)) {
                             fechaFin = fechaElegida
                             fecha.setText("" + fechaInicio!!.dayOfMonth + "/" + fechaInicio!!.monthValue + "/" + fechaInicio!!.year + "-" + day + "/" + (month+1) + "/" + year)
 
@@ -148,7 +146,7 @@ class PantallaAnuncios : AppCompatActivity() {
         }
 
         //Codifico el tipo de anuncio según el anuncio elegido
-        var anuncio : Int = if (anuncioElegido == "Venta") {
+        val anuncio : Int = if (anuncioElegido == "Venta") {
             1
         } else if (anuncioElegido == "Alquiler" || anuncioElegido == "Vacaciones") {
             2
@@ -157,9 +155,9 @@ class PantallaAnuncios : AppCompatActivity() {
         }
 
         //Búsqueda
-        var anunciosBuscados = ArrayList<Anuncio>()
+        val anunciosBuscados = ArrayList<Anuncio>()
         val helper : Helper = Helper(this)
-        var querier : SQLiteDatabase = helper.writableDatabase
+        val querier : SQLiteDatabase = helper.writableDatabase
         var cursor : Cursor
         if (anuncio == 0) {
             if (ubicacionElegida != "Málaga oriental") {
@@ -267,16 +265,16 @@ class PantallaAnuncios : AppCompatActivity() {
         }
 
         btnBuscar.setOnClickListener {
-            var referencia : String? = txtreferencia.text.toString()
-            var superficie : String? = txtsuperficie.text.toString()
-            var precioDesde : String? = txtprecioDesde.text.toString()
-            var precioHasta : String? = txtprecioHasta.text.toString()
-            var anuncio : String? = tipoAnuncio.selectedItem.toString()
-            var inmuebleElegido : String? = tipoInmueble.selectedItem.toString()
-            var ubicacionSpinner : String? = ubicacion.selectedItem.toString()
-            var numeroDormitorios : String = dormitorios.selectedItem.toString()
-            var personasElegidas : String? = personas.text.toString()
-            var fechaElegida : Date?
+            val referencia : String = txtreferencia.text.toString()
+            val superficie : String = txtsuperficie.text.toString()
+            val precioDesde : String = txtprecioDesde.text.toString()
+            val precioHasta : String = txtprecioHasta.text.toString()
+            val anuncio : String = tipoAnuncio.selectedItem.toString()
+            val inmuebleElegido : String = tipoInmueble.selectedItem.toString()
+            val ubicacionSpinner : String = ubicacion.selectedItem.toString()
+            val numeroDormitorios : String = dormitorios.selectedItem.toString()
+            //var personasElegidas : String? = personas.text.toString()
+            //var fechaElegida : Date?
 
             try {
             anunciosBuscados.clear()
@@ -285,11 +283,11 @@ class PantallaAnuncios : AppCompatActivity() {
 
             var consulta : String? = ""
             var valores : Array<String> = arrayOf()
-            if (referencia != null && referencia != "") {
+            if (referencia != "") {
                 consulta += "referencia = ?"
                 valores+=referencia
             }
-            if (superficie != null && superficie != "") {
+            if (superficie != "") {
 
                     if (consulta == "") {
                         consulta += "superficie > ?"
@@ -301,7 +299,7 @@ class PantallaAnuncios : AppCompatActivity() {
 
             }
 
-                if (precioDesde != null && precioDesde != "" && precioDesde.toInt() > 0) {
+                if (precioDesde != "" && precioDesde.toInt() > 0) {
                     if (consulta == "") {
                         consulta += "precio > ?"
                     }
@@ -311,7 +309,7 @@ class PantallaAnuncios : AppCompatActivity() {
                     valores += precioDesde
                 }
 
-                if (precioHasta != null && precioHasta != "" && precioHasta.toInt() > 0) {
+                if (precioHasta != "" && precioHasta.toInt() > 0) {
                     if (consulta == "") {
                         consulta += "precio < ?"
                     }
@@ -330,7 +328,7 @@ class PantallaAnuncios : AppCompatActivity() {
                     }
                     valores += dormitoriosElegidos
                 }
-            if (ubicacionSpinner != null && ubicacionSpinner != "Málaga oriental") {
+            if (ubicacionSpinner != "Málaga oriental") {
                 if (consulta == "") {
                     consulta += "localidad = ?"
                 }
@@ -363,7 +361,7 @@ class PantallaAnuncios : AppCompatActivity() {
             }
 
             //Codifico el tipo de inmueble
-            var inmueble : Int = if (inmuebleElegido == getString(R.string.pisos)) {
+            val inmueble : Int = if (inmuebleElegido == getString(R.string.pisos)) {
                 4
             }
             else if (inmuebleElegido == getString(R.string.casas)) {
@@ -509,7 +507,7 @@ class PantallaAnuncios : AppCompatActivity() {
         startActivity(abrirPagina)
     }
 
-    fun setLocale(localeName: String) {
+    /*fun setLocale(localeName: String) {
         if (localeName != idiomaActual) {
             locale = Locale(localeName)
             val res = resources
@@ -521,7 +519,7 @@ class PantallaAnuncios : AppCompatActivity() {
             startActivity(refresh)
         }
 
-    }
+    }*/
 
     //Función para devolver un anuncio obtenido de base de datos
     private fun devolverAnuncio(cursor : Cursor) : Anuncio {
