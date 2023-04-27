@@ -1,14 +1,16 @@
 package com.avilesnorling.avilesnorling
 
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.FotoRecyclerAdapter
@@ -43,6 +45,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val imgYoutube : ImageView by lazy{findViewById<ImageView>(R.id.imgYoutube)}
     val imgInstagram : ImageView by lazy{findViewById<ImageView>(R.id.imgInstagram)}
     val imgCasa : ImageView by lazy{findViewById<ImageView>(R.id.imgCasa)}
+    val layout : ConstraintLayout by lazy{findViewById<ConstraintLayout>(R.id.layout_anuncio_individual)}
     lateinit var locale : Locale
     private var idiomaActual = Locale.getDefault().language.toString()
     //private var idioma : String? = null
@@ -52,6 +55,13 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
         val urlAnuncio : String? = intent.getStringExtra("urlAnuncio")
         idiomaActual = intent.getStringExtra("idioma").toString()
+
+        val inflater : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView : View = inflater.inflate(R.layout.layout_cargando, null)
+        val popupVentana = PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        popupVentana.isOutsideTouchable = false
+        popupVentana.isFocusable = true
+        popupVentana.showAtLocation(layout, Gravity.CENTER, 0, 0)
 
         //Array de idiomas que se muestra en el spinner
         val idiomas = arrayOf(
@@ -190,34 +200,34 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     val planta : String? = elemento.getChild("extensionInmoenter").getChildText("nplantas")
                     val lavadero : String? = elemento.getChild("extensionInmoenter").getChildText("lavadero")
                     if (registroTurismo != null) {
-                        textoGeneral += "\n- Código Turístico: " + registroTurismo
+                        textoGeneral += "\n- "+getString(R.string.codigoTuristico)+": " + registroTurismo
                     }
                     if (planta != null) {
-                        textoGeneral += "\n- " + planta + "ª planta"
+                        textoGeneral += "\n- " + planta + getString(R.string.planta)
                     }
                     if (ascensor != null) {
-                        textoGeneral += "\n- Ascensor"
+                        textoGeneral += "\n- " + getString(R.string.ascensor)
                     }
                     if (salones != null) {
-                        textoGeneral += "\n- " + salones + " salones"
+                        textoGeneral += "\n- " + salones + " " + getString(R.string.salones)
                     }
                     if (dormitorios != null) {
-                        textoGeneral += "\n- " + dormitorios + " dormitorios"
+                        textoGeneral += "\n- " + dormitorios + " " + getString(R.string.dormitorios)
                     }
                     if (banos != null) {
-                        textoGeneral += "\n- " + banos + " baños"
+                        textoGeneral += "\n- " + banos + " " + getString(R.string.banos)
                     }
                     if (empotrados != null) {
-                        textoGeneral += "\n- " + empotrados + " armarios empotrados"
+                        textoGeneral += "\n- " + empotrados + " " + getString(R.string.empotrados)
                     }
                     if (terrazas != null) {
-                        textoGeneral += "\n- " + terrazas
+                        textoGeneral += "\n- " + terrazas + " " + getString(R.string.terrazas)
                         if (superficieTerrazas != null) {
                             textoGeneral += " (" + superficieTerrazas + " m2)"
                         }
                     }
                     if (lavadero != null) {
-                        textoGeneral += "\n- Lavadero"
+                        textoGeneral += "\n- " + getString(R.string.lavadero)
                     }
                     generales.text = textoGeneral + "\n"
 
@@ -225,10 +235,10 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     val util : String? = elemento.getChildText("superficieUtil")
                     var textoSuperficies : String = ""
                     if (construido != null) {
-                        textoSuperficies +="\n- Constr.: " + construido + " m2"
+                        textoSuperficies +="\n- " + getString(R.string.construido) + ": " + construido + " m2"
                     }
                     if (util != null) {
-                        textoSuperficies +="\n- Útil: " + util + " m2"
+                        textoSuperficies +="\n- " + getString(R.string.util) + ": " + util + " m2"
                     }
                     superficies.text = textoSuperficies + "\n"
 
@@ -241,46 +251,46 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     val aireAcondicionado : String? = elemento.getChildText("tipoAireAcondicionado")
                     var textoEquipamientos : String = ""
                     if (piscina != null) {
-                        textoEquipamientos +="\n- Piscina"
+                        textoEquipamientos +="\n- " + getString(R.string.piscina)
                     }
                     if (jardines != null) {
-                        textoEquipamientos +="\n- Jardines"
+                        textoEquipamientos +="\n- " + getString(R.string.jardines)
                     }
                     if (tipoCocina != null) {
                         if (tipoCocina == "1") {
-                            textoEquipamientos += "\n- Cocina independiente"
+                            textoEquipamientos += "\n- " + getString(R.string.cocinaIndependiente)
                         }
                         else if (tipoCocina == "2") {
-                            textoEquipamientos += "\n- Cocina americana"
+                            textoEquipamientos += "\n- " + getString(R.string.cocinaAmericana)
                         }
                         else {
-                            textoEquipamientos += "\n- Cocina amueblada"
+                            textoEquipamientos += "\n- " + getString(R.string.cocinaAmueblada)
                         }
                     }
                     if (cocinaAmueblada != null) {
-                        textoEquipamientos +="\n- Cocina amueblada"
+                        textoEquipamientos +="\n- " + getString(R.string.cocinaAmueblada)
                     }
                     if (electrodomesticos != null) {
-                        textoEquipamientos +="\n- Electrodomésticos"
+                        textoEquipamientos +="\n- " + getString(R.string.electrodomesticos)
                     }
                     if (aireAcondicionado != null) {
                         textoEquipamientos += if (aireAcondicionado == "2") {
-                            "\n- Aire Acondicionado / Instalación"
+                            "\n- " + getString(R.string.instalacion)
                         } else if (aireAcondicionado == "3") {
-                            "\n- A/C Climatizador"
+                            "\n- " + getString(R.string.climatizador)
                         } else {
                             if (elemento.getChildText("tipoConservacion") == "6") {
-                                "\n- Aire Acondicionado / Preinstalación"
+                                "\n- " + getString(R.string.preinstalacion)
                             } else {
-                                "\n- Aire acondicionado central"
+                                "\n- " + getString(R.string.central)
                             }
                         }
                     }
                     if (portero != null) {
                         textoEquipamientos += if (portero == "1") {
-                            "\n- Portero automático"
+                            "\n- " + getString(R.string.portero)
                         } else {
-                            "\n- Video-portero"
+                            "\n- " + getString(R.string.videoportero)
                         }
                     }
                     equipamientos.text = textoEquipamientos + "\n"
@@ -289,13 +299,13 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     val soleria : String? = elemento.getChildText("tipoSoleria")
                     if (soleria != null) {
                         textoCalidades += if (soleria == "5") {
-                            "\n- Solería de cerámica"
+                            "\n- " + getString(R.string.soleriaCeramica)
                         } else if (soleria == "1") {
-                            "\n- Solería de parquet"
+                            "\n- " + getString(R.string.soleriaParquet)
                         } else if (soleria == "6") {
-                            "\n- Tarima"
+                            "\n- " + getString(R.string.tarima)
                         } else {
-                            "\n- Solería de mármol"
+                            "\n- " + getString(R.string.soleriaMarmol)
                         }
                     }
                     calidades.text = textoCalidades + "\n"
@@ -306,44 +316,44 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     val orientacion : String? = elemento.getChildText("tipoOrientacion")
                     if (zona != null) {
                         if (zona == "1") {
-                            textoSituacion += "\n- Zona urbana"
+                            textoSituacion += "\n- " + getString(R.string.zonaUrbana)
                         }
                         else {
-                            textoSituacion += "\n- Urbanización"
+                            textoSituacion += "\n- " + getString(R.string.urbanizacion)
                         }
                     }
                     if (playa != null) {
                         if (playa == "2") {
-                            textoSituacion += "\n- A 500 metros de la playa"
+                            textoSituacion += "\n- " + getString(R.string.metrosPlaya)
                         }
                         else if (playa == "4") {
-                            textoSituacion += "\n- 2ª Línea de playa"
+                            textoSituacion += "\n- " + getString(R.string.segundaLinea)
                         }
                         else if (playa == "3") {
-                            textoSituacion += "\n- En zona costera"
+                            textoSituacion += "\n- " + getString(R.string.zonaCostera)
                         }
                         else {
-                            textoSituacion += "\n- 1ª Línea de playa"
+                            textoSituacion += "\n- " + getString(R.string.primeraLinea)
                         }
                     }
                     if (orientacion != null) {
                         if (orientacion == "3") {
-                            textoSituacion += "\n- Orientación este"
+                            textoSituacion += "\n- " + getString(R.string.orientacionEste)
                         }
                         else if (orientacion == "4") {
-                            textoSituacion += "\n- Orientación oeste"
+                            textoSituacion += "\n- " + getString(R.string.orientacionOeste)
                         }
                         else if (orientacion == "2") {
-                            textoSituacion += "\n- Orientación sur"
+                            textoSituacion += "\n- " + getString(R.string.orientacionSur)
                         }
                         else if (orientacion == "8") {
-                            textoSituacion += "\n- Orientación suroeste"
+                            textoSituacion += "\n- " + getString(R.string.orientacionSuroste)
                         }
                         else if (orientacion == "7") {
-                            textoSituacion += "\n- Orientación sureste"
+                            textoSituacion += "\n- " + getString(R.string.orientacionSureste)
                         }
                         else {
-                            textoSituacion += "\n- Orientación noroeste"
+                            textoSituacion += "\n- " + getString(R.string.orientacionNoroste)
                         }
                     }
 
@@ -354,13 +364,13 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     val deporte : String? = elemento.getChildText("instalacionesDeportivas")
                     val verde : String? = elemento.getChildText("espaciosVerdes")
                     if (escuelas != null) {
-                        textoCercaDe += "\n- Escuelas"
+                        textoCercaDe += "\n- " + getString(R.string.escuelas)
                     }
                     if (deporte != null) {
-                        textoCercaDe += "\n- Zonas deportivas"
+                        textoCercaDe += "\n- " + getString(R.string.zonasDeportivas)
                     }
                     if (verde != null) {
-                        textoCercaDe += "\n- Zonas verdes"
+                        textoCercaDe += "\n- " + getString(R.string.zonasVerdes)
                     }
 
                     cercaDe.text = textoCercaDe + "\n"
@@ -368,7 +378,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     var textoComunicaciones : String = ""
                     val bus : String? = elemento.getChildText("autobuses")
                     if (bus != null) {
-                        textoComunicaciones += "\n- Bus"
+                        textoComunicaciones += "\n- " + getString(R.string.bus)
                     }
 
                     comunicaciones.text = textoComunicaciones + "\n"
@@ -404,6 +414,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                         calidades.visibility = View.GONE
                         findViewById<TextView>(R.id.tituloCalidades).visibility = View.GONE
                     }
+                    popupVentana.dismiss()
                 } else {
                     Toast.makeText(
                         this,

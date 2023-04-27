@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_anuncio_individual"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo"
@@ -239,7 +240,7 @@
                 android:id="@+id/tituloSituacion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Situación"
+                android:text="@string/situacion"
                 android:textColor="@color/white" />
 
             <TextView
@@ -257,7 +258,7 @@
                 android:id="@+id/tituloCercaDe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cerca de"
+                android:text="@string/cercaDe"
                 android:textColor="@color/white" />
 
             <TextView
@@ -275,7 +276,7 @@
                 android:id="@+id/tituloComunicaciones"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Comunicaciones"
+                android:text="@string/comunicaciones"
                 android:textColor="@color/white" />
 
             <TextView
