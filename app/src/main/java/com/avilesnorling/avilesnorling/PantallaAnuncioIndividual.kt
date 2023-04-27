@@ -1,6 +1,6 @@
 package com.avilesnorling.avilesnorling
 
-import android.content.Context
+import android.app.Dialog
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -9,12 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.FotoRecyclerAdapter
 import com.avilesnorling.avilesnorling.clases.Helper
+import com.bumptech.glide.Glide
 import org.jdom2.DefaultJDOMFactory
 import org.jdom2.Element
 import org.jdom2.input.SAXBuilder
@@ -35,7 +34,11 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val cercaDe : TextView by lazy {findViewById<TextView>(R.id.cercaDe)}
     val comunicaciones : TextView by lazy {findViewById<TextView>(R.id.comunicaciones)}
     val precioTexto : TextView by lazy {findViewById<TextView>(R.id.precioAnuncioIndividual)}
+    val nombreContacto : TextView by lazy {findViewById<TextView>(R.id.nombreContacto)}
+    val emailContacto : TextView by lazy {findViewById<TextView>(R.id.emailContacto)}
+    val telefonoContacto : TextView by lazy {findViewById<TextView>(R.id.telefonoContacto)}
     val recyclerFotos : RecyclerView by lazy {findViewById<RecyclerView>(R.id.recyclerFotos)}
+    val scrollView : ScrollView by lazy {findViewById<ScrollView>(R.id.scroll)}
     //Barra de arriba
     val spinnerIdiomas : Spinner by lazy{findViewById<Spinner>(R.id.spinnerIdiomas)}
     val imgWhatsapp : ImageView by lazy{findViewById<ImageView>(R.id.imgWhatsapp)}
@@ -45,7 +48,6 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val imgYoutube : ImageView by lazy{findViewById<ImageView>(R.id.imgYoutube)}
     val imgInstagram : ImageView by lazy{findViewById<ImageView>(R.id.imgInstagram)}
     val imgCasa : ImageView by lazy{findViewById<ImageView>(R.id.imgCasa)}
-    val layout : ConstraintLayout by lazy{findViewById<ConstraintLayout>(R.id.layout_anuncio_individual)}
     lateinit var locale : Locale
     private var idiomaActual = Locale.getDefault().language.toString()
     //private var idioma : String? = null
@@ -56,13 +58,14 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         val urlAnuncio : String? = intent.getStringExtra("urlAnuncio")
         idiomaActual = intent.getStringExtra("idioma").toString()
 
-        val inflater : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView : View = inflater.inflate(R.layout.layout_cargando, null)
-        val popupVentana = PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        popupVentana.isOutsideTouchable = false
-        popupVentana.isFocusable = true
-        popupVentana.showAtLocation(layout, Gravity.CENTER, 0, 0)
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.layout_cargando)
+        val imagen : ImageView = dialog.findViewById(R.id.cargando)
+        Glide.with(this).load(R.drawable.loading_gif).into(imagen)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(false)
 
+        dialog.show()
         //Array de idiomas que se muestra en el spinner
         val idiomas = arrayOf(
             Pair(getString(R.string.espanol), R.drawable.espana),
@@ -123,7 +126,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             }
         }
 
-        val helper : Helper = Helper(this)
+        val helper = Helper(this)
         val querier : SQLiteDatabase = helper.writableDatabase
         val cursor : Cursor = querier.query("propiedades", null, "url = ?", arrayOf(urlAnuncio), null, null, null)
         cursor.moveToFirst()
@@ -167,6 +170,16 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
         cursor.close()
 
+        scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            val margen = scrollView.getChildAt(0).height - (scrollY + scrollView.height)
+            if (margen <= 10) {
+                btnReserva.visibility = View.INVISIBLE
+            }
+            else {
+                btnReserva.visibility = View.VISIBLE
+            }
+        }
+
         //Saco los datos del XML porque no quiero engordar aún más la clase Anuncio
         sacarElemento(urlAnuncio) {elemento ->
             runOnUiThread {
@@ -188,7 +201,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     recyclerFotos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                     val recyclerAdapter = FotoRecyclerAdapter(imagenes)
                     recyclerFotos.adapter = recyclerAdapter
-                    var textoGeneral : String = ""
+                    var textoGeneral = ""
                     val registroTurismo : String? = elemento.getChildText("registroTurismo")
                     val ascensor : String? = elemento.getChildText("ascensor")
                     val salones : String? = elemento.getChild("extensionInmoenter").getChildText("salones")
@@ -233,7 +246,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
                     val construido : String? = elemento.getChildText("superficieConstruida")
                     val util : String? = elemento.getChildText("superficieUtil")
-                    var textoSuperficies : String = ""
+                    var textoSuperficies = ""
                     if (construido != null) {
                         textoSuperficies +="\n- " + getString(R.string.construido) + ": " + construido + " m2"
                     }
@@ -249,7 +262,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     val portero : String? = elemento.getChildText("tipoPortero")
                     val tipoCocina : String? = elemento.getChild("extensionInmoenter").getChildText("tipoCocina")
                     val aireAcondicionado : String? = elemento.getChildText("tipoAireAcondicionado")
-                    var textoEquipamientos : String = ""
+                    var textoEquipamientos = ""
                     if (piscina != null) {
                         textoEquipamientos +="\n- " + getString(R.string.piscina)
                     }
@@ -295,7 +308,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     }
                     equipamientos.text = textoEquipamientos + "\n"
 
-                    var textoCalidades : String = ""
+                    var textoCalidades = ""
                     val soleria : String? = elemento.getChildText("tipoSoleria")
                     if (soleria != null) {
                         textoCalidades += if (soleria == "5") {
@@ -310,7 +323,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     }
                     calidades.text = textoCalidades + "\n"
 
-                    var textoSituacion : String = ""
+                    var textoSituacion = ""
                     val zona : String? = elemento.getChildText("tipoZona")
                     val playa : String? = elemento.getChildText("tipoPlaya")
                     val orientacion : String? = elemento.getChildText("tipoOrientacion")
@@ -359,7 +372,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
                     situacion.text = textoSituacion + "\n"
 
-                    var textoCercaDe : String = ""
+                    var textoCercaDe = ""
                     val escuelas : String? = elemento.getChildText("centrosEscolares")
                     val deporte : String? = elemento.getChildText("instalacionesDeportivas")
                     val verde : String? = elemento.getChildText("espaciosVerdes")
@@ -375,13 +388,16 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
                     cercaDe.text = textoCercaDe + "\n"
 
-                    var textoComunicaciones : String = ""
+                    var textoComunicaciones = ""
                     val bus : String? = elemento.getChildText("autobuses")
                     if (bus != null) {
                         textoComunicaciones += "\n- " + getString(R.string.bus)
                     }
 
                     comunicaciones.text = textoComunicaciones + "\n"
+                    nombreContacto.text = elemento.getChild("extensionInmoenter").getChildText("nombreContacto")
+                    emailContacto.text = elemento.getChild("extensionInmoenter").getChildText("emailContacto")
+                    telefonoContacto.text = elemento.getChild("extensionInmoenter").getChildText("telefonoContacto")
 
                     if (textoSituacion == "") {
                         situacion.visibility = View.GONE
@@ -414,14 +430,14 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                         calidades.visibility = View.GONE
                         findViewById<TextView>(R.id.tituloCalidades).visibility = View.GONE
                     }
-                    popupVentana.dismiss()
+                    dialog.dismiss()
                 } else {
                     Toast.makeText(
                         this,
                         "No se pudieron obtener los datos. Volviendo atrás",
                         Toast.LENGTH_LONG
                     ).show()
-                    val intent: Intent = Intent(this, PantallaAnuncios::class.java)
+                    val intent = Intent(this, PantallaAnuncios::class.java)
                     startActivity(intent)
                 }
             }
@@ -454,14 +470,14 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             //Está caído
         }
         imgCasa.setOnClickListener {
-            val intentCasa : Intent = Intent(this, MenuPrincipal::class.java)
+            val intentCasa = Intent(this, MenuPrincipal::class.java)
             startActivity(intentCasa)
         }
     }
 
     //Función para abrir la web que toque
     private fun abrirWeb (url : String) {
-        val abrirPagina : Intent = Intent(Intent.ACTION_VIEW)
+        val abrirPagina = Intent(Intent.ACTION_VIEW)
         abrirPagina.data = Uri.parse(url)
         startActivity(abrirPagina)
     }

@@ -110,7 +110,7 @@ class MenuPrincipal : AppCompatActivity() {
             //Está caído
         }
         imgCasa.setOnClickListener {
-            val intentCasa : Intent = Intent(this, MenuPrincipal::class.java)
+            val intentCasa = Intent(this, MenuPrincipal::class.java)
             startActivity(intentCasa)
         }
         //Botones
@@ -128,15 +128,15 @@ class MenuPrincipal : AppCompatActivity() {
 
     //Función para abrir la web que toque
     private fun abrirWeb (url : String) {
-        val abrirPagina : Intent = Intent(Intent.ACTION_VIEW)
+        val abrirPagina = Intent(Intent.ACTION_VIEW)
         abrirPagina.data = Uri.parse(url)
         startActivity(abrirPagina)
     }
 
     //Función para cambiar a la pantalla de turno
     fun cambiarPantalla (tipoAnuncio : String, boton : Button) {
-        val intent : Intent = Intent(this, PantallaAnuncios::class.java)
-        var zona : String = ""
+        val intent = Intent(this, PantallaAnuncios::class.java)
+        var zona = ""
         intent.putExtra("tipoAnuncio", tipoAnuncio)
 
         val inflater : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

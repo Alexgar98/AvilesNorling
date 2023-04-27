@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.LocaleList
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +48,7 @@ class PantallaAnuncios : AppCompatActivity() {
     val imgYoutube : ImageView by lazy{findViewById<ImageView>(R.id.imgYoutube)}
     val imgInstagram : ImageView by lazy{findViewById<ImageView>(R.id.imgInstagram)}
     val imgCasa : ImageView by lazy{findViewById<ImageView>(R.id.imgCasa)}
-    lateinit var locale : Locale
+    //lateinit var locale : Locale
     private var idiomaActual = "es"
     private var idioma : String? = null
 
@@ -156,7 +155,7 @@ class PantallaAnuncios : AppCompatActivity() {
 
         //Búsqueda
         val anunciosBuscados = ArrayList<Anuncio>()
-        val helper : Helper = Helper(this)
+        val helper = Helper(this)
         val querier : SQLiteDatabase = helper.writableDatabase
         var cursor : Cursor
         if (anuncio == 0) {
@@ -252,9 +251,6 @@ class PantallaAnuncios : AppCompatActivity() {
             val anuncioNuevo : Anuncio = devolverAnuncio(cursor)
             anunciosBuscados.add(anuncioNuevo)
         }
-        Toast.makeText(this, "Se han encontrado estos resultados: " + anunciosBuscados.size, Toast.LENGTH_LONG).show()
-
-
 
         recyclerAnuncios.layoutManager = LinearLayoutManager(this)
         val recyclerAdapter = AnuncioRecyclerAdapter(anunciosBuscados)
@@ -494,7 +490,7 @@ class PantallaAnuncios : AppCompatActivity() {
             //Está caído
         }
         imgCasa.setOnClickListener {
-            val intentCasa : Intent = Intent(this, MenuPrincipal::class.java)
+            val intentCasa = Intent(this, MenuPrincipal::class.java)
             startActivity(intentCasa)
         }
 
@@ -502,7 +498,7 @@ class PantallaAnuncios : AppCompatActivity() {
 
     //Función para abrir la web que toque
     private fun abrirWeb (url : String) {
-        val abrirPagina : Intent = Intent(Intent.ACTION_VIEW)
+        val abrirPagina = Intent(Intent.ACTION_VIEW)
         abrirPagina.data = Uri.parse(url)
         startActivity(abrirPagina)
     }

@@ -60,7 +60,7 @@ class PantallaCarga : AppCompatActivity() {
             GlobalScope.launch {
                 updateDatabase()
                 launch(Dispatchers.Main) {
-                    val intent : Intent = Intent(this@PantallaCarga, MenuPrincipal::class.java)
+                    val intent = Intent(this@PantallaCarga, MenuPrincipal::class.java)
                     startActivity(intent)
                 }
             }

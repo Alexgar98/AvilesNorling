@@ -1,7 +1,6 @@
 package com.avilesnorling.avilesnorling.clases
 
 import android.content.Intent
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.PantallaAnuncioIndividual
 import com.avilesnorling.avilesnorling.R
 import com.squareup.picasso.Picasso
-import java.net.URL
 
 class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>) : RecyclerView.Adapter<AnuncioRecyclerAdapter.ViewHolder>(){
 
@@ -35,17 +33,17 @@ class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>) : RecyclerVi
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): AnuncioRecyclerAdapter.ViewHolder {
+    ): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_recycler_anuncios, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: AnuncioRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val anuncio = anuncios[position]
         holder.referenciaAnuncio.text = "Ref: " + anuncio.referencia
         Picasso.get().load(anuncio.imgPrincipal).into(holder.foto)
         if (anuncio.precio!! > 0) {
-            holder.precioAnuncio.text = "" + anuncio.precio!! + " €"
+            holder.precioAnuncio.text = "" + anuncio.precio + " €"
         }
         else {
             holder.precioAnuncio.visibility = View.INVISIBLE
@@ -76,7 +74,7 @@ class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>) : RecyclerVi
         holder.numeroPersonas.visibility = View.INVISIBLE
         holder.layout.setOnClickListener {
             val url = anuncio.url
-            val intent : Intent = Intent(holder.layout.context, PantallaAnuncioIndividual :: class.java)
+            val intent = Intent(holder.layout.context, PantallaAnuncioIndividual :: class.java)
             intent.putExtra("urlAnuncio", url)
             holder.layout.context.startActivity(intent)
         }
