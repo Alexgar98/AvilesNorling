@@ -129,10 +129,12 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             }
         }
 
+        //Cojo datos del anuncio de la base de datos
         val helper = Helper(this)
         val querier : SQLiteDatabase = helper.writableDatabase
         val cursor : Cursor = querier.query("propiedades", null, "url = ?", arrayOf(urlAnuncio), null, null, null)
         cursor.moveToFirst()
+        //Descodifico el tipo de inmueble
         val inmueble : String = when (cursor.getInt(cursor.getColumnIndexOrThrow("tipoInmueble"))) {
             1 -> getString(R.string.estudio)
             2 -> getString(R.string.apartamento)
@@ -148,6 +150,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         val ref : String = cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
         categoriaUbicacion.text = inmueble + " " + getString(R.string.en) + " " + ubicacion
         referencia.text = "Ref: " + ref
+        //Texto de la descripción según el idioma
         if (idiomaActual == "es") {
             descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs")).trim()
         }
@@ -174,6 +177,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
         cursor.close()
 
+        //Quito el botón de reserva si el scroll está abajo del todo
         scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
             val margen = scrollView.getChildAt(0).height - (scrollY + scrollView.height)
             if (margen <= 10) {
@@ -448,6 +452,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             }
         }
 
+        //Leo el json de propiedades para generar el enlace de Avaibook cuando haga falta
         val inputStream = this.assets.open("propiedades.json")
         val json = inputStream.bufferedReader().use { it.readText() }
         val gson = Gson()
@@ -528,6 +533,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
     }
 
+    //Función para sacar un elemento del XML
     fun sacarElemento (url : String?, callback : (Element?) -> Unit ) {
         Thread {
             try {

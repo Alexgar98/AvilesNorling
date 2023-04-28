@@ -19,4 +19,9 @@ class Helper (contexto : Context) : SQLiteOpenHelper(contexto, "propiedades", nu
 
     }
 
+    fun remake() {
+        val db = writableDatabase
+        onCreate(db)
+    }
+
 }

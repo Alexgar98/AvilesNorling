@@ -113,6 +113,7 @@ class MenuPrincipal : AppCompatActivity() {
             val intentCasa = Intent(this, MenuPrincipal::class.java)
             startActivity(intentCasa)
         }
+        //TODO Pasar todo este bloque a fragment
         //Botones
         btnVenta.setOnClickListener {
             cambiarPantalla("Venta", btnVenta)

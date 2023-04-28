@@ -260,6 +260,7 @@ class PantallaAnuncios : AppCompatActivity() {
 
         }
 
+        //Cojo los datos que haya al pulsar el botón de Buscar
         btnBuscar.setOnClickListener {
             val referencia : String = txtreferencia.text.toString()
             val superficie : String = txtsuperficie.text.toString()

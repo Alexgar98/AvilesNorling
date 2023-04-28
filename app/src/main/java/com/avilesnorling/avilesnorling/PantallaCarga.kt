@@ -53,9 +53,8 @@ class PantallaCarga : AppCompatActivity() {
         catch (e : Exception) {
             Toast.makeText(this, R.string.noSePudoConectar, Toast.LENGTH_LONG).show()
             Log.e("Exception", e.message, e)
-        }
+        } //TODO Voy a forzar a actualizar para poder probar cosas. Todo este try/catch hay que cambiarlo
 
-        //TODO Fuerzo a actualizar para poder probar cosas
         try {
             GlobalScope.launch {
                 updateDatabase()
@@ -79,6 +78,8 @@ class PantallaCarga : AppCompatActivity() {
         val root = document.rootElement
 
         //Base de datos
+        val helper = Helper(this)
+        helper.remake() //Dropeo la tabla si hay y se meten los datos de nuevo
         val querier: SQLiteDatabase = Helper(this).writableDatabase
 
         //Leo el XML y meto los datos en una lista de anuncios
@@ -219,6 +220,7 @@ class PantallaCarga : AppCompatActivity() {
         }
 
         //Uso la lista para meter los datos en BD
+
         for (dato in datos) {
             try {
                 val sql: String =
