@@ -7,13 +7,16 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.FotoRecyclerAdapter
 import com.avilesnorling.avilesnorling.clases.Helper
+import com.avilesnorling.avilesnorling.clases.IdAnuncio
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import org.jdom2.DefaultJDOMFactory
 import org.jdom2.Element
 import org.jdom2.input.SAXBuilder
@@ -142,8 +145,9 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             else -> getString(R.string.propiedad)
         }
         val ubicacion : String = cursor.getString(cursor.getColumnIndexOrThrow("localidad"))
+        val ref : String = cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
         categoriaUbicacion.text = inmueble + " " + getString(R.string.en) + " " + ubicacion
-        referencia.text = "Ref: " + cursor.getString(cursor.getColumnIndexOrThrow("referencia"))
+        referencia.text = "Ref: " + ref
         if (idiomaActual == "es") {
             descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs")).trim()
         }
@@ -430,6 +434,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                         calidades.visibility = View.GONE
                         findViewById<TextView>(R.id.tituloCalidades).visibility = View.GONE
                     }
+
                     dialog.dismiss()
                 } else {
                     Toast.makeText(
@@ -443,9 +448,32 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             }
         }
 
-        btnReserva.setOnClickListener {
-            //TODO Averiguar cómo hace la conversión Avaibook para entrar a la reserva por ahí. Es inviable hacerlo con cada anuncio
+        val inputStream = this.assets.open("propiedades.json")
+        val json = inputStream.bufferedReader().use { it.readText() }
+        val gson = Gson()
+        val propiedades = gson.fromJson(json, Array<IdAnuncio>::class.java)
+        val idAvail : String?
+        val idOpinan : String?
+        try {
+            for (i in propiedades.indices) {
+                if (propiedades[i].cod_an == ref) {
+                    idAvail = propiedades[i].id_avail
+                    idOpinan = propiedades[i].id_opinan
+                    btnReserva.setOnClickListener {
+                        abrirWeb("https://www.avaibook.com/reservas/nueva_reserva.php?idw=" + idAvail + "&cod_propietario=89412&cod_alojamiento=" + idOpinan + "&lang=" + idiomaActual)
+                    }
+                    break
+                } else {
+                    continue
+                }
+
+            }
         }
+        catch (e: Exception) {
+            btnReserva.visibility = View.GONE
+            Log.e("Error", e.message, e)
+        }
+
 
         //Barra de arriba
 
@@ -523,7 +551,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                 }
             }
             catch (e : Exception) {
-                e.message?.let { android.util.Log.e("Error", it) }
+                e.message?.let { Log.e("Error", it) }
                 runOnUiThread {
                     callback(null)
                 }

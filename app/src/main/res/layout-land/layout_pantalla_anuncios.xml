@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    tools:context=".PantallaAnuncios">
+
+    <LinearLayout
+        android:id="@+id/redesIdioma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imgWhatsapp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/whatsapp" />
+
+        <ImageView
+            android:id="@+id/imgFacebook"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/facebook" />
+
+        <ImageView
+            android:id="@+id/imgTwitter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/twitter" />
+
+        <ImageView
+            android:id="@+id/imgLinkedin"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/linkedin" />
+
+        <ImageView
+            android:id="@+id/imgYoutube"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/youtube" />
+
+        <ImageView
+            android:id="@+id/imgInstagram"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/instagram" />
+
+        <Spinner
+            android:id="@+id/spinnerIdiomas"
+            android:layout_width="175dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/imgCasa"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/casa" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/redesIdioma">
+
+        <EditText
+            android:id="@+id/referencia"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@color/white"
+            android:ems="10"
+            android:hint="@string/referencia"
+            android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hintColor" />
+
+        <Spinner
+            android:id="@+id/tipoAnuncio"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:contentDescription="@string/tipo"
+            android:textColor="@color/white" />
+
+        <Spinner
+            android:id="@+id/tipoInmueble"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/tipoInmueble"
+            android:textColor="@color/white" />
+
+        <Spinner
+            android:id="@+id/ubicacion"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/zona"
+            android:textColor="@color/white" />
+
+        <Spinner
+            android:id="@+id/dormitorios"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/dormitorios"
+            android:text="@string/dormitorios"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/superficie"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:ems="10"
+            android:hint="@string/superficie"
+            android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hintColor" />
+
+        <ViewFlipper
+            android:id="@+id/precioPersonas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/precioDesde"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/white"
+                android:ems="10"
+                android:hint="@string/precioDesde"
+                android:inputType="textPersonName"
+                android:textColor="@color/white"
+                android:textColorHint="@color/hintColor" />
+
+            <EditText
+                android:id="@+id/personas"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:ems="10"
+                android:hint="@string/personas"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/hintColor" />
+        </ViewFlipper>
+
+        <ViewFlipper
+            android:id="@+id/precioFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/precioHasta"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/white"
+                android:ems="10"
+                android:hint="@string/precioHasta"
+                android:inputType="textPersonName"
+                android:textColor="@color/white"
+                android:textColorHint="@color/hintColor" />
+
+            <EditText
+                android:id="@+id/fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/fecha"
+                android:inputType="date"
+                android:textColor="@color/white"
+                android:textColorHint="@color/hintColor" />
+        </ViewFlipper>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnBuscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/btn"
+        android:text="@string/buscar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/redesIdioma" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerAnuncios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/btnBuscar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
