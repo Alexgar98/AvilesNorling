@@ -281,8 +281,8 @@ class PantallaAnuncios : AppCompatActivity() {
             var consulta : String? = ""
             var valores : Array<String> = arrayOf()
             if (referencia != "") {
-                consulta += "referencia = ?"
-                valores+=referencia
+                consulta += "referencia like ?"
+                valores+="%$referencia%"
             }
             if (superficie != "") {
 
