@@ -232,10 +232,10 @@ class UpdateDatabase : Service() {
             }
         }
         stopSelf()
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onBind(p0: Intent?): IBinder? {
-        return null
+        return onBind(p0)
     }
 }

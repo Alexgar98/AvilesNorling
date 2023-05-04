@@ -90,5 +90,6 @@
     <string name="situacion">Situación</string>
     <string name="cercaDe">Cerca de</string>
     <string name="comunicaciones">Comunicaciones</string>
+    <string name="consultar">A consultar</string>
 
 </resources>

@@ -145,7 +145,7 @@ class PantallaAnuncios : AppCompatActivity() {
         }
 
         //Codifico el tipo de anuncio según el anuncio elegido
-        val anuncio : Int = if (anuncioElegido == "Venta") {
+        val codigoAnuncio : Int = if (anuncioElegido == "Venta") {
             1
         } else if (anuncioElegido == "Alquiler" || anuncioElegido == "Vacaciones") {
             2
@@ -158,7 +158,7 @@ class PantallaAnuncios : AppCompatActivity() {
         val helper = Helper(this)
         val querier : SQLiteDatabase = helper.writableDatabase
         var cursor : Cursor
-        if (anuncio == 0) {
+        if (codigoAnuncio == 0) {
             if (ubicacionElegida != "Málaga oriental") {
                 cursor = querier.query(
                     "propiedades",
@@ -173,14 +173,14 @@ class PantallaAnuncios : AppCompatActivity() {
             else {
                 cursor = querier.query("propiedades", null, null, null, null, null, null)
             }
-        } else if (anuncio == 2) {
+        } else if (codigoAnuncio == 2) {
             if (anuncioElegido != "Vacaciones") {
                 if (ubicacionElegida != "Málaga oriental") {
                     cursor = querier.query(
                         "propiedades",
                         null,
                         "localidad = ? and tipoOferta = ? and vacacional = ?",
-                        arrayOf(ubicacionElegida, anuncio.toString(), "false"),
+                        arrayOf(ubicacionElegida, codigoAnuncio.toString(), "false"),
                         null,
                         null,
                         null
@@ -191,7 +191,7 @@ class PantallaAnuncios : AppCompatActivity() {
                         "propiedades",
                         null,
                         "tipoOferta = ? and vacacional = ?",
-                        arrayOf(anuncio.toString(), "false"),
+                        arrayOf(codigoAnuncio.toString(), "false"),
                         null,
                         null,
                         null
@@ -204,7 +204,7 @@ class PantallaAnuncios : AppCompatActivity() {
                         "propiedades",
                         null,
                         "localidad = ? and tipoOferta = ? and vacacional = ?",
-                        arrayOf(ubicacionElegida, anuncio.toString(), "true"),
+                        arrayOf(ubicacionElegida, codigoAnuncio.toString(), "true"),
                         null,
                         null,
                         null
@@ -215,7 +215,7 @@ class PantallaAnuncios : AppCompatActivity() {
                         "propiedades",
                         null,
                         "tipoOferta = ? and vacacional = ?",
-                        arrayOf(anuncio.toString(), "true"),
+                        arrayOf(codigoAnuncio.toString(), "true"),
                         null,
                         null,
                         null
@@ -229,7 +229,7 @@ class PantallaAnuncios : AppCompatActivity() {
                     "propiedades",
                     null,
                     "localidad = ? and tipoOferta = ?",
-                    arrayOf(ubicacionElegida, anuncio.toString()),
+                    arrayOf(ubicacionElegida, codigoAnuncio.toString()),
                     null,
                     null,
                     null
@@ -240,7 +240,7 @@ class PantallaAnuncios : AppCompatActivity() {
                     "propiedades",
                     null,
                     "tipoOferta = ?",
-                    arrayOf(anuncio.toString()),
+                    arrayOf(codigoAnuncio.toString()),
                     null,
                     null,
                     null
@@ -393,7 +393,7 @@ class PantallaAnuncios : AppCompatActivity() {
             }
 
             recyclerAdapter.notifyDataSetChanged()
-                Toast.makeText(this, "Se han encontrado estos resultados: " + anunciosBuscados.size, Toast.LENGTH_LONG).show()
+
             }
             catch (e : java.lang.NumberFormatException) {
                 e.message?.let { Log.e("Error", it) }

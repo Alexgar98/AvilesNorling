@@ -46,7 +46,7 @@ class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>) : RecyclerVi
             holder.precioAnuncio.text = "" + anuncio.precio + " €"
         }
         else {
-            holder.precioAnuncio.visibility = View.INVISIBLE
+            holder.precioAnuncio.text = holder.itemView.context.getString(R.string.consultar)
         }
         if (anuncio.dormitorios!! > 0 ) {
             holder.habitaciones.text = "" + anuncio.dormitorios

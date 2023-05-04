@@ -85,4 +85,5 @@
     <string name="situacion">Location</string>
     <string name="cercaDe">Close to</string>
     <string name="comunicaciones">Communications</string>
+    <string name="consultar">On request</string>
 </resources>

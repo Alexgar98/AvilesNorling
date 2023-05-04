@@ -177,7 +177,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
 
         cursor.close()
 
-        //Quito el botón de reserva si el scroll está abajo del todo
+        //Quito el botón de reserva si el scroll está abajo
         scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
             val margen = scrollView.getChildAt(0).height - (scrollY + scrollView.height)
             if (margen <= 10) {
@@ -407,6 +407,11 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     emailContacto.text = elemento.getChild("extensionInmoenter").getChildText("emailContacto")
                     telefonoContacto.text = elemento.getChild("extensionInmoenter").getChildText("telefonoContacto")
 
+                    if (descripcion.text == "") {
+                        descripcion.visibility = View.GONE
+                        findViewById<TextView>(R.id.description).visibility = View.GONE
+                    }
+
                     if (textoSituacion == "") {
                         situacion.visibility = View.GONE
                         findViewById<TextView>(R.id.tituloSituacion).visibility = View.GONE
@@ -521,8 +526,9 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             val res = resources
             val dm = res.displayMetrics
             val conf = res.configuration
-            //Esto está deprecated, preguntar si eso porque me tiene hasta las narices (?)
+            @Suppress("DEPRECATION")
             conf.locale = locale
+            @Suppress("DEPRECATION")
             res.updateConfiguration(conf, dm)
             idiomaActual = localeName
             val refresh = Intent(this, PantallaAnuncioIndividual::class.java)

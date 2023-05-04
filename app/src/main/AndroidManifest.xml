@@ -35,7 +35,9 @@
         </activity>
 
         <service
-            android:name=".UpdateDatabase"
+            android:name="UpdateDatabase"
+            android:icon="@drawable/logo"
+            android:label="Update database"
             android:enabled="true"
             android:exported="false" />
 

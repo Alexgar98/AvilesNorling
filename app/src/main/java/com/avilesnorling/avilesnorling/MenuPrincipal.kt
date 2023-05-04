@@ -200,15 +200,15 @@ class MenuPrincipal : AppCompatActivity() {
             val res = resources
             val dm = res.displayMetrics
             val conf = res.configuration
-            //Esto está deprecated, preguntar si eso porque me tiene hasta las narices (?)
+            @Suppress("DEPRECATION")
             conf.locale = locale
+            @Suppress("DEPRECATION")
             res.updateConfiguration(conf, dm)
             val refresh = Intent(this, MenuPrincipal::class.java)
             refresh.putExtra(idioma, localeName)
             startActivity(refresh)
         }
     }
-
     override fun onBackPressed() {
         //Aquí no tiene que haber nada absolutamente
     }
