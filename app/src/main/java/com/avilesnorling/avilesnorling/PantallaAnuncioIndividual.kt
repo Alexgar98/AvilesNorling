@@ -174,19 +174,20 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         if (esVenta) {
             btnReserva.visibility = View.GONE
         }
-
-        cursor.close()
-
-        //Quito el botón de reserva si el scroll está abajo
-        scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            val margen = scrollView.getChildAt(0).height - (scrollY + scrollView.height)
-            if (margen <= 10) {
-                btnReserva.visibility = View.INVISIBLE
-            }
-            else {
-                btnReserva.visibility = View.VISIBLE
+        else {
+            //Quito el botón de reserva si el scroll está abajo
+            scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                val margen = scrollView.getChildAt(0).height - (scrollY + scrollView.height)
+                if (margen <= 10) {
+                    btnReserva.visibility = View.INVISIBLE
+                }
+                else {
+                    btnReserva.visibility = View.VISIBLE
+                }
             }
         }
+
+        cursor.close()
 
         //Saco los datos del XML porque no quiero engordar aún más la clase Anuncio
         sacarElemento(urlAnuncio) {elemento ->
