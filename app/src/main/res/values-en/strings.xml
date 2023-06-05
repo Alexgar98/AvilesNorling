@@ -86,4 +86,9 @@
     <string name="cercaDe">Close to</string>
     <string name="comunicaciones">Communications</string>
     <string name="consultar">On request</string>
+    <string name="nombre">Name</string>
+    <string name="telefono">Telephone</string>
+    <string name="mensaje">Message</string>
+    <string name="politicaPrivacidad">I accept the Privacy Policy</string>
+    <string name="contactar">Contact</string>
 </resources>

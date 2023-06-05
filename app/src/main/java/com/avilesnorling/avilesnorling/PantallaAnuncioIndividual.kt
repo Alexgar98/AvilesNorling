@@ -51,6 +51,12 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val imgYoutube : ImageView by lazy{findViewById<ImageView>(R.id.imgYoutube)}
     val imgInstagram : ImageView by lazy{findViewById<ImageView>(R.id.imgInstagram)}
     val imgCasa : ImageView by lazy{findViewById<ImageView>(R.id.imgCasa)}
+    val campoNombre : EditText by lazy {findViewById<EditText>(R.id.campoNombre)}
+    val campoEmail : EditText by lazy {findViewById<EditText>(R.id.campoEmail)}
+    val campoTelefono : EditText by lazy {findViewById<EditText>(R.id.campoTelefono)}
+    val campoMensaje : EditText by lazy {findViewById<EditText>(R.id.campoMensaje)}
+    val privacidad : CheckBox by lazy {findViewById<CheckBox>(R.id.politicaPrivacidad)}
+    val btnContacto : Button by lazy {findViewById<Button>(R.id.btnContacto)}
     lateinit var locale : Locale
     private var idiomaActual = Locale.getDefault().language.toString()
     //private var idioma : String? = null
@@ -65,9 +71,10 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         dialog.setContentView(R.layout.layout_cargando)
         val imagen : ImageView = dialog.findViewById(R.id.cargando)
         Glide.with(this).load(R.drawable.loading_gif).into(imagen)
-        dialog.setCancelable(true)
+        dialog.setCancelable(false)
         dialog.setCanceledOnTouchOutside(false)
-
+        val layout : View = findViewById<View>(R.id.layout_anuncio_individual)
+        layout.visibility = View.INVISIBLE
         dialog.show()
         //Array de idiomas que se muestra en el spinner
         val idiomas = arrayOf(
@@ -444,7 +451,7 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                         calidades.visibility = View.GONE
                         findViewById<TextView>(R.id.tituloCalidades).visibility = View.GONE
                     }
-
+                    layout.visibility = View.VISIBLE
                     dialog.dismiss()
                 } else {
                     Toast.makeText(
@@ -483,6 +490,26 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         catch (e: Exception) {
             btnReserva.visibility = View.GONE
             Log.e("Error", e.message, e)
+        }
+
+        //Formulario de contacto
+        var nombreContacto = campoNombre.text.toString()
+        var emailContacto = campoEmail.text.toString()
+        var telefonoContacto = campoTelefono.text.toString()
+        var mensajeContacto = campoMensaje.text.toString()
+        btnContacto.setOnClickListener {
+            if (!privacidad.isChecked) {
+                Toast.makeText(this, "Debes aceptar la política de privacidad", Toast.LENGTH_LONG).show()
+            }
+            else {
+                if (nombreContacto == "" || emailContacto == "" || telefonoContacto == "" || mensajeContacto == "") {
+                    Toast.makeText(this, "Debes rellenar todos los campos", Toast.LENGTH_LONG).show()
+                }
+                else {
+                    //TODO ¿A dónde hay que mandar el mensaje
+                    Toast.makeText(this, "Si ves este mensaje es que vas bien", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
 

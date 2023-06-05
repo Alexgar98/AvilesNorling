@@ -91,5 +91,9 @@
     <string name="cercaDe">Cerca de</string>
     <string name="comunicaciones">Comunicaciones</string>
     <string name="consultar">A consultar</string>
-
+    <string name="nombre">Nombre</string>
+    <string name="telefono">Teléfono</string>
+    <string name="mensaje">Mensaje</string>
+    <string name="politicaPrivacidad">Acepto la política de privacidad</string>
+    <string name="contactar">Contactar</string>
 </resources>

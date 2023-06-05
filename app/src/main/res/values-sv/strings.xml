@@ -86,4 +86,9 @@
     <string name="cercaDe">Nära</string>
     <string name="comunicaciones">Kommunikation</string>
     <string name="consultar">På förfrågan</string>
+    <string name="nombre">Namn</string>
+    <string name="telefono">Telefonnummer</string>
+    <string name="mensaje">Meddelande</string>
+    <string name="politicaPrivacidad">Markera att du läst och accepterar vår Personuppgiftspolicy</string>
+    <string name="contactar">Kontakta</string>
 </resources>

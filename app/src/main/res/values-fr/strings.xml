@@ -87,4 +87,9 @@
     <string name="cercaDe">Proche de</string>
     <string name="comunicaciones">Communications</string>
     <string name="consultar">Sur demande</string>
+    <string name="nombre">Nom</string>
+    <string name="telefono">Numéro de téléphone</string>
+    <string name="mensaje">Message</string>
+    <string name="politicaPrivacidad">Indiquant que vous avez lu et accepté politique de protection des données</string>
+    <string name="contactar">Contacter</string>
 </resources>

@@ -310,6 +310,51 @@
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 
+            <EditText
+                android:id="@+id/campoNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/nombre"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/campoEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/campoTelefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/telefono"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/campoMensaje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/mensaje"
+                android:inputType="textPersonName" />
+
+            <CheckBox
+                android:id="@+id/politicaPrivacidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/politicaPrivacidad" />
+
+            <Button
+                android:id="@+id/btnContacto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/btn"
+                android:text="@string/contactar" />
+
             <TextView
                 android:id="@+id/emailContacto"
                 android:layout_width="match_parent"

@@ -86,4 +86,9 @@
     <string name="cercaDe">Nahe bei</string>
     <string name="comunicaciones">Kommunikation</string>
     <string name="consultar">Auf Anfrage</string>
+    <string name="nombre">Name</string>
+    <string name="telefono">Telefonnummer</string>
+    <string name="mensaje">Botschaft</string>
+    <string name="politicaPrivacidad">Beim absenden akzeptieren sie das datenschutzgesetz</string>
+    <string name="contactar">Kontaktieren</string>
 </resources>
