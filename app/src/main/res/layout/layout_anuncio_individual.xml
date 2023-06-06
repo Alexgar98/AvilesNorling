@@ -337,10 +337,11 @@
             <EditText
                 android:id="@+id/campoMensaje"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
                 android:ems="10"
+                android:gravity="start|top"
                 android:hint="@string/mensaje"
-                android:inputType="textPersonName" />
+                android:inputType="textMultiLine" />
 
             <CheckBox
                 android:id="@+id/politicaPrivacidad"
