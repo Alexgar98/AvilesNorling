@@ -91,4 +91,6 @@
     <string name="mensaje">Botschaft</string>
     <string name="politicaPrivacidad">Beim absenden akzeptieren sie das datenschutzgesetz</string>
     <string name="contactar">Kontaktieren</string>
+    <string name="aceptarPolitica">Sie sollten die Datenschutzerklärung akzeptieren</string>
+    <string name="rellenarCampos">Sie müssen alle Felder ausfüllen</string>
 </resources>

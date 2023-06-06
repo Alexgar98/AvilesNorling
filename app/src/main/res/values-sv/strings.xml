@@ -91,4 +91,6 @@
     <string name="mensaje">Meddelande</string>
     <string name="politicaPrivacidad">Markera att du läst och accepterar vår Personuppgiftspolicy</string>
     <string name="contactar">Kontakta</string>
+    <string name="aceptarPolitica">Du bör acceptera integritetspolicyn</string>
+    <string name="rellenarCampos">Du måste fylla i alla fält</string>
 </resources>

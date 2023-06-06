@@ -7,6 +7,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -492,22 +497,58 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
             Log.e("Error", e.message, e)
         }
 
+        //Link a lso términos y condiciones
+
+        val textoTerminos = privacidad.text.toString()
+        val ss = SpannableString(textoTerminos)
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(p0: View) {
+                val abrirPagina = Intent(Intent.ACTION_VIEW)
+                abrirPagina.data = Uri.parse("https://www.avilesnorling.com/es/privacy")
+                startActivity(abrirPagina)
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color = getColor(R.color.btn)
+                ds.isUnderlineText = false
+            }
+        }
+        ss.setSpan(clickableSpan, 1, ss.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        privacidad.text = ss
+        privacidad.movementMethod = LinkMovementMethod.getInstance()
+
+
         //Formulario de contacto
-        var nombreContacto = campoNombre.text.toString()
-        var emailContacto = campoEmail.text.toString()
-        var telefonoContacto = campoTelefono.text.toString()
-        var mensajeContacto = campoMensaje.text.toString()
+
         btnContacto.setOnClickListener {
+            val nombreContactoCampo = campoNombre.text.toString()
+            val emailContactoCampo = campoEmail.text.toString()
+            val telefonoContactoCampo = campoTelefono.text.toString()
+            val mensajeContactoCampo = campoMensaje.text.toString()
             if (!privacidad.isChecked) {
-                Toast.makeText(this, "Debes aceptar la política de privacidad", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.politicaPrivacidad), Toast.LENGTH_LONG).show()
             }
             else {
-                if (nombreContacto == "" || emailContacto == "" || telefonoContacto == "" || mensajeContacto == "") {
-                    Toast.makeText(this, "Debes rellenar todos los campos", Toast.LENGTH_LONG).show()
+                if (nombreContactoCampo == "" || emailContactoCampo == "" || telefonoContactoCampo == "" || mensajeContactoCampo == "") {
+                    Toast.makeText(this, getString(R.string.rellenarCampos), Toast.LENGTH_LONG).show()
                 }
                 else {
-                    //TODO ¿A dónde hay que mandar el mensaje
-                    Toast.makeText(this, "Si ves este mensaje es que vas bien", Toast.LENGTH_LONG).show()
+                    val destino = emailContacto.text.toString()
+                    val asunto = "Ref " + ref + " - " + nombreContactoCampo
+                    val cuerpo = mensajeContactoCampo + "\nTel: " + telefonoContactoCampo
+                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                        data = Uri.parse("mailto:")
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf(destino))
+                        putExtra(Intent.EXTRA_SUBJECT, asunto)
+                        putExtra(Intent.EXTRA_TEXT, cuerpo)
+                    }
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    }
+                    else {
+                        Toast.makeText(this, "no hay cliente de email", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }

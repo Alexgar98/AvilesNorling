@@ -96,4 +96,6 @@
     <string name="mensaje">Mensaje</string>
     <string name="politicaPrivacidad">Acepto la política de privacidad</string>
     <string name="contactar">Contactar</string>
+    <string name="aceptarPolitica">Debes aceptar la política de privacidad</string>
+    <string name="rellenarCampos">Debes rellenar todos los campos</string>
 </resources>

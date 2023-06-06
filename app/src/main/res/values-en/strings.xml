@@ -91,4 +91,6 @@
     <string name="mensaje">Message</string>
     <string name="politicaPrivacidad">I accept the Privacy Policy</string>
     <string name="contactar">Contact</string>
+    <string name="aceptarPolitica">You must accept the privacy policy</string>
+    <string name="rellenarCampos">You must fill all the fields</string>
 </resources>
