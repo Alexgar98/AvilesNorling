@@ -189,7 +189,7 @@
                 android:textColorHint="@color/hintColor" />
 
             <EditText
-                android:id="@+id/fecha"
+                android:id="@+id/fechaEntrada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"

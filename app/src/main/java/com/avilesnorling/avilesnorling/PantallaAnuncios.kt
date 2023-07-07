@@ -36,7 +36,8 @@ class PantallaAnuncios : AppCompatActivity() {
     val precioPersonas : ViewFlipper by lazy {findViewById<ViewFlipper>(R.id.precioPersonas)}
     val precioFecha : ViewFlipper by lazy {findViewById<ViewFlipper>(R.id.precioFecha)}
     val personas : EditText by lazy {findViewById<EditText>(R.id.personas)}
-    val fecha : EditText by lazy {findViewById<EditText>(R.id.fecha)}
+    val fechaEntrada : EditText by lazy {findViewById<EditText>(R.id.fechaEntrada)}
+    val fechaSalida : EditText by lazy {findViewById<EditText>(R.id.fechaSalida)}
     val recyclerAnuncios : RecyclerView by lazy {findViewById<RecyclerView>(R.id.recyclerAnuncios)}
 
     //Barra de arriba
@@ -106,34 +107,41 @@ class PantallaAnuncios : AppCompatActivity() {
         //Manejo de la fecha
         var fechaInicio: LocalDate? = null
         var fechaFin: LocalDate? = null
-        fecha.setOnClickListener {
+        fechaEntrada.setOnClickListener {
             val calendar = Calendar.getInstance()
 
             val datePickerDialog = DatePickerDialog(
                 this,
                 { _, year, month, day ->
                     //El +1 es porque el DatePicker empieza los meses en 0 y el LocalDate en 1
-                    val fechaElegida : LocalDate = LocalDate.of(year, month + 1, day)
-                    if (fechaInicio == null || fechaFin != null) {
-                        if (fechaElegida.isBefore(LocalDate.now())) {
-                            Toast.makeText(this, getString(R.string.fechaNoValida), Toast.LENGTH_LONG).show()
-                        }
-                        else {
-                            fechaInicio = fechaElegida
-                            //Reseteo por si el usuario está poniendo otro rango de fechas
-                            fechaFin = null
-                            fecha.setText("" + day + "/" + (month+1) + "/" + year)
-                        }
+                    fechaInicio = LocalDate.of(year, month + 1, day)
+                    if (fechaFin != null && fechaFin!!.isBefore(fechaInicio)) {
+                        Toast.makeText(this, getString(R.string.fechaNoValida), Toast.LENGTH_LONG).show()
                     }
                     else {
-                        if (fechaElegida.isAfter(fechaInicio)) {
-                            fechaFin = fechaElegida
-                            fecha.setText("" + fechaInicio!!.dayOfMonth + "/" + fechaInicio!!.monthValue + "/" + fechaInicio!!.year + "-" + day + "/" + (month+1) + "/" + year)
+                        fechaEntrada.setText("" + fechaInicio!!.dayOfMonth + "/" + fechaInicio!!.monthValue + "/" + fechaInicio!!.year)
+                    }
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
 
-                        }
-                        else {
-                            Toast.makeText(this, getString(R.string.fechaNoValida), Toast.LENGTH_LONG).show()
-                        }
+            datePickerDialog.show()
+        }
+
+        fechaSalida.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val datePickerDialog = DatePickerDialog(
+                this,
+                { _, year, month, day ->
+                    //El +1 es porque el DatePicker empieza los meses en 0 y el LocalDate en 1
+                    fechaFin = LocalDate.of(year, month + 1, day)
+                    if (fechaInicio != null && fechaInicio!!.isAfter(fechaFin)) {
+                        Toast.makeText(this, getString(R.string.fechaNoValida), Toast.LENGTH_LONG).show()
+                    }
+                    else {
+                        fechaSalida.setText("" + fechaFin!!.dayOfMonth + "/" + fechaFin!!.monthValue + "/" + fechaFin!!.year)
                     }
                 },
                 calendar.get(Calendar.YEAR),

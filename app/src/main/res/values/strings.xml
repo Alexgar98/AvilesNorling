@@ -98,4 +98,6 @@
     <string name="contactar">Contactar</string>
     <string name="aceptarPolitica">Debes aceptar la política de privacidad</string>
     <string name="rellenarCampos">Debes rellenar todos los campos</string>
+    <string name="entrada">Entrada</string>
+    <string name="salida">Salida</string>
 </resources>

@@ -15,6 +15,8 @@ import com.avilesnorling.avilesnorling.clases.AlarmReceiver
 import com.avilesnorling.avilesnorling.clases.Anuncio
 import com.avilesnorling.avilesnorling.clases.Helper
 import com.bumptech.glide.Glide
+import com.github.doyaaaaaken.kotlincsv.dsl.context.ExcessFieldsRowBehaviour
+import com.github.doyaaaaaken.kotlincsv.dsl.context.InsufficientFieldsRowBehaviour
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,6 +24,7 @@ import org.jdom2.input.SAXBuilder
 import java.net.URL
 import java.time.LocalDateTime
 import java.util.*
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 
 class PantallaCarga : AppCompatActivity() {
     val imgCarga : ImageView by lazy {findViewById<ImageView>(R.id.imgCarga)}
@@ -29,6 +32,21 @@ class PantallaCarga : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_pantalla_carga)
         Glide.with(this).load(R.drawable.loading_gif).into(imgCarga)
+
+        //TODO Pruebas de los csv. Quitar
+
+        val tsvReader = csvReader {
+            delimiter = ';'
+            excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
+            insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
+        }
+        val inputStream = this.assets.open("Listado de propiedades.csv")
+        tsvReader.open(inputStream) {
+            readAllAsSequence().forEach { row ->
+                println(row)
+            }
+        }
+
         try {
             //Se actualiza la base de datos por si el XML ha cambiado
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager

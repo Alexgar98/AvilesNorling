@@ -93,4 +93,6 @@
     <string name="contactar">Kontakta</string>
     <string name="aceptarPolitica">Du bör acceptera integritetspolicyn</string>
     <string name="rellenarCampos">Du måste fylla i alla fält</string>
+    <string name="entrada">Start</string>
+    <string name="salida">Avgång</string>
 </resources>

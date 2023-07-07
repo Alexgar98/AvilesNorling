@@ -94,4 +94,6 @@
     <string name="contactar">Contacter</string>
     <string name="aceptarPolitica">Vous devez accepter la politique de confidentialité</string>
     <string name="rellenarCampos">Vous devez remplir tous les champs</string>
+    <string name="entrada">Entrée</string>
+    <string name="salida">Sortie</string>
 </resources>

@@ -93,4 +93,6 @@
     <string name="contactar">Contact</string>
     <string name="aceptarPolitica">You must accept the privacy policy</string>
     <string name="rellenarCampos">You must fill all the fields</string>
+    <string name="entrada">Entry</string>
+    <string name="salida">Exit</string>
 </resources>

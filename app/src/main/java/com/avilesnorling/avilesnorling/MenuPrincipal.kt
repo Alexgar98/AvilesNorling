@@ -1,5 +1,9 @@
 package com.avilesnorling.avilesnorling
 
+// Aplicación hecha por Alexis García Díaz
+// Si lees esto y tienes dudas o necesitas contratar un programador
+// envía un Whatsapp al 675369606. Gracias :)
+
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
