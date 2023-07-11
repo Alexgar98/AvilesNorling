@@ -18,8 +18,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.Anuncio
 import com.avilesnorling.avilesnorling.clases.AnuncioRecyclerAdapter
 import com.avilesnorling.avilesnorling.clases.Helper
+import com.github.doyaaaaaken.kotlincsv.dsl.context.ExcessFieldsRowBehaviour
+import com.github.doyaaaaaken.kotlincsv.dsl.context.InsufficientFieldsRowBehaviour
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -261,7 +266,7 @@ class PantallaAnuncios : AppCompatActivity() {
         }
 
         recyclerAnuncios.layoutManager = LinearLayoutManager(this)
-        val recyclerAdapter = AnuncioRecyclerAdapter(anunciosBuscados)
+        val recyclerAdapter = AnuncioRecyclerAdapter(anunciosBuscados, this.assets)
         recyclerAnuncios.adapter = recyclerAdapter
 
         recyclerAnuncios.setOnClickListener {
@@ -278,8 +283,20 @@ class PantallaAnuncios : AppCompatActivity() {
             val inmuebleElegido : String = tipoInmueble.selectedItem.toString()
             val ubicacionSpinner : String = ubicacion.selectedItem.toString()
             val numeroDormitorios : String = dormitorios.selectedItem.toString()
-            //var personasElegidas : String? = personas.text.toString()
-            //var fechaElegida : Date?
+            val personasElegidas : String = personas.text.toString()
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            val entradaElegida = try {
+                LocalDate.parse(fechaEntrada.text.toString(), formatter)
+            }
+            catch (e : DateTimeParseException) {
+                LocalDate.of(1990, 1, 1)
+            }
+            val salidaElegida = try {
+                LocalDate.parse(fechaSalida.text.toString(), formatter)
+            }
+            catch (e : DateTimeParseException) {
+                LocalDate.of(1990, 1, 1)
+            }
 
             try {
             anunciosBuscados.clear()
@@ -288,10 +305,20 @@ class PantallaAnuncios : AppCompatActivity() {
 
             var consulta : String? = ""
             var valores : Array<String> = arrayOf()
+
             if (referencia != "") {
                 consulta += "referencia like ?"
                 valores+="%$referencia%"
             }
+                if (personasElegidas != "") {
+                    if (consulta == "") {
+                        consulta += "personas >= ?"
+                    }
+                    else {
+                        consulta += " and personas >= ?"
+                    }
+                    valores += personasElegidas
+                }
             if (superficie != "") {
 
                     if (consulta == "") {
@@ -399,6 +426,48 @@ class PantallaAnuncios : AppCompatActivity() {
                 val anuncioNuevo : Anuncio = devolverAnuncio(cursor)
                 anunciosBuscados.add(anuncioNuevo)
             }
+
+                if (entradaElegida != LocalDate.of(1990, 1, 1) && salidaElegida != LocalDate.of(1990, 1, 1)) {
+                    val rsvReader = csvReader {
+                        excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
+                        insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
+                    }
+                    val reservasStream = this.assets.open("Listado de reservas.csv")
+                    val reservas : java.util.ArrayList<Map<String, String>> = arrayListOf()
+                    rsvReader.open(reservasStream) {
+                        readAllWithHeaderAsSequence().forEach { row : Map<String, String> ->
+                            reservas.add(row)
+                        }
+                    }
+                    for (anuncio in anunciosBuscados) {
+                        for (reserva in reservas) {
+                            if (reserva.getOrDefault(
+                                    "Nombre alojamiento",
+                                    "Aquí hay algo mal"
+                                ) == anuncio.referencia
+                            ) {
+                                val fechaEntrada =
+                                    reserva.getOrDefault("Fecha entrada", "Aquí hay algo mal")
+                                val fechaSalida =
+                                    reserva.getOrDefault("Fecha salida", "Aquí hay algo mal")
+                                val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                                var entrada = LocalDate.parse(fechaEntrada, formatter)
+                                val salida = LocalDate.parse(fechaSalida, formatter)
+                                val fechas: java.util.ArrayList<LocalDate> = arrayListOf()
+                                while (!entrada.isAfter(salida)) {
+                                    fechas.add(entrada)
+                                    entrada = entrada.plusDays(1)
+                                }
+                                for (fecha in fechas) {
+                                    if (fecha.isAfter(entradaElegida) && fecha.isBefore(salidaElegida)) {
+                                        anunciosBuscados.remove(anuncio)
+                                        continue
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
             recyclerAdapter.notifyDataSetChanged()
 
@@ -549,7 +618,8 @@ class PantallaAnuncios : AppCompatActivity() {
             cursor.getInt(cursor.getColumnIndexOrThrow("dormitorios")),
             cursor.getInt(cursor.getColumnIndexOrThrow("superficie")),
             cursor.getInt(cursor.getColumnIndexOrThrow("banos")),
-            cursor.getString(cursor.getColumnIndexOrThrow("vacacional")).toBoolean()
+            cursor.getString(cursor.getColumnIndexOrThrow("vacacional")).toBoolean(),
+            cursor.getInt(cursor.getColumnIndexOrThrow("personas"))
         )
     }
 }

@@ -25,6 +25,8 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.util.*
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class PantallaCarga : AppCompatActivity() {
     val imgCarga : ImageView by lazy {findViewById<ImageView>(R.id.imgCarga)}
@@ -35,15 +37,30 @@ class PantallaCarga : AppCompatActivity() {
 
         //TODO Pruebas de los csv. Quitar
 
-        val tsvReader = csvReader {
-            delimiter = ';'
+        val rsvReader = csvReader {
             excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
             insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
         }
-        val inputStream = this.assets.open("Listado de propiedades.csv")
-        tsvReader.open(inputStream) {
-            readAllAsSequence().forEach { row ->
-                println(row)
+        val reservasStream = this.assets.open("Listado de reservas.csv")
+        val reservas : ArrayList<Map<String, String>> = arrayListOf()
+        rsvReader.open(reservasStream) {
+            readAllWithHeaderAsSequence().forEach { row : Map<String, String> ->
+                reservas.add(row)
+            }
+        }
+        for (reserva in reservas) {
+            if (reserva.getOrDefault("Nombre alojamiento", "Aquí hay algo mal") == "A&N Mar 3") {
+                val fechaEntrada = reserva.getOrDefault("Fecha entrada", "Aquí hay algo mal")
+                val fechaSalida = reserva.getOrDefault("Fecha salida", "Aquí hay algo mal")
+                val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                var entrada = LocalDate.parse(fechaEntrada, formatter)
+                val salida = LocalDate.parse(fechaSalida, formatter)
+                val fechas : ArrayList<LocalDate> = arrayListOf()
+                while (!entrada.isAfter(salida)) {
+                    fechas.add(entrada)
+                    entrada = entrada.plusDays(1)
+                }
+                println(fechas)
             }
         }
 
@@ -208,6 +225,26 @@ class PantallaCarga : AppCompatActivity() {
             catch (e : Exception) {
                 vacacional = false
             }
+            var personas = 0
+            val tsvReader = csvReader {
+                delimiter = ';'
+                excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
+                insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
+            }
+            val inputStream = assets.open("Listado de propiedades.csv")
+            tsvReader.open(inputStream) {
+                readAllWithHeaderAsSequence().forEach { row : Map<String, String> ->
+                    if (row.getOrDefault("Alojamiento", "Aquí hay algo mal") == referencia) {
+                        personas = try {
+                            Integer.parseInt(row.getOrDefault("Capacidad personas", "Aquí hay algo mal"))
+                        } catch (e : java.lang.NumberFormatException) {
+                            0
+                        }
+                    }
+                }
+            }
+
+
 
             datos.add(
                 Anuncio(
@@ -232,7 +269,8 @@ class PantallaCarga : AppCompatActivity() {
                     dormitorios,
                     superficie,
                     banos,
-                    vacacional
+                    vacacional,
+                    personas
                 )
             )
         }
@@ -245,7 +283,7 @@ class PantallaCarga : AppCompatActivity() {
                     "INSERT INTO propiedades (referencia, fecha, url, tipoInmueble, tipoOferta, descripcionEs, " +
                             "descripcionEn, descripcionFr, descripcionDe, descripcionSv, codigoPostal, provincia, " +
                             "localidad, direccion, geoLocalizacion, registroTurismo, imgPrincipal, precio, dormitorios," +
-                            " superficie, banos, vacacional) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                            " superficie, banos, vacacional, personas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                 val statement = querier.compileStatement(sql)
                 statement.bindString(1, dato.referencia)
                 statement.bindString(2, dato.fecha.toString())
@@ -269,6 +307,7 @@ class PantallaCarga : AppCompatActivity() {
                 statement.bindLong(20, dato.superficie!!.toLong())
                 statement.bindLong(21, dato.banos!!.toLong())
                 statement.bindString(22, dato.vacacional.toString())
+                statement.bindLong(23, dato.personas!!.toLong())
                 statement.executeInsert()
             } catch (e: SQLiteConstraintException) {
                 e.message?.let { Log.e("Error", it) }

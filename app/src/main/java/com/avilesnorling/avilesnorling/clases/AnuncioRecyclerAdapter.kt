@@ -1,6 +1,7 @@
 package com.avilesnorling.avilesnorling.clases
 
 import android.content.Intent
+import android.content.res.AssetManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.PantallaAnuncioIndividual
 import com.avilesnorling.avilesnorling.R
+import com.github.doyaaaaaken.kotlincsv.dsl.context.ExcessFieldsRowBehaviour
+import com.github.doyaaaaaken.kotlincsv.dsl.context.InsufficientFieldsRowBehaviour
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.squareup.picasso.Picasso
 
-class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>) : RecyclerView.Adapter<AnuncioRecyclerAdapter.ViewHolder>(){
+class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>, private val assets : AssetManager) : RecyclerView.Adapter<AnuncioRecyclerAdapter.ViewHolder>(){
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val layout : ConstraintLayout = view.findViewById(R.id.recyclerLayout)
@@ -69,9 +73,12 @@ class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>) : RecyclerVi
             holder.superficie.visibility = View.INVISIBLE
             holder.imgSuperficie.visibility = View.INVISIBLE
         }
-        //TODO averiguar el número de personas
-        holder.imgPersonas.visibility = View.INVISIBLE
-        holder.numeroPersonas.visibility = View.INVISIBLE
+        holder.numeroPersonas.text = "" + anuncio.personas
+
+        if (holder.numeroPersonas.text == "0") {
+            holder.imgPersonas.visibility = View.INVISIBLE
+            holder.numeroPersonas.visibility = View.INVISIBLE
+        }
         holder.layout.setOnClickListener {
             val url = anuncio.url
             val intent = Intent(holder.layout.context, PantallaAnuncioIndividual :: class.java)
