@@ -284,19 +284,8 @@ class PantallaAnuncios : AppCompatActivity() {
             val ubicacionSpinner : String = ubicacion.selectedItem.toString()
             val numeroDormitorios : String = dormitorios.selectedItem.toString()
             val personasElegidas : String = personas.text.toString()
-            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            val entradaElegida = try {
-                LocalDate.parse(fechaEntrada.text.toString(), formatter)
-            }
-            catch (e : DateTimeParseException) {
-                LocalDate.of(1990, 1, 1)
-            }
-            val salidaElegida = try {
-                LocalDate.parse(fechaSalida.text.toString(), formatter)
-            }
-            catch (e : DateTimeParseException) {
-                LocalDate.of(1990, 1, 1)
-            }
+            println("Fecha entrada: " + fechaInicio)
+            println("Fecha salida: " + fechaFin)
 
             try {
             anunciosBuscados.clear()
@@ -427,7 +416,7 @@ class PantallaAnuncios : AppCompatActivity() {
                 anunciosBuscados.add(anuncioNuevo)
             }
 
-                if (entradaElegida != LocalDate.of(1990, 1, 1) && salidaElegida != LocalDate.of(1990, 1, 1)) {
+                if (fechaInicio != null && fechaFin != null) {
                     val rsvReader = csvReader {
                         excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
                         insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
@@ -439,6 +428,7 @@ class PantallaAnuncios : AppCompatActivity() {
                             reservas.add(row)
                         }
                     }
+                    var aEliminar : ArrayList<Anuncio> = arrayListOf()
                     for (anuncio in anunciosBuscados) {
                         for (reserva in reservas) {
                             if (reserva.getOrDefault(
@@ -458,14 +448,18 @@ class PantallaAnuncios : AppCompatActivity() {
                                     fechas.add(entrada)
                                     entrada = entrada.plusDays(1)
                                 }
+                                println(reserva.getOrDefault("Nombre alojamiento","Aquí hay algo mal"))
+                                println(fechas)
                                 for (fecha in fechas) {
-                                    if (fecha.isAfter(entradaElegida) && fecha.isBefore(salidaElegida)) {
-                                        anunciosBuscados.remove(anuncio)
-                                        continue
+                                    if (fecha.isAfter(fechaInicio) && fecha.isBefore(fechaFin)) {
+                                        aEliminar.add(anuncio)
                                     }
                                 }
                             }
                         }
+                    }
+                    for (anuncio in aEliminar) {
+                        anunciosBuscados.remove(anuncio)
                     }
                 }
 

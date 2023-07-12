@@ -35,35 +35,6 @@ class PantallaCarga : AppCompatActivity() {
         setContentView(R.layout.layout_pantalla_carga)
         Glide.with(this).load(R.drawable.loading_gif).into(imgCarga)
 
-        //TODO Pruebas de los csv. Quitar
-
-        val rsvReader = csvReader {
-            excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
-            insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
-        }
-        val reservasStream = this.assets.open("Listado de reservas.csv")
-        val reservas : ArrayList<Map<String, String>> = arrayListOf()
-        rsvReader.open(reservasStream) {
-            readAllWithHeaderAsSequence().forEach { row : Map<String, String> ->
-                reservas.add(row)
-            }
-        }
-        for (reserva in reservas) {
-            if (reserva.getOrDefault("Nombre alojamiento", "Aquí hay algo mal") == "A&N Mar 3") {
-                val fechaEntrada = reserva.getOrDefault("Fecha entrada", "Aquí hay algo mal")
-                val fechaSalida = reserva.getOrDefault("Fecha salida", "Aquí hay algo mal")
-                val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                var entrada = LocalDate.parse(fechaEntrada, formatter)
-                val salida = LocalDate.parse(fechaSalida, formatter)
-                val fechas : ArrayList<LocalDate> = arrayListOf()
-                while (!entrada.isAfter(salida)) {
-                    fechas.add(entrada)
-                    entrada = entrada.plusDays(1)
-                }
-                println(fechas)
-            }
-        }
-
         try {
             //Se actualiza la base de datos por si el XML ha cambiado
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
