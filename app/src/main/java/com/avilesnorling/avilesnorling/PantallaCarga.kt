@@ -25,8 +25,9 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.util.*
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.CoroutineScope
+import java.io.InputStream
+import kotlin.coroutines.CoroutineContext
 
 class PantallaCarga : AppCompatActivity() {
     val imgCarga : ImageView by lazy {findViewById<ImageView>(R.id.imgCarga)}
@@ -62,7 +63,12 @@ class PantallaCarga : AppCompatActivity() {
         } //TODO Voy a forzar a actualizar para poder probar cosas. Todo este try/catch hay que cambiarlo
 
         try {
+            val contexto : Context = this;
             GlobalScope.launch {
+                downloadFile(contexto, "https://app.avantio.com/index.php?module=Compromisos&action=ExportCsv&return_module=Compromisos&return_action=ListView&idGA=3633&estados[0]=UNPAID&estados[1]=CONFIRMADA&estados[2]=CANCELLED&estados[3]=PETICIONES_REVISAR&estados[4]=PETICIONES_DESESTIMADA&estados[5]=BAJOPETICION&estados[6]=PROPIETARIO&estados[7]=UNAVAILABLE&estados[8]=PAID&estados[9]=GARANTIA&estados[10]=CONFLICTED&estados[11]=REQUEST_TO_BOOK&fechaAltaIni=2023-10-25",
+                    "Listado de reservas.csv")
+                downloadFile(contexto, "https://app.avantio.com/index.php?ga=3633&module=Propiedades&action=Export&return_module=Propiedades&return_action=index",
+                "Listado de propiedades.csv")
                 updateDatabase()
                 launch(Dispatchers.Main) {
                     val intent = Intent(this@PantallaCarga, MenuPrincipal::class.java)
@@ -75,6 +81,24 @@ class PantallaCarga : AppCompatActivity() {
             Log.e("Exception", e.message, e)
         }
 
+    }
+
+    private fun downloadFile(context: Context, fileUrl: String, filename: String) {
+        val url = URL(fileUrl)
+        val connection = url.openConnection()
+        connection.connect()
+
+        val input : InputStream = connection.getInputStream()
+        val output = context.openFileOutput(filename, Context.MODE_PRIVATE)
+
+        val buffer = ByteArray(1024)
+        var bytesRead : Int
+        while (input.read(buffer).also {bytesRead = it} > 0) {
+            output.write(buffer, 0, bytesRead)
+        }
+
+        output.close()
+        input.close()
     }
 
     private fun updateDatabase() {
@@ -163,8 +187,11 @@ class PantallaCarga : AppCompatActivity() {
             } else {
                 sueco = ""
             }
-            val imgPrincipal: String =
-                elemento.getChild("listaImagenes").getChildren("imagen")[0].getChildText("url")
+            var imgPrincipal: String? = elemento?.getChild("listaImagenes")?.getChildren("imagen")?.get(0)
+                ?.getChildText("url")
+            if (imgPrincipal.isNullOrBlank()) {
+                imgPrincipal = ""
+            }
             var precio: Int?
             try {
                 precio = elemento.getChildText("precio").toInt()
@@ -202,7 +229,7 @@ class PantallaCarga : AppCompatActivity() {
                 excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
                 insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
             }
-            val inputStream = assets.open("Listado de propiedades.csv")
+            val inputStream = this.openFileInput("Listado de propiedades.csv")
             tsvReader.open(inputStream) {
                 readAllWithHeaderAsSequence().forEach { row : Map<String, String> ->
                     if (row.getOrDefault("Alojamiento", "Aquí hay algo mal") == referencia) {
@@ -214,7 +241,7 @@ class PantallaCarga : AppCompatActivity() {
                     }
                 }
             }
-
+            inputStream.close()
 
 
             datos.add(

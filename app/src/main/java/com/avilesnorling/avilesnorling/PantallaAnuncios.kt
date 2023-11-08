@@ -21,10 +21,12 @@ import com.avilesnorling.avilesnorling.clases.Helper
 import com.github.doyaaaaaken.kotlincsv.dsl.context.ExcessFieldsRowBehaviour
 import com.github.doyaaaaaken.kotlincsv.dsl.context.InsufficientFieldsRowBehaviour
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.features.json.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -67,7 +69,6 @@ class PantallaAnuncios : AppCompatActivity() {
         val inmuebles = arrayOf<String>(getString(R.string.tipoInmueble), getString(R.string.pisos), getString(R.string.casas), getString(R.string.locales))
         val ubicaciones = arrayOf<String>("Torre del Mar", "Vélez-Málaga", "Algarrobo", "Almáchar", "Almayate", "Benajarafe", "Benamargosa", "Caleta de Vélez", "Canillas de Aceituno", "Torrox", "Málaga", "Málaga oriental")
         val numerosDormitorios = arrayOf<String>(getString(R.string.dormitorios), "1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+", "10+")
-
 
         //Adapters de los spinners
         val anunciosAdapter = ArrayAdapter(this, R.layout.layout_spinners, R.id.textoSpinners, anuncios)
@@ -421,13 +422,15 @@ class PantallaAnuncios : AppCompatActivity() {
                         excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
                         insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
                     }
-                    val reservasStream = this.assets.open("Listado de reservas.csv")
+                    //val reservasStream = this.assets.open("Listado de reservas.csv")
+                    val reservasStream = this.openFileInput("Listado de reservas.csv")
                     val reservas : java.util.ArrayList<Map<String, String>> = arrayListOf()
                     rsvReader.open(reservasStream) {
                         readAllWithHeaderAsSequence().forEach { row : Map<String, String> ->
                             reservas.add(row)
                         }
                     }
+                    reservasStream.close()
                     var aEliminar : ArrayList<Anuncio> = arrayListOf()
                     for (anuncio in anunciosBuscados) {
                         for (reserva in reservas) {
