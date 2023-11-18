@@ -126,7 +126,7 @@ class MenuPrincipal : AppCompatActivity() {
             cambiarPantalla("Alquiler", btnAlquiler)
         }
         btnVacaciones.setOnClickListener {
-            cambiarPantalla("Vacaciones", btnVacaciones)
+            abrirWeb("https://reservas.avilesnorling.com/alquiler/alquiler-alquileres-d0/")
         }
 
     }
@@ -164,14 +164,6 @@ class MenuPrincipal : AppCompatActivity() {
             btnBenamargosa.visibility = View.VISIBLE
             val btnTorrox : RadioButton = popupView.findViewById<RadioButton>(R.id.btnTorrox)
             btnTorrox.visibility = View.VISIBLE
-        }
-        if (tipoAnuncio == "Vacaciones") {
-            val btnCanillas : RadioButton = popupView.findViewById<RadioButton>(R.id.btnCanillas)
-            btnCanillas.visibility = View.GONE
-            val btnMalaga : RadioButton = popupView.findViewById<RadioButton>(R.id.btnMalaga)
-            btnMalaga.visibility = View.VISIBLE
-            val btnMalagaOriental : RadioButton = popupView.findViewById<RadioButton>(R.id.btnMalagaOriental)
-            btnMalagaOriental.visibility = View.VISIBLE
         }
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             //Ñapa monumental, cambiar esto más adelante

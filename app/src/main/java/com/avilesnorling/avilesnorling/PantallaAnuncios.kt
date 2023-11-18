@@ -431,13 +431,13 @@ class PantallaAnuncios : AppCompatActivity() {
                         }
                     }
                     reservasStream.close()
-                    var aEliminar : ArrayList<Anuncio> = arrayListOf()
-                    for (anuncio in anunciosBuscados) {
+                    val aEliminar : ArrayList<Anuncio> = arrayListOf()
+                    for (ad in anunciosBuscados) {
                         for (reserva in reservas) {
                             if (reserva.getOrDefault(
                                     "Nombre alojamiento",
                                     "Aquí hay algo mal"
-                                ) == anuncio.referencia
+                                ) == ad.referencia
                             ) {
                                 val fechaEntrada =
                                     reserva.getOrDefault("Fecha entrada", "Aquí hay algo mal")
@@ -455,14 +455,14 @@ class PantallaAnuncios : AppCompatActivity() {
                                 println(fechas)
                                 for (fecha in fechas) {
                                     if (fecha.isAfter(fechaInicio) && fecha.isBefore(fechaFin)) {
-                                        aEliminar.add(anuncio)
+                                        aEliminar.add(ad)
                                     }
                                 }
                             }
                         }
                     }
-                    for (anuncio in aEliminar) {
-                        anunciosBuscados.remove(anuncio)
+                    for (ad in aEliminar) {
+                        anunciosBuscados.remove(ad)
                     }
                 }
 
@@ -615,8 +615,7 @@ class PantallaAnuncios : AppCompatActivity() {
             cursor.getInt(cursor.getColumnIndexOrThrow("dormitorios")),
             cursor.getInt(cursor.getColumnIndexOrThrow("superficie")),
             cursor.getInt(cursor.getColumnIndexOrThrow("banos")),
-            cursor.getString(cursor.getColumnIndexOrThrow("vacacional")).toBoolean(),
-            cursor.getInt(cursor.getColumnIndexOrThrow("personas"))
+            cursor.getString(cursor.getColumnIndexOrThrow("vacacional")).toBoolean()
         )
     }
 }

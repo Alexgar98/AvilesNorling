@@ -19,9 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.clases.FotoRecyclerAdapter
 import com.avilesnorling.avilesnorling.clases.Helper
-import com.avilesnorling.avilesnorling.clases.IdAnuncio
 import com.bumptech.glide.Glide
-import com.google.gson.Gson
 import org.jdom2.DefaultJDOMFactory
 import org.jdom2.Element
 import org.jdom2.input.SAXBuilder
@@ -32,7 +30,6 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val categoriaUbicacion : TextView by lazy {findViewById<TextView>(R.id.categoriaUbicacion)}
     val referencia : TextView by lazy {findViewById<TextView>(R.id.referenciaInteriorAnuncio)}
     val descripcion : TextView by lazy {findViewById<TextView>(R.id.txtDescripcion)}
-    val btnReserva : Button by lazy {findViewById<Button>(R.id.btnReserva)}
     val titulo : TextView by lazy {findViewById<TextView>(R.id.tituloAnuncio)}
     val generales : TextView by lazy {findViewById<TextView>(R.id.generales)}
     val superficies : TextView by lazy {findViewById<TextView>(R.id.superficies)}
@@ -46,7 +43,6 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
     val emailContacto : TextView by lazy {findViewById<TextView>(R.id.emailContacto)}
     val telefonoContacto : TextView by lazy {findViewById<TextView>(R.id.telefonoContacto)}
     val recyclerFotos : RecyclerView by lazy {findViewById<RecyclerView>(R.id.recyclerFotos)}
-    val scrollView : ScrollView by lazy {findViewById<ScrollView>(R.id.scroll)}
     //Barra de arriba
     val spinnerIdiomas : Spinner by lazy{findViewById<Spinner>(R.id.spinnerIdiomas)}
     val imgWhatsapp : ImageView by lazy{findViewById<ImageView>(R.id.imgWhatsapp)}
@@ -180,23 +176,6 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
         }
         else {
             descripcion.text = cursor.getString(cursor.getColumnIndexOrThrow("descripcionEs")).trim()
-        }
-
-        val esVenta : Boolean = cursor.getInt(cursor.getColumnIndexOrThrow("tipoOferta")) == 1
-        if (esVenta) {
-            btnReserva.visibility = View.GONE
-        }
-        else {
-            //Quito el botón de reserva si el scroll está abajo
-            scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-                val margen = scrollView.getChildAt(0).height - (scrollY + scrollView.height)
-                if (margen <= 10) {
-                    btnReserva.visibility = View.INVISIBLE
-                }
-                else {
-                    btnReserva.visibility = View.VISIBLE
-                }
-            }
         }
 
         cursor.close()
@@ -468,33 +447,6 @@ class PantallaAnuncioIndividual : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-        }
-
-        //Leo el json de propiedades para generar el enlace de Avaibook cuando haga falta
-        val inputStream = this.assets.open("propiedades.json")
-        val json = inputStream.bufferedReader().use { it.readText() }
-        val gson = Gson()
-        val propiedades = gson.fromJson(json, Array<IdAnuncio>::class.java)
-        val idAvail : String?
-        val idOpinan : String?
-        try {
-            for (i in propiedades.indices) {
-                if (propiedades[i].cod_an == ref) {
-                    idAvail = propiedades[i].id_avail
-                    idOpinan = propiedades[i].id_opinan
-                    btnReserva.setOnClickListener {
-                        abrirWeb("https://www.avaibook.com/reservas/nueva_reserva.php?idw=" + idAvail + "&cod_propietario=89412&cod_alojamiento=" + idOpinan + "&lang=" + idiomaActual)
-                    }
-                    break
-                } else {
-                    continue
-                }
-
-            }
-        }
-        catch (e: Exception) {
-            btnReserva.visibility = View.GONE
-            Log.e("Error", e.message, e)
         }
 
         //Link a lso términos y condiciones

@@ -11,9 +11,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.avilesnorling.avilesnorling.PantallaAnuncioIndividual
 import com.avilesnorling.avilesnorling.R
-import com.github.doyaaaaaken.kotlincsv.dsl.context.ExcessFieldsRowBehaviour
-import com.github.doyaaaaaken.kotlincsv.dsl.context.InsufficientFieldsRowBehaviour
-import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.squareup.picasso.Picasso
 
 class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>, private val assets : AssetManager) : RecyclerView.Adapter<AnuncioRecyclerAdapter.ViewHolder>(){
@@ -73,12 +70,9 @@ class AnuncioRecyclerAdapter (private val anuncios : List<Anuncio>, private val 
             holder.superficie.visibility = View.INVISIBLE
             holder.imgSuperficie.visibility = View.INVISIBLE
         }
-        holder.numeroPersonas.text = "" + anuncio.personas
 
-        if (holder.numeroPersonas.text == "0") {
-            holder.imgPersonas.visibility = View.INVISIBLE
-            holder.numeroPersonas.visibility = View.INVISIBLE
-        }
+        holder.imgPersonas.visibility = View.INVISIBLE
+        holder.numeroPersonas.visibility = View.INVISIBLE
         holder.layout.setOnClickListener {
             val url = anuncio.url
             val intent = Intent(holder.layout.context, PantallaAnuncioIndividual :: class.java)

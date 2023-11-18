@@ -11,9 +11,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.avilesnorling.avilesnorling.clases.Anuncio
 import com.avilesnorling.avilesnorling.clases.Helper
-import com.github.doyaaaaaken.kotlincsv.dsl.context.ExcessFieldsRowBehaviour
-import com.github.doyaaaaaken.kotlincsv.dsl.context.InsufficientFieldsRowBehaviour
-import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jdom2.input.SAXBuilder
@@ -166,22 +163,6 @@ class UpdateDatabase : Service() {
                 catch (e : Exception) {
                     vacacional = false
                 }
-                var personas : Int = 0
-                val tsvReader = csvReader {
-                    delimiter = ';'
-                    excessFieldsRowBehaviour = ExcessFieldsRowBehaviour.IGNORE
-                    insufficientFieldsRowBehaviour = InsufficientFieldsRowBehaviour.IGNORE
-                }
-                val inputStream = assets.open("Listado de propiedades.csv")
-                tsvReader.open(inputStream) {
-                    readAllWithHeaderAsSequence().forEach { row : Map<String, String> ->
-                        personas = try {
-                            Integer.parseInt(row.getOrDefault("Capacidad personas", "Aquí hay algo mal"))
-                        } catch (e : java.lang.NumberFormatException) {
-                            0
-                        }
-                    }
-                }
 
                 datos.add(
                     Anuncio(
@@ -206,8 +187,7 @@ class UpdateDatabase : Service() {
                         dormitorios,
                         superficie,
                         banos,
-                        vacacional,
-                        personas
+                        vacacional
                     )
                 )
             }
@@ -219,7 +199,7 @@ class UpdateDatabase : Service() {
                         "INSERT INTO propiedades (referencia, fecha, url, tipoInmueble, tipoOferta, descripcionEs, " +
                                 "descripcionEn, descripcionFr, descripcionDe, descripcionSv, codigoPostal, provincia, " +
                                 "localidad, direccion, geoLocalizacion, registroTurismo, imgPrincipal, precio, dormitorios," +
-                                " superficie, banos, vacacional, personas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                                " superficie, banos, vacacional) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                     val statement = querier.compileStatement(sql)
                     statement.bindString(1, dato.referencia)
                     statement.bindString(2, dato.fecha.toString())
@@ -243,7 +223,6 @@ class UpdateDatabase : Service() {
                     statement.bindLong(20, dato.superficie!!.toLong())
                     statement.bindLong(21, dato.banos!!.toLong())
                     statement.bindString(22, dato.vacacional.toString())
-                    statement.bindLong(23, dato.personas!!.toLong())
                     statement.executeInsert()
                 } catch (e: SQLiteConstraintException) {
                     e.message?.let { Log.e("Error", it) }
